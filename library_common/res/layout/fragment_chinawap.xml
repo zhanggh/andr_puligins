@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <com.plugin.commons.view.ZqCircleView
+        android:id="@+id/web"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/rl_bottom"/>
+    
+    <RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="50dip"
+    android:background="#f9f9f9"
+    android:id="@+id/rl_bottom"
+    android:layout_alignParentBottom="true"
+    android:visibility="gone"
+    >
+    	<Button
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:background="@drawable/btn_implant_back_selector"
+		    android:id="@+id/btn_backweb"
+		    android:layout_centerVertical="true"
+		    android:layout_alignParentLeft="true"
+		    android:layout_marginLeft="34dip"
+		    >
+		    </Button>
+		    
+    	<Button
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:background="@drawable/btn_implant_advance_selector"
+		    android:id="@+id/btn_goweb"
+		    android:layout_centerVertical="true"
+		    android:layout_toRightOf="@+id/btn_backweb"
+		    android:layout_marginLeft="36dip"
+		    >
+		    </Button>
+		    
+    	<Button
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:background="@drawable/btn_implant_refresh_selector"
+		    android:id="@+id/btn_refresh"
+		    android:layout_centerVertical="true"
+		    android:layout_marginRight="34dip"
+		    android:layout_alignParentRight="true"
+		    >
+		    </Button>
+    
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+    android:orientation="horizontal"
+    android:background="@drawable/menu_item_selector"
+    >
+   <RelativeLayout
+	     android:layout_width="wrap_content"
+	     android:layout_height="65dip"
+	     android:gravity="center_vertical"
+	     android:layout_gravity="center_vertical"
+	     android:layout_marginLeft="14dip"
+	 >
+
+	    <TextView
+	        android:id="@+id/tv_title"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_centerVertical="true"
+	        android:layout_marginLeft="20dp"
+	        android:lineSpacingExtra="5dip"
+	        android:maxLines="2"
+	        android:text="458245233"
+	        android:textColor="@color/new_title_color"
+	        android:textSize="16sp" />
+
+	 </RelativeLayout>
+	  <RelativeLayout
+	     android:layout_width="match_parent"
+	     android:layout_height="65dip"
+	     android:gravity="center_vertical"
+	     android:layout_gravity="center_vertical"
+	     android:layout_marginLeft="14dip"
+	 >
+
+	    <ImageView
+	        android:id="@+id/im_right"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_centerVertical="true"
+	        android:layout_marginRight="20dp"
+	        android:src="@drawable/right_btn_selector" />
+
+	   </RelativeLayout>
+</LinearLayout>

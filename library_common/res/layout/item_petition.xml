@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+     android:orientation="vertical"
+    android:background="@drawable/menu_item_selector"
+    >
+    
+		 <RelativeLayout
+		     android:layout_width="match_parent"
+		     android:layout_height="wrap_content"
+		     android:layout_marginTop="19dip"
+		     android:layout_marginLeft="17dip"
+		 >
+			  <LinearLayout
+			     android:layout_width="wrap_content"
+			     android:layout_height="wrap_content"
+			     android:orientation="horizontal"
+			     android:layout_toLeftOf="@+id/ll_status"
+			     android:layout_marginRight="5dip"
+			     android:layout_alignParentLeft="true"
+			 >
+			    <TextView
+			        android:id="@+id/tv_desc"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:textSize="16sp"
+			        android:textColor="@color/new_title_color"
+			        android:text="某某地方公共设施被严重损坏"
+			      />
+		    </LinearLayout>
+
+		      <LinearLayout
+		          android:layout_width="wrap_content"
+		          android:layout_height="wrap_content"
+		          android:gravity="right"
+		          android:orientation="horizontal"
+		          android:layout_alignParentRight="true"
+		          android:id="@+id/ll_status" >
+
+		    <TextView
+		        android:id="@+id/tv_status"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="11sp"
+		        android:gravity="right"
+		        android:textColor="@color/font_whit"
+		        android:background="@color/kd_status_0"
+		        android:padding="3dip"
+		        android:layout_marginRight="11dip"
+		        android:text="已受理"
+		      />
+		    </LinearLayout>
+	    </RelativeLayout>
+	     <TextView
+	        android:id="@+id/tv_time"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="13sp"
+	        android:layout_marginTop="16dip"
+	        android:layout_marginLeft="17dip"
+	        android:layout_marginBottom="10dip"
+	        android:textColor="@color/grey_font2"
+	        android:text="2014-10-10"
+	      />
+	 
+</LinearLayout>

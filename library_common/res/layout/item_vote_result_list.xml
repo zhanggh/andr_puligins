@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" 
+    android:orientation="vertical"
+    android:background="@drawable/menu_item_selector"
+    >
+       <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:orientation="horizontal"
+        >
+             <TextView
+               android:id="@+id/textView3"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_vertical"
+               android:layout_marginLeft="14dip"
+               android:text="沈阳植物园" />
+
+             <LinearLayout
+                 android:layout_width="25dip"
+                 android:layout_height="11dip" 
+                 android:layout_gravity="center_vertical"
+                 android:background="#0797dd"
+                 android:layout_marginLeft="70dip"
+                 >
+             </LinearLayout>
+
+             <TextView 
+                 android:id="@+id/tv_prc1"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center_vertical"
+                 android:layout_marginLeft="9dip"
+                 android:text="25%"
+                 />
+       </LinearLayout>
+        <!--     分割线 -->
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@drawable/division"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+       <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:orientation="horizontal"
+        >
+             <TextView
+               android:id="@+id/textView3"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_vertical"
+               android:layout_marginLeft="14dip"
+               android:text="沈阳植物园" />
+             
+               <LinearLayout
+                 android:layout_width="14dip"
+                 android:layout_height="11dip" 
+                 android:layout_gravity="center_vertical"
+                 android:background="#ffde00"
+                 android:layout_marginLeft="70dip"
+                 >
+             </LinearLayout>
+
+             <TextView 
+                 android:id="@+id/tv_prc2"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center_vertical"
+                 android:layout_marginLeft="9dip"
+                 android:text="14%"
+                 />
+       </LinearLayout>
+        <!--     分割线 -->
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@drawable/division"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+       <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:orientation="horizontal"
+        >
+             <TextView
+               android:id="@+id/textView3"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_vertical"
+               android:layout_marginLeft="14dip"
+               android:text="沈阳植物园" />
+               <LinearLayout
+                 android:layout_width="40dip"
+                 android:layout_height="11dip" 
+                 android:layout_gravity="center_vertical"
+                 android:background="#f8765e"
+                 android:layout_marginLeft="70dip"
+                 >
+             </LinearLayout>
+
+             <TextView 
+                 android:id="@+id/tv_prc1"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center_vertical"
+                 android:layout_marginLeft="9dip"
+                 android:text="40%"
+                 />
+       </LinearLayout>
+</LinearLayout>

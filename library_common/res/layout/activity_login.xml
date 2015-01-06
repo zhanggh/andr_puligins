@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+     >
+	<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" android:gravity="center"
+    android:background="@drawable/situo_common_border"
+    android:layout_marginTop="14dip"
+    android:id="@+id/ll_logininfo">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="38dip"
+        android:hint="@string/zh_hint_username"
+        android:paddingLeft="16dip"
+        android:gravity="center_vertical"
+        android:text=""
+        android:id="@+id/et_name"
+        android:background="@null"/>
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="1dip"
+    android:orientation="vertical"
+    android:background="#c5c5c5"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="38dip"
+        android:hint="@string/zh_hint_login_pwd"
+        android:paddingLeft="16dip"
+        android:gravity="center_vertical" 
+        android:id="@+id/et_pwd"
+        android:background="@null"
+        android:text=""
+        android:inputType="textPassword"/>
+    </LinearLayout>
+    
+	   
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/zh_login" 
+        android:textSize="21dip"
+        android:textColor="@color/blue_btn_white"
+        android:layout_marginTop="15dip"
+        android:layout_below="@+id/ll_logininfo"
+        android:id="@+id/btn_sign"/>
+    
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/zh_register" 
+        android:textColor="@color/blue_font"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="18dip"
+        android:id="@+id/btn_register"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/zh_tv_forgetpwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/btn_sign"
+        android:layout_below="@+id/btn_sign"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="10dip"
+        android:text="@string/zh_forgetpwd" 
+        android:onClick="forgetpwd"
+        android:clickable="true"
+        />
+
+</RelativeLayout>

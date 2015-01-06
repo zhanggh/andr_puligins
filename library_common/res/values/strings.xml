@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+ 
+   	<string name="refresh">刷新</string>
+    <string name="person">个人中心</string>
+    <string name="tips">提示</string>
+    <string name="situo_ok">确定</string>
+    <string name="situo_cancel">取消</string>
+    <string name="loading">加载中</string>
+    <string name="zh_home">主页</string>
+    <string name="zh_setting_aboutus">关于我们</string>
+    <string name="zh_not_need">非必填</string>
+    
+    
+ 	<string name="zh_my_action">我的关注</string>
+    <string name="zh_write_commtent">写评论</string>
+    <string name="zh_input_text">请输入文字</string>
+    <string name="gov_search_hint">请输入机构名称</string>
+    <string name="zh_my_ask">我的提问</string>
+    <string name="tips">提示</string>
+    <string name="situo_ok">确定</string>
+    <string name="situo_cancel">取消</string>
+    <string name="loading">加载中</string>
+    <string name="zh_home">主页</string>
+    <string name="touch_again_exit">再按一次退出程序</string>
+    <string name="rsp_err">网络不给力哦~</string>
+    <string name="app_name">智慧浑南</string>
+	<string name="zh_my_info">我的</string>
+    <string name="zh_my_qr">扫一扫</string>
+    <string name="zh_my_group">我的团购</string>
+    <string name="zh_my_order">订单</string>
+    <string name="zh_my_notify">通知</string>
+    <string name="zh_my_set">设置</string>
+    <string name="zh_my_guide">新手指引</string>
+    <string name="zh_my_shareset">分享设置</string>
+    <string name="touch_again_exit">再按一次退出程序</string>
+    <string name="zh_setting_hit_suggest">请写下您在使用过程中发现的问题或者不便之处，促使我们改进，谢谢！</string>
+     <string name="zh_referrer">推荐人</string>
+    <string name="zh_ref_friend">推荐给朋友</string>
+    <string name="zh_user_guide">新手引导</string>
+    <string name="zh_faq">常见问题</string>
+    <string name="zh_msg_send">接收推送消息</string>
+    <string name="zh_suggest">意见反馈</string>
+    <string name="zh_test_version">检测版本</string>
+    <string name="zh_referrer_phone">推荐人手机号:</string>
+    <string name="zh_setting_version_sponsor">主办单位:</string>
+    <string name="zh_setting_version_contact_phone">联系电话:</string>
+    <string name="zh_setting_version_fax">传真号码:</string>
+    <string name="zh_setting_version_addr">单位地址:</string>
+    <string name="zh_setting_version_website">官方网站:</string>
+    <string name="zh_setting_aboutus">关于我们</string>
+    <string name="zh_not_need">非必填</string>
+      <string name="zh_clear_cache">清理缓存</string>
+<!-- 	扫一扫 -->
+	 <string name="zh_msg_camera_framework_bug">抱歉，Android相机出现问题。您可能需要重启设备。</string>
+	    
+<!-- 	 用户登录 注册 -->
+	<string name="rsp_err">网络不给力哦~</string>
+    <string name="zh_hint_username">输入账户名/手机号</string>
+    <string name="zh_login">登录</string>
+    <string name="zh_forgetpwd">忘记密码?</string>
+    <string name="zh_findpwd">找回密码</string>
+    <string name="zh_register">注册</string>
+    <string name="zh_setpwd">设置密码</string>
+    <string name="zh_hint_mobile">请输入您的手机号码</string>
+    <string name="zh_hint_smscode">请输入验证码</string>
+    <string name="zh_sure">确认</string>
+    <string name="zh_next_step">下一步</string>
+    <string name="zh_get_smscode">获取验证码</string>
+    <string name="zh_hint_login_pwd">请输入登录密码</string>
+    <string name="zh_hint_pwd">请输入新的登录密码</string>
+    <string name="zh_hint_pwd2">请再次输入登录密码</string>
+    <string name="zh_modify_pwd">修改密码</string>
+    <string name="zh_modify_info">修改资料</string>
+    <string name="zh_bind_mobile">修改绑定手机号</string>
+    <string name="zh_userinfo">个人信息</string>
+    <string name="zh_modify_icon">修改头像</string>
+    <string name="zh_userinfomodify">资料修改</string>
+    <string name="zh_userpwdmodify">密码修改</string>
+    <string name="zh_pwd_tips">密码必须有6-20位，由字符加符号或者数字组合而成</string>
+    <string name="zh_op_finish">完成</string>
+    <string name="zh_resmscode">重发验证码</string>
+    
+<!--    信件 -->
+	 <string name="gov_hot">热点</string>
+    <string name="gov_trends">动态</string>
+    <string name="gov_gov">机构</string>
+    <string name="gov_my">我的</string>
+    <string name="gov_search_hint">请输入机构名称</string>
+    <string name="zh_my_ask">我的提问</string>
+    <string name="zh_my_answer">我的回答</string>
+    <string name="zh_my_action">我的关注</string>
+    <string name="zh_write_commtent">写评论</string>
+    <string name="zh_input_text">请输入文字</string>
+    <string name="zh_pic">照片</string>
+    <string name="zh_photo">拍照</string>
+    <string name="zh_video">视频</string>
+    <string name="zh_my_bl">我的报料</string>
+    <string name="zh_other_bl">网友报料</string>
+    <string name="zh_has_ask">查看该机构回答过的问题</string>
+    
+    <!-- 	投票 -->
+	<string name="zh_vote_btn">投票</string>
+	<string name="zh_vote_end">已结束</string>
+	
+	<!--     号码通 -->
+	<string name="zh_num_search_tip">输入关键词</string>
+	<string name="zh_num_gov">政府机关</string>
+	<string name="zh_num_hos">医院机构</string>
+	<string name="zh_num_help">救援热线</string>
+	<string name="zh_num_societyhelp">社会服务</string>
+	<string name="zh_num_libry">图书馆</string>
+	<string name="zh_num_museum">博物馆</string>
+	<string name="zh_num_traffic">铁路航空</string>
+	<string name="zh_num_bank">银行</string>
+	<string name="zh_num_logistics">快递物流</string>
+	<string name="zh_num_car">租车代驾</string>
+	<string name="zh_num_repair">家电维修</string>
+	<string name="zh_num_familyhelp">家政</string>
+	<string name="zh_num_move">搬家</string>
+	<string name="zh_num_takeout">外卖送餐</string>
+	<string name="zh_num_traffic1">铁路航空</string>
+	<string name="zh_num_life">生活</string>
+</resources>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="162dip" >
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="35dip"
+            android:layout_gravity="bottom"
+            android:background="#800f0f0f"
+             >
+
+            <TextView
+                android:id="@+id/tv_imgtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/ll_dot" 
+                android:layout_marginLeft="13dip"
+                android:singleLine="true"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dip"
+                android:gravity="center" 
+                android:id="@+id/ll_dot"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dip">
+
+                <View
+                    android:id="@+id/v_dot0"
+                    style="@style/dot_style"
+                    android:background="@drawable/dot_focused" 
+                    android:visibility="gone"/>
+
+                <View
+                    android:id="@+id/v_dot1"
+                    style="@style/dot_style"
+                    android:visibility="gone" />
+
+                <View
+                    android:id="@+id/v_dot2"
+                    style="@style/dot_style"
+                    android:visibility="gone" />
+
+                <View
+                    android:id="@+id/v_dot3"
+                    style="@style/dot_style"
+                    android:visibility="gone" />
+
+                <View
+                    android:id="@+id/v_dot4"
+                    style="@style/dot_style" 
+                    android:visibility="gone"/>
+                <View
+                    android:id="@+id/v_dot5"
+                    style="@style/dot_style" 
+                    android:visibility="gone"/>
+                <View
+                    android:id="@+id/v_dot6"
+                    style="@style/dot_style"
+                    android:visibility="gone" />
+                <View
+                    android:id="@+id/v_dot7"
+                    style="@style/dot_style"
+                    android:visibility="gone" />
+                <View
+                    android:id="@+id/v_dot8"
+                    style="@style/dot_style"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </RelativeLayout>
+    </FrameLayout>
+
+</LinearLayout>

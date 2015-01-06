@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+  	  <LinearLayout
+  	      android:layout_width="match_parent"
+  	      android:layout_height="100dip"
+  	      android:layout_gravity="center_vertical"
+  	      android:orientation="horizontal" >
+
+     		<ImageView
+	 	     android:layout_width="68dip"
+	 	     android:layout_height="68dip"
+	 	     android:layout_gravity="center_vertical"
+	 	     android:gravity="center"
+	 	     android:scaleType="fitXY"
+	 	     android:layout_marginLeft="11dip"
+	 	     android:layout_marginRight="13dip"
+	 	     />
+      
+     		
+     		 <TextView
+		        android:id="@+id/tv_desc"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="@dimen/text_tile_size"
+		        android:textColor="@color/new_title_color"
+		        android:layout_gravity="center_vertical"
+				android:text="广州市天河区体育西107号"		         
+		      />
+      </LinearLayout>
+<!--     分割线 -->
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@drawable/division"
+        android:orientation="vertical" >
+    </LinearLayout>
+     <LinearLayout
+  	      android:layout_width="match_parent"
+  	      android:layout_height="50dip"
+  	      android:layout_gravity="center_vertical"
+  	      android:orientation="horizontal" >
+     		 <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="@dimen/text_tile_size"
+		        android:textColor="@color/new_title_color"
+		        android:layout_gravity="center_vertical"
+		        android:layout_marginLeft="18dip"
+				android:text="电话："		         
+		      /> 
+         
+     		 <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="@dimen/text_tile_size"
+		        android:textColor="@color/new_title_color"
+		        android:layout_gravity="center_vertical"
+				android:text="13943583454"		    
+				android:layout_marginLeft="20dip"     
+		      /> 
+         
+     </LinearLayout>
+     
+     <!--     分割线 -->
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@drawable/division"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:orientation="vertical" >
+    </LinearLayout>
+    
+       <LinearLayout
+  	      android:layout_width="match_parent"
+  	      android:layout_height="50dip"
+  	      android:layout_gravity="center_vertical"
+  	      android:orientation="horizontal" >
+     		 <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="@dimen/text_tile_size"
+		        android:textColor="@color/new_title_color"
+		        android:layout_gravity="center_vertical"
+		        android:layout_marginLeft="18dip"
+				android:text="地址："		         
+		      /> 
+         
+     		 <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="@dimen/text_tile_size"
+		        android:textColor="@color/new_title_color"
+		        android:layout_gravity="center_vertical"
+				android:text="广州市天河区天河城"		    
+				android:layout_marginLeft="20dip"     
+		      /> 
+         
+     </LinearLayout>
+     <!--     分割线 -->
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@drawable/division"
+        android:orientation="vertical" >
+    </LinearLayout>
+</LinearLayout>

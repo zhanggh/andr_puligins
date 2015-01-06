@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+     >
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:gravity="center_horizontal"
+	    >
+		<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="36dip"
+	    android:orientation="horizontal" 
+	    android:gravity="center_vertical"
+	    android:background="@drawable/situo_common_border"
+	    android:layout_marginTop="14dip"
+	    >
+
+	    <EditText
+	        android:id="@+id/et_passwd"
+	        android:layout_width="match_parent"
+	        android:layout_height="36dip"
+	        android:background="@null"
+	        android:gravity="center_vertical"
+	        android:hint="@string/zh_hint_pwd"
+	        android:inputType="textPassword"
+	        android:paddingLeft="13dip" />
+	    </LinearLayout>
+		<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="36dip"
+	    android:orientation="horizontal" 
+	    android:gravity="center_vertical"
+	    android:background="@drawable/situo_common_border"
+	    android:layout_marginTop="14dip"
+	    >
+
+	    <EditText
+	        android:id="@+id/et_ensure_passwd"
+	        android:layout_width="match_parent"
+	        android:layout_height="36dip"
+	        android:background="@null"
+	        android:gravity="center_vertical"
+	        android:hint="@string/zh_hint_pwd2"
+	        android:inputType="textPassword"
+	        android:paddingLeft="13dip" />
+	    </LinearLayout>
+		
+		<TextView 
+		    android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+		    android:textSize="9sp"
+		    android:layout_marginTop="9dip"
+		    android:text="@string/zh_pwd_tips" 
+		    />
+		
+	    <Button
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/zh_op_finish" 
+	        android:textSize="21sp"
+	        android:textColor="@color/blue_btn_white"
+	        android:layout_marginTop="9dip"
+	        android:id="@+id/btn_op_finish"/>
+    </LinearLayout>
+
+</RelativeLayout>

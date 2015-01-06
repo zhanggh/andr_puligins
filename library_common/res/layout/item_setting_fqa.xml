@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="70dp"
+    android:background="#edebec"
+    android:paddingBottom="6.0dip"
+    android:paddingTop="6.0dip" >
+
+    <TextView
+        android:id="@+id/tv_fqa_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:text="帮助信息"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="20dp"
+        android:textColor="#4c4c4c"
+        android:textSize="@dimen/text_tile_size" />
+
+</RelativeLayout>

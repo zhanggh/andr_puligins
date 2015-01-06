@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/transparent"
+    android:gravity="center_horizontal" >
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="210dip"
+    android:orientation="vertical" 
+    android:layout_marginLeft="4dip"
+    android:layout_marginRight="4dip"
+    android:background="@drawable/dialog_border"
+    >
+    	<ListView
+        android:id="@+id/lv_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="none"
+        android:divider="@color/line_color"
+        android:dividerHeight="0.5dip"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="true"
+        android:smoothScrollbar="true"
+        android:listSelector="@drawable/menu_item_selector"
+		android:cacheColorHint="@android:color/transparent"
+		android:layout_marginTop="10dip"
+		android:paddingLeft="10dip"
+		android:paddingRight="10dip"
+		android:scrollbars="none"
+         >
+    </ListView>
+    </LinearLayout>
+   
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    android:layout_marginLeft="4dip"
+    android:layout_marginRight="4dip"
+    android:layout_marginBottom="4dip"
+    android:background="@drawable/dialog_border"
+    android:layout_marginTop="5dip"
+    >
+    	<Button
+	    android:layout_width="match_parent"
+	    android:layout_height="38dip"
+	    android:background="@drawable/menu_item_selector"
+	    android:id="@+id/btn_cancel"
+	    android:text="取消"
+	    android:gravity="center"
+	    android:textSize="15sp"
+	    android:textColor="@color/blue_font"
+	    >
+	    	</Button>
+    	</LinearLayout>
+
+</LinearLayout>

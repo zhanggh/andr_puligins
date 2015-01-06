@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 二维码扫描主界面 -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <SurfaceView
+        android:id="@+id/preview_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <com.plugin.barcode.view.ViewfinderView
+        android:id="@+id/viewfinder_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="150dip"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/status_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:background="@color/transparent"
+            android:text="将二维码放入框内，即可自动完成扫描"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dip"
+        android:layout_gravity="bottom"
+        android:background="#800f0f0f" >
+
+         <LinearLayout
+             android:id="@+id/ly_qr_tag"
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:layout_alignParentTop="true"
+             android:layout_centerHorizontal="true"
+             android:orientation="horizontal">"
+             
+             <LinearLayout
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginRight="50dip"
+	            android:layout_gravity="center_vertical"
+	            android:orientation="vertical">
+	
+	            <ImageView
+	                android:id="@+id/im_qr_scan"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:src="@drawable/btn_qr_scan_selector" />
+	
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:textColor="@color/white"
+	                android:layout_gravity="center_horizontal"
+	                android:text="扫码" />
+	        </LinearLayout>
+	
+	        <LinearLayout
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="50dip"
+	            android:layout_gravity="center_vertical"
+	            android:orientation="vertical" >
+	
+	            <ImageView
+	                android:id="@+id/im_qr_pic"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:src="@drawable/btn_qr_image_selector" />
+	
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:textColor="@color/white"
+	                android:layout_gravity="center_horizontal"
+	                android:text="照片" />
+	        </LinearLayout>
+         </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

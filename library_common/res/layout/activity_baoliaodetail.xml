@@ -1,0 +1,144 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    
+    >
+    <ScrollView
+        android:id="@+id/pull_refresh_scrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="15dip"
+    	android:paddingRight="15dip" 
+    	android:layout_marginBottom="49dip"
+    	android:scrollbars="none">
+		 <LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:orientation="vertical"
+		    android:layout_marginTop="14dip"
+		    >
+		        <LinearLayout
+			     android:layout_width="match_parent"
+			     android:layout_height="wrap_content"
+			     android:orientation="horizontal"
+			     android:gravity="center_vertical"
+			 	>
+			    <ImageView
+			        android:id="@+id/iv_image"
+			        android:layout_width="32dip"
+			        android:layout_height="33dip"
+			        android:scaleType="fitXY"
+			      />
+			    <LinearLayout
+				     android:layout_width="match_parent"
+				     android:layout_height="wrap_content"
+				     android:orientation="vertical"
+				     android:gravity="center_vertical"
+				 >
+			    <TextView
+			        android:id="@+id/tv_name"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:textSize="14sp"
+			        android:textColor="@color/new_title_color"
+			        android:layout_marginLeft="7dip"
+			      />
+			    <TextView
+			        android:id="@+id/tv_time"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:textSize="9sp"
+			        android:textColor="@color/grey_font2"
+			        android:layout_marginLeft="7dip"
+			        android:layout_marginTop="2dip"
+			      />
+			    </LinearLayout>
+		    </LinearLayout>
+		    <TextView
+		        android:id="@+id/tv_content"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="13sp"
+		        android:layout_marginLeft="40dip"
+		        android:layout_marginTop="15dip"
+		      />
+			    
+		     <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="13sp"
+		        android:text="评论(0)"
+		        android:textColor="@color/grey_font"
+		        android:layout_marginTop="15dip"
+		        android:layout_marginBottom="10dip"
+		        android:id="@+id/tv_replycount"
+		      />
+		     
+		     <include layout="@layout/line_grey"></include>"
+			 <LinearLayout
+			     android:layout_width="match_parent"
+			     android:layout_height="wrap_content"
+			     android:orientation="vertical"
+			     android:id="@+id/ll_comment"
+			 	>   
+			 </LinearLayout>
+	    </LinearLayout>
+    </ScrollView>
+     
+    
+    <RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="49dip"
+    android:layout_alignParentBottom="true"
+    android:background="@color/white"
+    android:id="@+id/rl_commentbar"
+    >
+    	 <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="1dip"
+	    android:orientation="vertical"
+	    android:background="@color/line_color"
+	    android:layout_alignParentTop="true"/>
+    	 
+    	 <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="30dip"
+	    android:orientation="horizontal"
+	    android:background="@drawable/situo_corner_border"
+	    android:layout_alignParentLeft="true"
+	    android:layout_centerVertical="true"
+	    android:layout_marginLeft="20dip"
+	    android:layout_marginRight="15dip"
+	    android:gravity="center_vertical"
+	    android:layout_toLeftOf="@+id/btn_fav"
+	    android:id="@+id/ll_addcomment">
+	    <ImageView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/write"
+		        android:layout_marginLeft="4dip"
+		        android:clickable="false"
+		        />
+	    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="写评论"
+        android:gravity="center_vertical" 
+        android:background="@null"
+        android:layout_marginLeft="7dip"
+        android:textColor="@color/grey_font2"
+        />
+    	 </LinearLayout>
+    	 
+<!--     	 <Button -->
+<!-- 	        android:layout_width="wrap_content" -->
+<!-- 	        android:layout_height="wrap_content" -->
+<!-- 	        android:background="@drawable/btn_fav_selector" -->
+<!-- 	        android:layout_alignParentRight="true" -->
+<!-- 	        android:layout_centerVertical="true" -->
+<!-- 	        android:layout_marginRight="15dip" -->
+<!-- 	        android:id="@+id/btn_fav"/> -->
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    
+    
+<!--      <color name="title_bg_color">#9dd0a2</color> -->
+    
+    <color name="app_bg">#eeeeee</color>
+    <color name="select_text_color">#eee</color>
+    <drawable name="transparent_background">#00000000</drawable>
+    <color name="item_selector_color">#f4f4f4</color>
+     <color name="grey_start">#CBCBCB</color>
+	 <color name="font_whit">#ffffff</color>
+	 <color name="white">#ffffff</color>
+	 <color  name="zh_tips_bar">#f2f5f5</color>
+	<color  name="kd_status_0">#138ef8</color>
+	<color  name="kd_status_1">#ff3b3b</color>
+	<color  name="kd_email_ct">#161616</color>
+	<color name="black_font">#343434</color>
+	<color name="line_color">#cbcbcb</color>
+	<color name="grey_font">#9d9c9c</color>
+	<color name="grey_font2">#959595</color>
+	<color name="grey_font3">#797979</color>
+	<color name="black">#000000</color>
+	<color name="new_title_color">#161616</color>
+	<color name="font_whit">#ffffff</color>
+	<color name="new_desc_color">#696969</color>
+	<color name="blue_font">#1a87bf</color>
+	<color name="black_font">#343434</color>
+	<color name="font_normal_color">#454545</color>
+	<color name="bg_color">#e2e2e2</color>
+	<color name="new_commentcount_color">#949494</color>
+	<color name="rightmenuitem_selector_color">#3218225e</color>
+	<color name="white_low">#e7f4ed</color>
+	<color name="blue_btn_white">#fff7f6</color>
+	<color name="blue_start">#0f93b8</color>
+	<color name="new_colora2a2a2">#a2a2a2</color>
+	<color name="bottom_tab_bg">#e0f6f6f6</color>
+	<color name="bg_red">#d82f2f</color>
+	<color name="red">#ff0000</color>
+	    <!-- zxing begin -->
+	<color name="contents_text">#ff000000</color>
+	<color name="encode_view">#ffffffff</color>
+	<color name="help_button_view">#ffcccccc</color>
+	<color name="help_view">#ff404040</color>
+  	<color name="possible_result_points">#c0ffff00</color>  
+	<color name="result_image_border">#ffffffff</color>
+	<color name="result_minor_text">#ffc0c0c0</color>
+	<color name="result_points">#c000ff00</color>
+	<color name="result_text">#ffffffff</color>
+	<color name="result_view">#b0000000</color>
+	<color name="sbc_header_text">#ff808080</color>
+	<color name="sbc_header_view">#ffffffff</color>
+	<color name="sbc_list_item">#fffff0e0</color>
+	<color name="sbc_layout_view">#ffffffff</color>
+	<color name="sbc_page_number_text">#ff000000</color>
+	<color name="sbc_snippet_text">#ff4b4b4b</color>
+	<color name="share_text">#ff000000</color>
+	<color name="share_view">#ffffffff</color>
+	<color name="status_view">#50000000</color>
+	<color name="status_text">#ffffffff</color>
+	<color name="viewfinder_frame">#ff000000</color>
+	<color name="viewfinder_laser">#ffff0000</color>
+	<color name="viewfinder_mask">#60000000</color>
+	<color name="header">#58567D</color>
+	<color name="grgray">#686868</color>
+	<!-- zxing end -->
+</resources>

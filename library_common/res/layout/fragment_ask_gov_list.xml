@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white" >
+    
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" 
+    android:layout_marginLeft="10dip"
+    android:layout_marginRight="10dip"
+    android:gravity="center"
+    android:background="@drawable/search_box"
+    android:layout_marginTop="8dip"
+    android:id="@+id/ll_box">
+    	<ImageView
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:src="@drawable/search_icon"
+    	    ></ImageView>
+    	
+    	<TextView
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:text="@string/gov_search_hint"
+    	    android:layout_marginLeft="5dip"
+    	    android:textColor="#afafaf"
+    	    ></TextView>
+    </LinearLayout>
+   <ListView
+        android:id="@+id/lv_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fadingEdge="none"
+        android:divider="@color/line_color"
+        android:dividerHeight="0.5dip"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true"
+        android:listSelector="@drawable/menu_item_selector"
+		android:cacheColorHint="@android:color/transparent"
+		android:layout_marginTop="10dip"
+		android:paddingLeft="10dip"
+		android:paddingRight="10dip"
+		android:scrollbars="none"
+         >
+    </ListView>
+
+</LinearLayout>
