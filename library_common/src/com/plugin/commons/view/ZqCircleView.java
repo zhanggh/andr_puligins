@@ -1,6 +1,12 @@
 package com.plugin.commons.view;
 
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -12,6 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.plugin.R;
+import com.plugin.commons.ComApp;
+import com.plugin.commons.api.ComAppApi;
+import com.plugin.commons.helper.FuncUtil;
 
 
 
@@ -150,7 +159,12 @@ public class ZqCircleView extends RelativeLayout{
 	}
 	
 	public void loadUrl(String url){
+		
+		if(url.equals("http://218.24.200.244/")){
+			mWebView.getSettings().setDefaultTextEncodingName("GBK");
+		} 
 		mWebView.loadUrl(url);
+		 
 	}
 
 	public WebView getmWebView() {

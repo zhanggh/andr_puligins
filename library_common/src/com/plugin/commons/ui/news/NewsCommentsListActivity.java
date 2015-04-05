@@ -81,7 +81,6 @@ public class NewsCommentsListActivity extends BaseActivity{
 		
 		lv_news = (PullToRefreshListView) this.findViewById(R.id.lv_news);
 		mAdapter = new NewsCommentsListAdapter(this, dataList);
-//		ll_comment = (LinearLayout)this.findViewById(R.id.ll_comment);
 		lv_news.setAdapter(mAdapter);
 		lv_news.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
@@ -187,8 +186,9 @@ public class NewsCommentsListActivity extends BaseActivity{
 	
 	private void doRefresh(final boolean isInit,final boolean isRefresh)
 	{
+		ComUtil.showListNone(this.getEmptyView(), "努力加载中...", dataList);
 		//异步
-		sCallBack=new SituoAjaxCallBackImp<CommentModel,NewsService>(findViewById(R.id.ll_root),pageStart,this.dataList,isInit, isRefresh, log,
+		sCallBack=new SituoAjaxCallBackImp<CommentModel,NewsService>(findViewById(R.id.ll_root),pageStart,this.dataList,isInit, isRefresh,
 				this, lv_news, mAdapter,CoreContants.REQUEST_COMMENT,newService) {//, null,newService,null
 
 			@Override

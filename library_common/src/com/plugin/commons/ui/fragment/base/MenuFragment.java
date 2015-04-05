@@ -14,22 +14,25 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.plugin.R;
 import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
 import com.plugin.commons.adapter.NavDrawerListAdapter;
 import com.plugin.commons.helper.DingLog;
-import com.plugin.commons.helper.FuncUtil;
 import com.plugin.commons.model.MenuModel;
 import com.plugin.commons.model.NavDrawerItem;
 import com.plugin.commons.model.NewsTypeModel;
 import com.plugin.commons.service.NewsService;
 import com.plugin.commons.service.NewsServiceImpl;
+import com.plugin.commons.ui.event.SLMenuListOnItemClickListener;
 
 
 @SuppressLint({ "NewApi", "ValidFragment" })
@@ -44,7 +47,8 @@ public class MenuFragment extends Fragment implements OnItemClickListener {
 	private SLMenuListOnItemClickListener mCallback;
 	private int selected = -1;
 	GridView gv_menu;
-
+	RelativeLayout rl_leftHome;
+	ImageView im_leftHome;
 	private int arrayMenuNames;
 	private int arrayMenuCodes;
 	private int arrayMenuIcons;
@@ -97,6 +101,8 @@ public class MenuFragment extends Fragment implements OnItemClickListener {
 
 	@SuppressLint("NewApi")
 	private void findView(View rootView) {
+        rl_leftHome=(RelativeLayout) rootView.findViewById(R.id.rl_leftHome);
+        im_leftHome=(ImageView) rootView.findViewById(R.id.im_leftHome);
 		initMenuList();
 		//mDrawerList = (ListView) rootView.findViewById(R.id.left_menu);  
 		gv_menu = (GridView)rootView.findViewById(R.id.gv_menu);
@@ -131,13 +137,29 @@ public class MenuFragment extends Fragment implements OnItemClickListener {
 		//最终显示在app的栏目
 		List<MenuModel> menus=new ArrayList<MenuModel>(); 
 
-		//首页
-		MenuModel md=new MenuModel();
-		md.setCode(CoreContants.MENU_CODE_HOME);
-		md.setName("首页");
-		md.setIcon(ComApp.getInstance().appStyle.home_btn_selector);
-		menus.add(md);
-		
+		if(!ComApp.getInstance().appStyle.homeOnButtom){
+			//首页
+			MenuModel md=new MenuModel();
+			md.setCode(CoreContants.MENU_CODE_HOME);
+			md.setName("首页");
+			md.setIcon(ComApp.getInstance().appStyle.home_btn_selector);
+			menus.add(md);
+		}else{//home菜单放置与底部右下角
+			rl_leftHome.setVisibility(View.VISIBLE);
+			im_leftHome.setBackgroundResource(ComApp.getInstance().appStyle.home_btn_selector);
+			im_leftHome.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					 if(mCallback!=null){
+						NavDrawerItem  item =new NavDrawerItem();
+						item.setCode(CoreContants.MENU_CODE_HOME); 
+						item.setTitle("首页");
+			        	mCallback.selectItem(item);
+			         }
+				}
+			});
+		}
         if(allMenuFromMap.size()>0){//从map中获取app全部menu
     		for(NewsTypeModel menu:menusOnline){
     			log.info(menu.getName()+";"+menu.getId());
@@ -191,16 +213,6 @@ public class MenuFragment extends Fragment implements OnItemClickListener {
         selected = position;
 	}
 
-	/**
-     * 左侧菜单 点击回调接口
-     * @author FX_SKY
-     *
-     */
-    public interface SLMenuListOnItemClickListener{
-    	
-    	public void selectItem(NavDrawerItem item);
-    }
-    
     @Override
 	public void onResume() {
 		super.onResume();

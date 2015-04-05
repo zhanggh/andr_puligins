@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" 
-    android:background="@drawable/menu_item_selector"
+    android:layout_width="match_parent"
+    android:layout_height="76dip" 
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingTop="10dip"
+    android:paddingBottom="10dip"
+    android:paddingLeft="12dip"
+    android:paddingRight="12dip"
     >
-	<LinearLayout
-	     android:layout_width="wrap_content"
-	     android:layout_height="76dip"
-	     android:background="@null"
-	     android:orientation="horizontal"
-	     android:gravity="center_vertical"
-	     android:paddingTop="12dip"
-	     android:paddingBottom="12dip"
-	     android:paddingLeft="10dip"
-	     android:paddingRight="10dip"
-	 >
 	 <RelativeLayout
+	     android:id="@+id/rl_layout"
 	     android:layout_width="80dip"
 	     android:layout_height="50dip"
 	 >
@@ -23,15 +18,9 @@
         android:id="@+id/iv_image"
         android:layout_width="80dip"
         android:layout_height="50dip"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:scaleType="fitXY"
-      />
-    <ImageView
-        android:id="@+id/iv_video"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/video"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
       />
     <TextView
         android:id="@+id/tv_subtype"
@@ -50,38 +39,53 @@
         android:textSize="10sp"
         android:gravity="center"
       />
+
+    <ImageView
+        android:id="@+id/iv_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/video" 
+        android:visibility="gone"/>
+
     </RelativeLayout>
 	<RelativeLayout
 	     android:layout_width="match_parent"
-	     android:layout_height="match_parent"
+	     android:layout_height="56dip"
 	     android:background="@null"
 	     android:layout_marginLeft="8dip"
 	 >
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/new_title_color"
-        android:gravity="center_vertical"
-        android:textSize="16sp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:lineSpacingExtra="6sp"
-        android:maxLines="2"
-        />
-     <TextView
-        android:id="@+id/tv_desc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/new_desc_color"
-        android:gravity="center_vertical"
-        android:maxLines="2"
-        android:textSize="14sp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tv_title"
-        android:layout_marginTop="2dip"
-        android:visibility="gone"
-        />
+    
+	    <LinearLayout
+		     android:layout_width="wrap_content"
+		     android:layout_height="match_parent"
+		     android:layout_alignParentLeft="true"
+        	 android:orientation="vertical"
+        	 android:gravity="center_vertical"
+		 >
+	 		<TextView
+		        android:id="@+id/tv_title"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:textColor="@color/new_title_color"
+		        android:textSize="16sp"
+		        android:lineSpacingExtra="6sp"
+		        android:maxLines="2"
+		        android:ellipsize="end"
+		        android:layout_gravity="center_vertical"
+		        />
+	 		<TextView
+		        android:id="@+id/tv_desc"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textColor="@color/new_desc_color"
+		        android:maxLines="1"
+		        android:textSize="14sp"
+		        android:ellipsize="end"
+		        android:layout_gravity="center_vertical"
+		        />
+	   </LinearLayout>
       <TextView
         android:id="@+id/tv_commentcount"
         android:layout_width="wrap_content"
@@ -110,5 +114,4 @@
         android:visibility="gone"
         />
     </RelativeLayout>
-    </LinearLayout>
 </LinearLayout>

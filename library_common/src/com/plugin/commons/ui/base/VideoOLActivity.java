@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.plugin.R;
 import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
-import com.plugin.commons.broadcast.ComBroatCast;
 import com.plugin.commons.helper.ComUtil;
 import com.plugin.commons.helper.DialogUtil;
 import com.plugin.commons.helper.DingLog;
@@ -24,6 +23,7 @@ import com.plugin.commons.helper.FuncUtil;
 import com.plugin.commons.helper.SituoHttpAjax;
 import com.plugin.commons.helper.XHConstants;
 import com.plugin.commons.helper.XHSDKUtil;
+import com.plugin.commons.listener.ComBroatCast;
 import com.plugin.commons.model.CacheModel;
 import com.plugin.commons.model.NewsInfoModel;
 import com.plugin.commons.model.NewsTypeModel;
@@ -33,7 +33,7 @@ import com.plugin.commons.service.DetailBarManager;
 import com.plugin.commons.service.NewsService;
 import com.plugin.commons.service.NewsServiceImpl;
 import com.plugin.commons.ui.news.NewsCommentsListActivity;
-import com.plugin.commons.widget.VideoWidget;
+import com.plugin.commons.widget.VideoSurfacePlayer;
 import com.zq.types.StBaseType;
 
 
@@ -66,8 +66,7 @@ public class VideoOLActivity extends BaseActivity{
 			mNewType =(NewsTypeModel)getIntent().getExtras().get(CoreContants.PARAMS_TYPE);
 		}
 		//回调
-		this.receiver=new ComBroatCast(this,CoreContants.ACTIVITY_RETTRUN);
-		this.receiver.setmNews(mNews);
+		this.receiver=new ComBroatCast(mNews,this,CoreContants.ACTIVITY_RETTRUN);
 		newService = new NewsServiceImpl();
 		refreshUI();
 		
@@ -86,7 +85,7 @@ public class VideoOLActivity extends BaseActivity{
 		btn_fav = (Button)this.findViewById(R.id.btn_fav);
 		btn_fav.setBackgroundResource(ComApp.getInstance().appStyle.btn_fav_selector);
 		
-		btn_right = (Button)this.findViewById(ComApp.getInstance().appStyle.btn_title_right);
+		btn_right = (Button)this.findViewById(R.id.btn_title_right);
 		iv_image = (ImageView)this.findViewById(R.id.iv_image);
 		rl_video = (RelativeLayout)this.findViewById(R.id.rl_video);
 		tv_arttitle = (TextView)this.findViewById(R.id.tv_arttitle);
@@ -106,18 +105,11 @@ public class VideoOLActivity extends BaseActivity{
 		if(CoreContants.MENU_CODE_VIDEO_WH.equals(mAttype)){
 			this.findViewById(R.id.rl_commentbar).setVisibility(View.GONE);
 		}
-//		else if(CoreContants.MENU_CODE_KUANDIAN.equals(mAttype)||CoreContants.MENU_CODE_TRIPAREA.equals(mAttype)||CoreContants.MENU_CODE_NEWS_XINHUA.equals(mAttype)){
-//			this.findViewById(R.id.rl_commentbar).setVisibility(View.GONE);
-//			btn_right.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.btn_colection_selector));
-//			btn_right.setVisibility(View.VISIBLE);
-//			CacheModel cm = CacheDataService.getAcction(CacheModel.CACHE_ASKNEWS, mNews.getId());
-//			btn_right.setSelected(cm!=null);
-//		}
 		else{
 			//btn_comment_selector
-			btn_right.setBackground(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_comment_selector));
+			btn_right.setBackgroundDrawable(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_comment_selector));
 			btn_right.setVisibility(View.VISIBLE);
-			tv_right = (TextView)this.findViewById(ComApp.getInstance().appStyle.tv_right);
+			tv_right = (TextView)this.findViewById(R.id.tv_right);
 			tv_right.setVisibility(View.VISIBLE);
 			tv_right.setText(mNews.getReplycount());
 			addComment();
@@ -134,13 +126,19 @@ public class VideoOLActivity extends BaseActivity{
 			
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(VideoOLActivity.this,VideoWidget.class);
-				intent.putExtra(VideoWidget.PARAM_URL, mNews.getVideourl());
-				intent.putExtra(VideoWidget.PARAM_TITLE, mNews.getTitle());
-				startActivity(intent);
-				overridePendingTransition(R.anim.my_scale_action,
-						R.anim.fade_out);
+//				// TODO Auto-generated method stub
+//				Intent intent = new Intent(VideoOLActivity.this,VideoWidget.class);
+//				intent.putExtra(VideoWidget.PARAM_URL, mNews.getVideourl());
+//				intent.putExtra(VideoWidget.PARAM_TITLE, mNews.getTitle());
+//				startActivity(intent);
+//				overridePendingTransition(R.anim.my_scale_action,
+//						R.anim.fade_out);
+				//调用系统自带播放器
+				ComUtil.playVideoFromUrl(VideoOLActivity.this,mNews.getVideourl());
+				
+//				Intent intent = new Intent(VideoOLActivity.this,VideoSurfacePlayer.class);
+//				intent.putExtra(CoreContants.PARAMS_MSG, mNews.getVideourl());
+//				startActivity(intent);
 			}
 		});
 		btn_right.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +161,7 @@ public class VideoOLActivity extends BaseActivity{
 	 */
 	private void addComment(){
 		CacheModel cm = new CacheModel();
-		cm.type = CacheModel.CACHE_ASKNEWS;
+		cm.type = CacheModel.CACHE_VIDEO;
 		cm.id = mNews.getId()+"";
 		cm.msg = mNews;
 		DetailBarManager detailBarMng = new DetailBarManager(this,this.findViewById(R.id.rl_commentbar),cm);

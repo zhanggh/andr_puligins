@@ -3,15 +3,16 @@ package com.plugin.commons.ui.news;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xinhua.analytics.analytics.AnalyticsAgent;
-
-import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -27,16 +28,19 @@ import com.plugin.commons.helper.DingLog;
 import com.plugin.commons.helper.FuncUtil;
 import com.plugin.commons.helper.SituoHttpAjax;
 import com.plugin.commons.helper.SituoHttpAjax.SituoAjaxCallBack;
+import com.plugin.commons.model.CacheModel;
 import com.plugin.commons.model.NewPicItemModel;
 import com.plugin.commons.model.NewsInfoModel;
 import com.plugin.commons.model.NewsTypeModel;
 import com.plugin.commons.model.RspResultModel;
+import com.plugin.commons.service.CacheDataService;
 import com.plugin.commons.service.NewsService;
 import com.plugin.commons.service.NewsServiceImpl;
+import com.plugin.commons.ui.base.BaseActivity;
 import com.plugin.commons.ui.fragment.base.GuideScroll;
 import com.zq.types.StBaseType;
 
-public class NewsImageActivity extends Activity {
+public class NewsImageActivity extends BaseActivity {
 	DingLog log = new DingLog(NewsImageActivity.class);
 	private GuideScroll mScrollLayout;
 	int mSelectItem=0;
@@ -52,8 +56,14 @@ public class NewsImageActivity extends Activity {
 	private List<ImageView> imageViews; // 滑动的图片集合
 	FrameLayout fl_scroll;
 	ViewPager viewPager;
+	private String mAttype;
+	private Button btn_right;
+	private TextView tv_right;
+	private View btn_share;
+	private Button btn_fav;
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_imagenew);
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(CoreContants.PARAMS_NEWS)) {
@@ -62,6 +72,7 @@ public class NewsImageActivity extends Activity {
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(CoreContants.PARAMS_TYPE)) {
         	mNewType = (NewsTypeModel) getIntent().getExtras().getSerializable(CoreContants.PARAMS_TYPE);
 		}
+        ComUtil.customeTitle(this,FuncUtil.getPexfStr(mNews.getTitle(), 12, "..."),true);
         initViews();
         request();
     }
@@ -69,13 +80,19 @@ public class NewsImageActivity extends Activity {
     private void initViews()
     {
     	newsSvc = new NewsServiceImpl();
-    	btn_left = (Button)this.findViewById(R.id.btn_left);
-    	tv_title = (TextView)this.findViewById(R.id.tv_title);
+    	btn_left = (Button)this.findViewById(R.id.btn_title_left);
+    	tv_title = (TextView)this.findViewById(R.id.tv_img_title);
     	tv_desc = (TextView)this.findViewById(R.id.tv_desc);
     	tv_readcount = (TextView)this.findViewById(R.id.tv_readcount);
     	fl_scroll = (FrameLayout)this.findViewById(R.id.fl_scroll);
+    	btn_right = (Button)this.findViewById(R.id.btn_title_right);
     	fl_scroll.setBackgroundResource(ComApp.getInstance().appStyle.placeholder_b);
         tv_title.setText(mNews.getTitle());
+        btn_share = (Button)this.findViewById(R.id.btn_share);
+		btn_share.setBackgroundDrawable(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_share_selector));
+		btn_fav = (Button)this.findViewById(R.id.btn_fav);
+		btn_fav.setBackgroundDrawable(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_fav_selector));
+        
         btn_left.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -85,17 +102,71 @@ public class NewsImageActivity extends Activity {
 			}
 		});
         
+        if(mNewType!=null){
+			mAttype = FuncUtil.isEmpty(mNewType.getParentid())? mNewType.getId():mNewType.getParentid();
+			if(FuncUtil.isEmpty(mNews.getArttype())){
+				mNews.setArttype(mAttype);
+			}
+		}
+		else{
+			mAttype = mNews.getArttype();
+		}
+		
+		NewsTypeModel ntype=newsSvc.getNewsType(mAttype);
+		if(ntype!=null){
+			if(CoreContants.NEWS_COMMENT.equals(newsSvc.getNewsType(mAttype).getOpenreply())){
+				btn_right.setBackgroundDrawable(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_comment_selector));
+				btn_right.setVisibility(View.VISIBLE);
+				tv_right = (TextView)this.findViewById(R.id.tv_right);
+				tv_right.setVisibility(View.VISIBLE);
+				tv_right.setText(mNews.getReplycount());
+				ComUtil.addComment(NewsImageActivity.this,mNews,newsSvc,mAttype,tv_right,CacheModel.CACHE_IMG_NEWS);
+			}else{
+				this.findViewById(R.id.rl_commentbar).setVisibility(View.GONE);
+				btn_right.setBackgroundDrawable(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_colection_selector));
+				btn_right.setVisibility(View.VISIBLE);
+				CacheModel cm = CacheDataService.getAcction(CacheModel.CACHE_ASKNEWS,mNews.getArttype()+mNews.getId());
+				btn_right.setSelected(cm!=null);
+			}
+			btn_right.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					if(CoreContants.NEWS_COMMENT.equals(newsSvc.getNewsType(mAttype).getOpenreply())){
+						Intent intent = new Intent(NewsImageActivity.this,NewsCommentsListActivity.class);
+						intent.putExtra(CoreContants.PARAMS_MSG,"0");
+						intent.putExtra(CoreContants.PARAMS_MSG_ID,mNews.getId());
+						intent.putExtra(CoreContants.PARAMS_TYPE,mAttype);
+						startActivity(intent);
+					}else{
+						CacheModel cm = new CacheModel();
+						cm.type = CacheModel.CACHE_IMG_NEWS;
+						cm.id = mNews.getArttype()+mNews.getId();
+						cm.msg = mNews;
+						ComUtil.doCollection(cm,NewsImageActivity.this,mNews,mAttype,btn_right);
+					}
+				}
+			});
+		}else{
+			btn_right.setVisibility(View.INVISIBLE);
+			this.findViewById(R.id.rl_commentbar).setVisibility(View.GONE);
+		}
     }
     
     private void showGuideView(){
     	if(!FuncUtil.isEmpty(imageList)){
 			imageViews = new ArrayList<ImageView>();
+			Bitmap loadImg = BitmapFactory.decodeResource(getResources(),R.drawable.draw_bgblack);
+			//imageList.get(0).setImg("http://img04.tooopen.com/images/20130805/tooopen_18234668.jpg");
+			//imageList.get(0).setDescition("fdsfse发动机司法局饿哦围绕而我诶我热uwofjwerwe分为沃尔沃而非我热我分为我热我热我维吾尔");
 			// 初始化图片资源
 			for (int i = 0; i < imageList.size(); i++) {
 				ImageView imageView = new ImageView(this);
-				imageView.setScaleType(ScaleType.CENTER_CROP);
+				imageView.setScaleType(ScaleType.FIT_CENTER);
+				imageView.setBackgroundColor(getResources().getColor(R.color.black));
 				imageViews.add(imageView);
-				ComApp.getInstance().getFinalBitmap().display(imageView, imageList.get(i).getImg(),ComApp.getInstance().getLoadingBig(),ComApp.getInstance().getLoadingBig());
+				ComApp.getInstance().getFinalBitmap().display(imageView, imageList.get(i).getImg(),loadImg,loadImg);
 			}
 			tv_desc.setText(imageList.get(0).getDescition());
 			tv_readcount.setText("("+(mSelectItem+1)+"/"+imageList.size()+")");
@@ -208,22 +279,5 @@ public class NewsImageActivity extends Activity {
 			item.setId(i+"");
 			imageList.add(item);
 		}
-	}
-	@Override
-	public void onDestroy(){
-		super.onDestroy();
-	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		AnalyticsAgent.onResume(this);
-	}
-	
-	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		AnalyticsAgent.onResume(this);
 	}
 }

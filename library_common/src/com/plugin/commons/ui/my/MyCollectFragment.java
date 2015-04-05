@@ -47,21 +47,8 @@ public class MyCollectFragment extends BaseFragment {
 	List<ContentBean> colslist;
 	private ZhKdBaseAdapter<ContentBean> mAdapter;
 	
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		log.info("onViewCreated");
-		initViews(view);
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		log.info("onActivityCreated");
-		initDisplay();
-	}
-	
-	private void initViews(View view) {
+	 
+	protected void initViews(View view) {
 		lv_news = (PullToRefreshListView) view.findViewById(R.id.lv_news);
 		mAdapter = new MyCollectListAdapter(mActivity,dataList.getColslist());
 		lv_news.setAdapter(mAdapter);
@@ -105,6 +92,30 @@ public class MyCollectFragment extends BaseFragment {
 					type.setHassub("0");
 					ComUtil.goNewsDetail(mActivity, item, type);
 				}
+				if(colslist.get(arg2-1).getType()==CacheModel.CACHE_VIDEO){
+					NewsInfoModel item = dataList.getNewsById(dataList.getColslist().get(arg2-1).getId());
+					NewsTypeModel type = new NewsTypeModel();
+					type.setId(item.getArttype());
+					type.setType(CoreContants.NEWS_SUBTYPE_VIDEO);
+					type.setHassub("0");
+					ComUtil.goNewsDetail(mActivity, item, type);
+				}
+				if(colslist.get(arg2-1).getType()==CacheModel.CACHE_IMG_NEWS){
+					NewsInfoModel item = dataList.getNewsById(dataList.getColslist().get(arg2-1).getId());
+					NewsTypeModel type = new NewsTypeModel();
+					type.setId(item.getArttype());
+					type.setType(CoreContants.NEWS_SUBTYPE_PIC);
+					type.setHassub("0");
+					ComUtil.goNewsDetail(mActivity, item, type);
+				}
+				if(colslist.get(arg2-1).getType()==CacheModel.CACHE_ASKNEWS_EXT){//个性化图文
+					NewsInfoModel item = dataList.getNewsById(dataList.getColslist().get(arg2-1).getId());
+					NewsTypeModel type = new NewsTypeModel();
+					type.setId(item.getArttype());
+					type.setType(CoreContants.NEWS_SUBTYPE_WORD_EXT);
+					type.setHassub("0");
+					ComUtil.goNewsDetail(mActivity, item, type);
+				}
 				
 			}
 			
@@ -112,12 +123,13 @@ public class MyCollectFragment extends BaseFragment {
 	
 	}
 	
-	private void initDisplay() {
+	protected void initDisplay() {
 		doRefresh(true);
 	}
 	
 	private void doRefresh(final boolean isInit)
 	{
+		ComUtil.showListNone(getView(), "努力加载中...", colslist);
 		if(isInit){
 //			DialogUtil.showProgressDialog(mActivity);
 		}

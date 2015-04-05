@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+<!-- 	热门应用推荐 -->
+			 
+			<RelativeLayout 
+				    android:layout_width="match_parent"
+			    	android:layout_height="18dip"
+			    	android:background="@color/bg_color"
+				    ></RelativeLayout>
+			<RelativeLayout 
+				    android:layout_width="match_parent"
+			    	android:layout_height="0.2dip"
+			    	android:background="#000"
+				    ></RelativeLayout>
+			
+    <RelativeLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="60dip"
+    	android:background="#eee"
+        >
+
+        <TextView
+            android:id="@+id/tv_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="18dp"
+            android:text="行业应用推荐" />
+        
+    </RelativeLayout>
+    <RelativeLayout 
+	    android:layout_width="match_parent"
+    	android:layout_height="0.2dip"
+    	android:background="#000"
+	    ></RelativeLayout>
+    
+      <LinearLayout 
+	        android:id="@+id/ll_datalist"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:padding="1sp"
+	        android:orientation="horizontal"
+	        android:gravity="center_vertical|center_horizontal"
+	        >
+			
+        
+    </LinearLayout>
+</LinearLayout>

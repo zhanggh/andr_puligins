@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.xinhua.analytics.analytics.AnalyticsAgent;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -33,11 +32,16 @@ import com.plugin.commons.helper.FuncUtil;
 import com.plugin.commons.helper.SituoHttpAjax;
 import com.plugin.commons.helper.XHConstants;
 import com.plugin.commons.helper.XHSDKUtil;
+import com.plugin.commons.helper.SituoHttpAjax.SituoAjaxCallBack;
 import com.plugin.commons.model.AskMsgModel;
+import com.plugin.commons.model.DialogObj;
 import com.plugin.commons.model.RspResultModel;
+import com.plugin.commons.model.WriterTpyeModel;
 import com.plugin.commons.service.AskGovService;
 import com.plugin.commons.service.AskGovServiceImpl;
+import com.plugin.commons.service.DisClsTestService;
 import com.plugin.commons.ui.base.BaseActivity;
+import com.plugin.commons.view.DialogOptionSelect;
 import com.zq.types.StBaseType;
 
 public class PetitionWrActivity extends BaseActivity{
@@ -46,7 +50,11 @@ public class PetitionWrActivity extends BaseActivity{
 	private final int REQUEST_CODE_PHOTO = 12;
 	Button btn_right;
 	EditText et_content;
-//	EditText et_title;
+	LinearLayout ll_typelist;
+	LinearLayout ly_writer_type;
+	TextView tv_writer_type;
+	private DialogObj mSelectItem;
+	private List<DialogObj> dlglist;
 	Button btn_photo;
 	Button btn_pic;
 	TextView tv_pic;
@@ -60,25 +68,41 @@ public class PetitionWrActivity extends BaseActivity{
 	AskGovService askSvc;
 	AskMsgModel mGov;
 	List<String> picPathList = new ArrayList<String>();
+	private TextView im_writer_type;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_petition_write);
+		
 		ComUtil.customeTitle(this, "写信",true);
-		mGov =(AskMsgModel)getIntent().getExtras().get(CoreContants.PARAMS_MSG);
-		askSvc = new AskGovServiceImpl();
+		if(this.getIntent().getExtras()!=null&&this.getIntent().getExtras().containsKey(CoreContants.PARAMS_MSG)){
+			mGov =(AskMsgModel)getIntent().getExtras().get(CoreContants.PARAMS_MSG);
+		}else{
+			mGov=new AskMsgModel();
+			mGov.setMsgtype("0");
+			mGov.setOrgid("0");
+		}
+		
 		initViews();
-//		refreshUI();
 	}
 	
 	
 	private void initViews()
 	{
+		askSvc = new AskGovServiceImpl();
 		ll_pic = (LinearLayout)this.findViewById(R.id.ll_pic);
 		ll_photo = (LinearLayout)this.findViewById(R.id.ll_photo);
 		btn_right = (Button)this.findViewById(R.id.btn_title_right);
-//		et_title = (EditText)this.findViewById(R.id.et_title);
+		ll_typelist = (LinearLayout)this.findViewById(R.id.ll_typelist);
+		ly_writer_type = (LinearLayout)this.findViewById(R.id.ly_writer_type);
+		if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+			ll_typelist.setVisibility(View.VISIBLE);
+			im_writer_type = (TextView)this.findViewById(R.id.im_writer_type);
+			im_writer_type.setBackgroundResource(ComApp.getInstance().appStyle.btn_petition_selector);
+			tv_writer_type = (TextView)this.findViewById(R.id.tv_writer_type);
+		}
+		
 		et_content = (EditText)this.findViewById(R.id.et_content);
 		ll_photo = (LinearLayout)this.findViewById(R.id.ll_photo);
 		iv_myimage1 = (ImageView)this.findViewById(R.id.iv_myimage1);
@@ -86,10 +110,10 @@ public class PetitionWrActivity extends BaseActivity{
 		iv_myimage3 = (ImageView)this.findViewById(R.id.iv_myimage3);
 		
 		btn_photo = (Button)this.findViewById(R.id.btn_photo);
-		btn_photo.setBackground(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_pic_selector));
+		btn_photo.setBackgroundDrawable(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_pic_selector));
 		
 		btn_pic = (Button)this.findViewById(R.id.btn_pic);
-		btn_pic.setBackground(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_photo_selector));
+		btn_pic.setBackgroundDrawable(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_photo_selector));
 		
 		tv_pic = (TextView)this.findViewById(R.id.tv_pic);
 		tv_pic.setTextColor(this.getResources().getColor(ComApp.getInstance().appStyle.font_grey_selector));
@@ -97,7 +121,7 @@ public class PetitionWrActivity extends BaseActivity{
 		tv_photo = (TextView)this.findViewById(R.id.tv_photo);
 		tv_photo.setTextColor(this.getResources().getColor(ComApp.getInstance().appStyle.font_grey_selector));
 		
-		btn_right.setBackground(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_dialogsure_selector));
+		btn_right.setBackgroundDrawable(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_dialogsure_selector));
 		btn_right.setVisibility(View.VISIBLE);
 		
 		//图片删除？
@@ -156,6 +180,7 @@ public class PetitionWrActivity extends BaseActivity{
 			
 			@Override
 			public void onClick(View arg0) {
+				DialogUtil.showProgressDialog(PetitionWrActivity.this, "提交中...");
 				// TODO Auto-generated method stub
 				final String content = et_content.getText().toString();
 				 
@@ -200,6 +225,7 @@ public class PetitionWrActivity extends BaseActivity{
 						DialogUtil.closeProgress(PetitionWrActivity.this);
 						RspResultModel result = (RspResultModel)baseType;
 						if(ComUtil.checkRsp(PetitionWrActivity.this, result)){
+							DialogUtil.closeProgress(PetitionWrActivity.this);
 							DialogUtil.showToast(PetitionWrActivity.this, "写信成功");
 							//用户行为采集
 							String user="未登录用户";
@@ -224,7 +250,7 @@ public class PetitionWrActivity extends BaseActivity{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				if(picPathList.size()>2){
+				if(picPathList.size()>3){
 					DialogUtil.showToast(PetitionWrActivity.this, "每次最多只允许上次3张图片");
 					return ;
 				}
@@ -360,7 +386,7 @@ public class PetitionWrActivity extends BaseActivity{
 		if(!FuncUtil.isEmpty(fileName)){
 			File imageFile = new File(fileName);
 			ins = new FileInputStream(imageFile);
-			//log.info("文件大小:"+imageIS.available());
+			log.info("文件大小:"+ins.available());
 			return ins;
 		}
 		return null;
@@ -380,6 +406,58 @@ public class PetitionWrActivity extends BaseActivity{
 		}
 		return "";
 	}
+	
+	/**
+	 * 选择写信人类型
+	 * @param view
+	 */
+	public void selectType(final View view){
+		// TODO Auto-generated method stub
+		 
+			DialogUtil.showProgressDialog(PetitionWrActivity.this);
+			SituoHttpAjax.ajax(new SituoAjaxCallBack(){
+
+				@Override
+				public StBaseType requestApi() {
+					
+					if(R.id.ly_writer_type==view.getId()){
+						RspResultModel rsp = DisClsTestService.getWriterList("3");
+						return rsp;
+					}
+					return null;
+				}
+
+				@Override
+				public void callBack(StBaseType baseType) {
+					DialogUtil.closeProgress(PetitionWrActivity.this);
+					List<WriterTpyeModel> writerList;
+					// TODO Auto-generated method stub
+					RspResultModel rsp = (RspResultModel)baseType;
+					if(ComUtil.checkRsp(PetitionWrActivity.this, rsp)){
+						 
+						writerList = rsp.getWriterList();
+						dlglist = new ArrayList<DialogObj>();
+						for(WriterTpyeModel wtype:writerList){
+							dlglist.add(new DialogObj(wtype.getId(),wtype.getTypeName()));
+						}
+						DialogOptionSelect dlg = new DialogOptionSelect(PetitionWrActivity.this,new DialogOptionSelect.PickDialogcallback() {
+							
+							@Override
+							public void onItemSelect(DialogObj selectItem) {
+								// TODO Auto-generated method stub
+								mSelectItem = selectItem;
+								mGov.setMsgtype(selectItem.getCode());
+								mGov.setOrgid("0");
+								tv_writer_type.setText(mSelectItem.getName());
+							}
+						},dlglist,mSelectItem);
+						dlg.show();
+					}
+				}
+				
+			});
+		}
+	
 	
 	@Override
 	public void onResume() {

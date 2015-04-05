@@ -20,6 +20,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleLis
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.plugin.R;
+import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
 import com.plugin.commons.adapter.HomeNewsListAdapter;
 import com.plugin.commons.helper.ComUtil;
@@ -29,6 +30,7 @@ import com.plugin.commons.helper.FuncUtil;
 import com.plugin.commons.helper.SituoHttpAjax;
 import com.plugin.commons.helper.SituoHttpAjax.SituoAjaxCallBack;
 import com.plugin.commons.model.NewsInfoModel;
+import com.plugin.commons.model.NewsTypeModel;
 import com.plugin.commons.model.RspResultModel;
 import com.plugin.commons.service.CacheDataService;
 import com.plugin.commons.service.NewsService;
@@ -38,25 +40,11 @@ import com.zq.types.StBaseType;
 
 public class HomePageFragment extends BaseFragment {
 	public DingLog log = new DingLog(HomePageFragment.class);
-	private static final String TAG = "HomeTabFragment";
+	private static final String TAG = "HomePageFragment";
 	private List<List<NewsInfoModel>> newList = new ArrayList<List<NewsInfoModel>>();
 	private HomeNewsListAdapter mAdapter;
-	NewsService newsSvc;
-	public void setMsgName(String msgName) {
-		this.mMsgName = msgName;
-	}
-	
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		this.mActivity = activity;
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-	
+	private NewsService newsSvc;
+	NewsTypeModel mNewType; 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -64,21 +52,8 @@ public class HomePageFragment extends BaseFragment {
 		return view;
 	}
 	
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		log.info("onViewCreated");
-		initViews(view);
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		log.info("onActivityCreated");
-		initDisplay();
-	}
-	
-	private void initViews(View view) {
+ 
+	protected void initViews(View view) {
 		newsSvc = new NewsServiceImpl();
 		lv_news = (PullToRefreshListView) view.findViewById(R.id.lv_news);
 		lv_news.setOnRefreshListener(new OnRefreshListener<ListView>() {
@@ -104,13 +79,20 @@ public class HomePageFragment extends BaseFragment {
 	
 	}
 	
-	private void initDisplay() {
-		RspResultModel rsp = newsSvc.homeList(true);//读取缓存的数据，先列出来列表，防止网络不好时没数据不好看
+	protected void initDisplay() {
+		ComApp.getInstance().appStyle.getProc_loading().setVisibility(View.VISIBLE);
+		RspResultModel rsp = newsSvc.homeList(true);
 		if(ComUtil.checkRsp(mActivity, rsp,false)){
-			//newList
 			newList = rsp.getHome_page_list();
+			if(newList!=null&&newList.size()>0){
+				CacheDataService.setNeedLoad(CoreContants.CACHE_HOME_LIST);
+				refreshList();
+			}else{
+				doRefresh(true);
+			}
+		}else{
+			doRefresh(true);
 		}
-		refreshList();
 		if(CacheDataService.isNeedLoad(CoreContants.CACHE_HOME_LIST))
 		{
 			mHandler.postDelayed(new Runnable() {
@@ -123,18 +105,13 @@ public class HomePageFragment extends BaseFragment {
 			}, 200);
 			
 		}
-		
-		//mMsgTv.setText("暂无新闻");
-		
-		//mAdapter.notifyDataSetChanged();
-		//doRefresh();
-		//doRefresh();
-		//lv_news.setRefreshing(false);
+		 
 	}
 	
 	public void doRefresh(final boolean isRefresh)
 	{
 		 
+		ComUtil.showListNone(getView(), "努力加载中...", newList);
 		SituoHttpAjax.ajax(new SituoAjaxCallBack(){
 			@Override
 			public StBaseType requestApi() {
@@ -149,16 +126,14 @@ public class HomePageFragment extends BaseFragment {
 				if(ComUtil.checkRsp(mActivity, result)){
 					newList = result.getHome_page_list();
 					if(newList!=null&&newList.size()>0){
-						refreshList();
 						CacheDataService.setNeedLoad(CoreContants.CACHE_HOME_LIST);
 					}
 				}
-				else{
-					lv_news.onRefreshComplete();
-				}
+				lv_news.onRefreshComplete();
+				refreshList();
 			}
 		});
-//		}
+ 
 	}
 	
 	 private Handler mHandler = new Handler() {
@@ -171,30 +146,33 @@ public class HomePageFragment extends BaseFragment {
 	 };
 	
 	private void refreshList(){
-		boolean flag=false;
+		int count=0;
 		if(FuncUtil.isEmpty(newList)){
 			newList = new ArrayList<List<NewsInfoModel>>();
 		}
+		List<List<NewsInfoModel>> temList=new ArrayList<List<NewsInfoModel>>();
 		if(newList!=null){
+			count=newList.size();
 			for(List<NewsInfoModel> list:newList){
 				if(list==null||list.size()==0){
-					flag=true;
-					break;
-				}
-			} 
-		}else{
-			flag=true;
-		}
-		if(!flag){
+					temList.add(list);
+				} 
+			}
+			for(List<NewsInfoModel> list:temList){
+				newList.remove(list);
+			}
+		} 
+		if(temList.size()!=count&&newList.size()!=0){
 			mAdapter = new HomeNewsListAdapter(mActivity,newList);
+			mAdapter.setmNewType(mNewType);
 			lv_news.setAdapter(mAdapter);
 			mAdapter.setNewList(newList);
 			mAdapter.notifyDataSetChanged();
-			lv_news.onRefreshComplete();
 			ComUtil.showListNone(getView(), "暂无数据", newList);
 		}else{
 			ComUtil.showListNone(getView(), "暂无数据", null);
 		}
+		ComApp.getInstance().appStyle.getProc_loading().setVisibility(View.GONE);
 		log.info("是否为空:"+FuncUtil.isEmpty(newList));
 	}
 
@@ -217,6 +195,14 @@ public class HomePageFragment extends BaseFragment {
 		// TODO Auto-generated method stub
 		super.onPause();
 		AnalyticsAgent.onPageEnd(getActivity(), "HomePageFragment");
+	}
+
+	public NewsTypeModel getmNewType() {
+		return mNewType;
+	}
+
+	public void setmNewType(NewsTypeModel mNewType) {
+		this.mNewType = mNewType;
 	}
 
 }

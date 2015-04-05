@@ -3,6 +3,7 @@ package com.plugin.commons.helper;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -633,5 +634,27 @@ public class FileUtils {
 		}
 		savedir = null;
 		return savePath;
+	}
+	
+	/**
+	 * 获取文件流
+	 * @param filepath
+	 * @return
+	 */
+	public static InputStream getStreamFromFile(String filepath){
+		
+		FileInputStream fin=null;
+		try {
+			File file =new File(filepath);
+			if(file.exists()){
+				fin=new FileInputStream(file);
+			}else{
+				return null;
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return fin;
 	}
 }

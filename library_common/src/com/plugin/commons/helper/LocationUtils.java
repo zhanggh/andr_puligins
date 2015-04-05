@@ -1,6 +1,5 @@
 package com.plugin.commons.helper;
 
-import io.vov.vitamio.utils.Log;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +15,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;

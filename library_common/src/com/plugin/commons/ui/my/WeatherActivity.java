@@ -79,7 +79,7 @@ public class WeatherActivity extends Activity {
     	swSvc = new SmartWeatherServiceImpl();
     	
     	city=ComApp.getInstance().appStyle.weatherShortAddr;
-		if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+		if(CoreContants.LOCATION_APP.contains(ComApp.APP_NAME)){
 			city=ComApp.getInstance().appStyle.getArea();
 			if(FuncUtil.isEmpty(city)){
 				city=ComApp.getInstance().appStyle.weatherShortAddr;

@@ -37,15 +37,40 @@ public class RspResultModel implements StBaseType ,Serializable{
 	private String loadflag;
 	private List<List<NewsInfoModel>>home_page_list;
 	private AppInfoModel appInfo;
-	List<Reply> myreply_list;//我评论的新闻
-	List<NumberModel> numlist;
-	List<InvestigateModel> inveslist;
+	private List<Reply> myreply_list;//我评论的新闻
+	private List<InvestigateModel> inveslist;
+	private List<List<PhotoAndVideoModel>> pkbklist;
 	
 	private SWAreaModel c;//天气区域信息
 	private SWFrontcastModel f;//天气预报信息
 	private SWObserveModel l;//天气实况信息
 	private List<SWIndexModel> i;//天气指数
 	private XinHuaModel xhModel;
+	
+	private List<PhotoAndVideoModel> comphotos;
+	private List<AreaModel> area_list;//地区列表
+	private List<AppInfoModel> app_list;//地区列表
+	/**
+	 * 瞬间和new radio
+	 */
+	private RadioVideoModel shunJRadio;
+	
+	/**
+	 * 号码通返回的数据集合
+	 */
+	List<NumberType> numbertypes;
+	public List<NumberModel> getNumbers() {
+		return numbers;
+	}
+	public void setNumbers(List<NumberModel> numbers) {
+		this.numbers = numbers;
+	}
+	List<NumberModel> numbers;
+	
+	/**
+	 * new radio 和瞬间 
+	 */
+	private List<RadioVideoModel> radioVideos;
 	
 	public List<Reply> getMyreply_list() {
 		return myreply_list;
@@ -240,17 +265,55 @@ public class RspResultModel implements StBaseType ,Serializable{
 	public void setInveslist(List<InvestigateModel> inveslist) {
 		this.inveslist = inveslist;
 	}
-	public List<NumberModel> getNumlist() {
-		return numlist;
-	}
-	public void setNumlist(List<NumberModel> numlist) {
-		this.numlist = numlist;
-	}
+	
+	
 	public XinHuaModel getXhModel() {
 		return xhModel;
 	}
 	public void setXhModel(XinHuaModel xhModel) {
 		this.xhModel = xhModel;
 	}
-	
+	public List<List<PhotoAndVideoModel>> getPkbklist() {
+		return pkbklist;
+	}
+	public void setPkbklist(List<List<PhotoAndVideoModel>> pkbklist) {
+		this.pkbklist = pkbklist;
+	}
+	public List<PhotoAndVideoModel> getComphotos() {
+		return comphotos;
+	}
+	public void setComphotos(List<PhotoAndVideoModel> comphotos) {
+		this.comphotos = comphotos;
+	}	
+	public List<RadioVideoModel> getRadioVideos() {
+		return radioVideos;
+	}
+	public void setRadioVideos(List<RadioVideoModel> radioVideos) {
+		this.radioVideos = radioVideos;
+	}
+	public RadioVideoModel getShunJRadio() {
+		return shunJRadio;
+	}
+	public void setShunJRadio(RadioVideoModel shunJRadio) {
+		this.shunJRadio = shunJRadio;
+	}
+	public List<NumberType> getNumbertypes() {
+		return numbertypes;
+	}
+	public void setNumbertypes(List<NumberType> numbertypes) {
+		this.numbertypes = numbertypes;
+	}
+	public List<AreaModel> getArea_list() {
+		return area_list;
+	}
+	public void setArea_list(List<AreaModel> area_list) {
+		this.area_list = area_list;
+	}
+	public List<AppInfoModel> getApp_list() {
+		return app_list;
+	}
+	public void setApp_list(List<AppInfoModel> app_list) {
+		this.app_list = app_list;
+	}
+
 }

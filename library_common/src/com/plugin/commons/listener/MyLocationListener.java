@@ -19,12 +19,14 @@ public class MyLocationListener implements BDLocationListener {
 	public void onReceiveLocation(BDLocation location) {
 		//Receive Location 
 		
-		if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+		if(CoreContants.LOCATION_APP.contains(ComApp.APP_NAME)){
 			String aname=(String) StCacheHelper.getCacheObj(ComApp.getInstance(), CoreContants.CACHE_AREA,"1");
-			if(aname==null){
-				ComUtil.doSmartWeather(location.getCity(),ComApp.getInstance(), ComApp.getInstance().appStyle.mWeatheView);
-			}else if(!aname.equals(location.getCity())){
-				ComUtil.doSmartWeather(location.getCity(),ComApp.getInstance(), ComApp.getInstance().appStyle.mWeatheView);
+			if(ComApp.getInstance().appStyle.mWeatheView!=null){
+				if(aname==null){
+					ComUtil.doSmartWeather(location.getCity(),ComApp.getInstance(), ComApp.getInstance().appStyle.mWeatheView);
+				}else if(!aname.equals(location.getCity())){
+					ComUtil.doSmartWeather(location.getCity(),ComApp.getInstance(), ComApp.getInstance().appStyle.mWeatheView);
+				}
 			}
 		}
 		//以下的debug数据

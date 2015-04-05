@@ -10,15 +10,13 @@ import android.util.DisplayMetrics;
 import android.widget.ImageView;
 import cn.jpush.android.api.JPushInterface;
 
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.location.LocationClientOption.LocationMode;
+ 
 import com.plugin.R;
 import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
 import com.plugin.commons.helper.ComUtil;
 import com.plugin.commons.helper.DialogUtil;
-import com.plugin.commons.helper.DialogUtil.OnAlertSureOnclick;
+ 
 import com.plugin.commons.helper.DingLog;
 import com.plugin.commons.helper.SituoHttpAjax;
 import com.plugin.commons.helper.SituoHttpAjax.SituoAjaxCallBack;
@@ -49,6 +47,14 @@ public class SplashActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
+		
+		if(CoreContants.APP_LMXF.equals(ComApp.APP_NAME)){//鹿鸣西丰进入个性化splash
+			Intent intent = new Intent(SplashActivity.this,SpecialSplashActivity.class);
+			intent.putExtra(XinHuaAdActivity.PARAM_XH, xhModel);
+			startActivity(intent);
+			finish();
+		}
+		
 		newsSvc = new NewsServiceImpl();
 		iv_qidongye=(ImageView) this.findViewById(R.id.im_qidongye);
 		im_loading=(ImageView) this.findViewById(R.id.im_loading);
@@ -85,7 +91,11 @@ public class SplashActivity extends Activity {
 						startActivity(intent);
 					}
 					else{
-						startActivity(new Intent(SplashActivity.this,MainActivity.class));
+						if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+							startActivity(new Intent(SplashActivity.this,MainWithoutRightSideActivity.class));
+						}else{
+							startActivity(new Intent(SplashActivity.this,MainActivity.class));
+						}
 					}
 					
 				}else{
@@ -134,10 +144,16 @@ public class SplashActivity extends Activity {
 						//先获取新华广告信息
 						RspResultModel rsp = new RspResultModel();
 						XinHuaService xhSvc = new XinHuaServiceImpl();
-						DisplayMetrics dm = new DisplayMetrics();getWindowManager().getDefaultDisplay().getMetrics(dm);
+						DisplayMetrics dm = new DisplayMetrics();
+						getWindowManager().getDefaultDisplay().getMetrics(dm);
 						int width = dm.widthPixels;//宽度
 						int height = dm.heightPixels ;//高度
 						rsp = xhSvc.getXHImg(width, height, ComApp.getInstance().appStyle.appid,ComApp.getInstance().appStyle.xinhuaKey);
+						
+						
+						//测试
+						RspResultModel rsp2 =xhSvc.getNewRadioTypeList();
+						
 						return rsp;
 					}
 
@@ -149,7 +165,7 @@ public class SplashActivity extends Activity {
 							if(rsp!=null){
 								log.info(rsp.getRetcode()+";"+rsp.getRetmsg());
 							}
-							if("0".equals(rsp.getRetcode())){
+							if(ComUtil.checkRsp(SplashActivity.this, rsp)){
 								xhModel = rsp.getXhModel();
 								//开始下载图片--afinal如果硬盘缓存存在，不会重新下载，否则会下载图片 
 								//因为图片下载时间比较长，所以希望提前下载
@@ -178,7 +194,11 @@ public class SplashActivity extends Activity {
 				public void run() {
 					DialogUtil.showToast(SplashActivity.this, "网络无法正常连接，请检查网络");
 					if(isAdd()){
-						startActivity(new Intent(SplashActivity.this,MainActivity.class));
+						if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+							startActivity(new Intent(SplashActivity.this,MainWithoutRightSideActivity.class));
+						}else{
+							startActivity(new Intent(SplashActivity.this,MainActivity.class));
+						}
 					}else{
 						Intent intent = new Intent(SplashActivity.this,LoginStatusActivity.class);
 						startActivity(intent);

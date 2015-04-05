@@ -10,7 +10,7 @@ public class NewsInfoModel implements StBaseType,Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -4317066544080696415L;
-	private String id;
+	private String id;//文章id
 	private String img;
 	private String title;
 	private String url;
@@ -19,12 +19,14 @@ public class NewsInfoModel implements StBaseType,Serializable{
 	private String replycount;
 	private String location;
 	private String newtype;
-	private String arttype;
+	private String arttype;//栏目id
 	private String subtypename;
 	private String videourl;
 	private String createtime;
 	private String openreply;
 	private int viewTimes;
+	private String imageUrl;
+	private String videoUrl;
 	
 	public String getId() {
 		return id;
@@ -119,4 +121,18 @@ public class NewsInfoModel implements StBaseType,Serializable{
 	public void setViewTimes(int viewTimes) {
 		this.viewTimes = viewTimes;
 	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+	public String getVideoUrl() {
+		return videoUrl;
+	}
+	public void setVideoUrl(String videoUrl) {
+		this.videoUrl = videoUrl;
+	}
+	
+	
 }

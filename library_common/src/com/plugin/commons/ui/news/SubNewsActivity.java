@@ -44,28 +44,22 @@ import com.plugin.commons.helper.SituoHttpAjax.SituoAjaxCallBack;
 import com.plugin.commons.model.NewsInfoModel;
 import com.plugin.commons.model.NewsTypeModel;
 import com.plugin.commons.model.RspResultModel;
+import com.plugin.commons.service.CacheDataService;
 import com.plugin.commons.service.NewsService;
 import com.plugin.commons.service.NewsServiceImpl;
+import com.plugin.commons.ui.base.BaseActivity;
 import com.zq.types.StBaseType;
 
-public class SubNewsActivity extends Activity {
+public class SubNewsActivity extends BaseActivity {
 	public DingLog log = new DingLog(SubNewsActivity.class);
-	private static final String TAG = "HomeTabFragment";
-	private PullToRefreshListView lv_news;
-	private Activity mActivity;
-	public int pageStart=0;
 	private List<NewsInfoModel> newList = new ArrayList<NewsInfoModel>();
 	private List<NewsInfoModel> headList = new ArrayList<NewsInfoModel>();
 	private ZhKdBaseAdapter<NewsInfoModel> mAdapter;
-	
-	private ViewPager viewPager; // android-support-v4中的滑动组件
+	private ViewPager viewPager;// android-support-v4中的滑动组件
 	private List<ImageView> imageViews; // 滑动的图片集合
-
 	private List<View> dots; // 图片标题正文的那些点
-
 	private TextView tv_imgtitle;
 	private int currentItem = 0; // 当前图片的索引号
-
 	// An ExecutorService that can schedule commands to run after a given delay,
 	// or to execute periodically.
 	private ScheduledExecutorService scheduledExecutorService;
@@ -73,13 +67,11 @@ public class SubNewsActivity extends Activity {
 	NewsService newsSvc;
 	NewsTypeModel mNewType;
 	NewsInfoModel mNews;
-	boolean isOnRequest = false;//是否已经自动刷新
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listview_pullrefresh);
-        mActivity = this;
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(CoreContants.PARAMS_NEWS)) {
         	mNews = (NewsInfoModel) getIntent().getExtras().getSerializable(CoreContants.PARAMS_NEWS);
 		}
@@ -87,6 +79,9 @@ public class SubNewsActivity extends Activity {
         	mNewType = (NewsTypeModel) getIntent().getExtras().getSerializable(CoreContants.PARAMS_TYPE);
 		}
         ComUtil.customeTitle(this,FuncUtil.getPexfStr(mNews.getTitle(), 12, "..."),true);
+        if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){//个性化 ╮(╯▽╰)╭
+        	mNewType.setName(FuncUtil.getPexfStr(mNews.getTitle(), 12, "..."));
+        }
         initViews();
         initDisplay();
     }
@@ -99,7 +94,7 @@ public class SubNewsActivity extends Activity {
 		lv_news.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(mActivity, System.currentTimeMillis(),
+				String label = DateUtils.formatDateTime(SubNewsActivity.this, System.currentTimeMillis(),
 						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 
 				// Update the LastUpdatedLabel
@@ -114,7 +109,7 @@ public class SubNewsActivity extends Activity {
 			@Override
 			public void onLastItemVisible() {
 				doRefresh(false);
-//				Toast.makeText(mActivity, "已无更多加载", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(SubNewsActivity.this, "已无更多加载", Toast.LENGTH_SHORT).show();
 			}
 		});
 		lv_news.setOnItemClickListener(new OnItemClickListener(){
@@ -124,8 +119,7 @@ public class SubNewsActivity extends Activity {
 					long arg3) {
 				// TODO Auto-generated method stub
 				mNewType.setHassub("0");
-				ComUtil.addViewTimes(mActivity,newList.get(arg2-(mAdView==null?1:2)),mNewType);
-				ComUtil.goNewsDetail(mActivity, newList.get(arg2-(mAdView==null?1:2)), mNewType);
+				ComUtil.goNewsDetail(SubNewsActivity.this, newList.get(arg2-(mAdView==null?1:2)), mNewType);
 			}
 			
 		});
@@ -134,13 +128,19 @@ public class SubNewsActivity extends Activity {
 	private void initDisplay() {
 		//mMsgTv.setText("暂无新闻");
 		RspResultModel rsp  = newsSvc.getSubNewsList(true, "0", "20",mNewType.getId(), "0",mNews.getId());
-		if(ComUtil.checkRsp(mActivity, rsp,false)){
-			newList = rsp.getArticle_list();
+		if(ComUtil.checkRsp(SubNewsActivity.this, rsp,false)){
 			headList = rsp.getHeadnew_list();
-			refreshList();
+			if(rsp.getArticle_list().size()>0){
+				newList=rsp.getArticle_list();
+				refreshList();
+				CacheDataService.setNeedLoad(CoreContants.CACHE_NEWS_NEWSLIST+mNewType.getParentid()+"_"+mNewType.getId());
+			}else{
+				doRefresh(true);
+			}
 		}else{
-			ComUtil.showListNone(findViewById(R.id.ll_root), "暂无数据", newList,headList);
+			doRefresh(true);
 		}
+		ComUtil.showListNone(findViewById(R.id.ll_root), "暂无数据", newList,headList);
 	}
 	
 	private void refreshList(){
@@ -151,7 +151,7 @@ public class SubNewsActivity extends Activity {
 			}
 			lv_news.getRefreshableView().setHeaderDividersEnabled(false);
 		}
-		mAdapter = new NewsListAdapter(mActivity,newList);
+		mAdapter = new NewsListAdapter(SubNewsActivity.this,newList);
 		mAdapter.setDataList(newList);
 		lv_news.setAdapter(mAdapter);
 		mAdapter.notifyDataSetChanged();
@@ -162,14 +162,14 @@ public class SubNewsActivity extends Activity {
 	
 	private View initAdView(){
 		if(!FuncUtil.isEmpty(headList)){
-			LayoutInflater mInflater = LayoutInflater.from(mActivity);
+			LayoutInflater mInflater = LayoutInflater.from(SubNewsActivity.this);
 			mAdView = mInflater.inflate(R.layout.view_newhead, null);
 
 			imageViews = new ArrayList<ImageView>();
 
 			// 初始化图片资源
 			for (int i = 0; i < headList.size(); i++) {
-				ImageView imageView = new ImageView(mActivity);
+				ImageView imageView = new ImageView(SubNewsActivity.this);
 				//imageView.setImageResource(imageResId[i]);
 				imageView.setScaleType(ScaleType.FIT_XY);
 				imageViews.add(imageView);
@@ -205,7 +205,7 @@ public class SubNewsActivity extends Activity {
 	
 	public void doRefresh(final boolean isRefresh)
 	{
-		
+		ComUtil.showListNone(this.getEmptyView(), "努力加载中...", newList);
 		if(isRefresh){//下拉
 			pageStart=0;
 		}else{//上拉
@@ -220,9 +220,9 @@ public class SubNewsActivity extends Activity {
 
 			@Override
 			public void callBack(StBaseType baseType) {
-				DialogUtil.closeProgress(mActivity);
+				DialogUtil.closeProgress(SubNewsActivity.this);
 				RspResultModel result = (RspResultModel)baseType;
-				if(ComUtil.checkRsp(mActivity, result)){
+				if(ComUtil.checkRsp(SubNewsActivity.this, result)){
 //					newList = result.getArticle_list();
 					headList = result.getHeadnew_list();
 					log.info(newList.size()+";size");

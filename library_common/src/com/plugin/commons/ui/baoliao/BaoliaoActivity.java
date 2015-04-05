@@ -103,7 +103,7 @@ public class BaoliaoActivity extends Activity{
 		iv_myvideo = (ImageView)this.findViewById(R.id.iv_myvideo);
 		rl_myvideo = (RelativeLayout)this.findViewById(R.id.rl_myvideo);
 		
-		btn_right.setBackground(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_dialogsure_selector));
+		btn_right.setBackgroundDrawable(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_dialogsure_selector));
 		btn_right.setVisibility(View.VISIBLE);
 		
 		int width = (ComUtil.getWindowWidth(this))/3;
@@ -275,6 +275,7 @@ public class BaoliaoActivity extends Activity{
 				}
 				Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 				intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
+				intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 512);//视频的最大字节数
 				startActivityForResult(intent, REQUEST_CODE_VIDEO);
 				
 			}

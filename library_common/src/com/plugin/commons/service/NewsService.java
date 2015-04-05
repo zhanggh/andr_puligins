@@ -88,4 +88,25 @@ public interface NewsService {
 	public RspResultModel getMyCmNewList(boolean iscache,String start,String size);
 	
 	public List<NewsTypeModel> getNewsTypes();
+	
+	/**
+	 * 地区列表
+	 * @return
+	 */
+	public RspResultModel getAreaList();
+	/**
+	 * 地区app推荐列表
+	 * @return
+	 */
+	public RspResultModel getAreaRecList(String areaId);
+	/**
+	 * 行业app推荐列表
+	 * @return
+	 */
+	public RspResultModel getIndustryRecList();
+	/**
+	 *热门app推荐列表
+	 * @return
+	 */
+	public RspResultModel getHotRecList();
 }

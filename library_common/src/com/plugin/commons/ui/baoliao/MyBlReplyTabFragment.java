@@ -43,28 +43,12 @@ import com.zq.types.StBaseType;
 public class MyBlReplyTabFragment extends BaseFragment {
 	public DingLog log = new DingLog(MyBlReplyTabFragment.class);
 	private static final String TAG = "MyBlReplyTabFragment";
-	private Activity mActivity;
-	private String mMsgName;
-	private PullToRefreshListView lv_news;
 	private List<BaoLiaoInfoModel> baoliaoList = new ArrayList<BaoLiaoInfoModel>();
 	private BaoliaoListAdapter mAdapter;
 	private BaoliaoService blService;
 	UserInfoService userService;
 	private int start=0;
-	public void setMsgName(String msgName) {
-		this.mMsgName = msgName;
-	}
-	
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		this.mActivity = activity;
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
+	 
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,21 +57,8 @@ public class MyBlReplyTabFragment extends BaseFragment {
 		return view;
 	}
 	
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		log.info("onViewCreated");
-		initViews(view);
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		log.info("onActivityCreated");
-		initDisplay();
-	}
-	
-	private void initViews(View view) {
+	 
+	protected void initViews(View view) {
 		lv_news = (PullToRefreshListView) view.findViewById(R.id.lv_news);
 		mAdapter = new BaoliaoListAdapter(mActivity,baoliaoList);
 		lv_news.setAdapter(mAdapter);
@@ -126,7 +97,7 @@ public class MyBlReplyTabFragment extends BaseFragment {
 	
 	}
 	
-	private void initDisplay() {
+	protected void initDisplay() {
 		blService=ComApp.getInstance().getBlService();
 		userService =new UserInfoServiceImpl();
 //		baoliaoList = DisClsTestService.getBaoliaoList(mMsgName).getBaoLiaoList();

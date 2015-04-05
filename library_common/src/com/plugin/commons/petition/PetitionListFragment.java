@@ -21,6 +21,7 @@ import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
 import com.plugin.commons.adapter.PetitionListAdapter;
 import com.plugin.commons.adapter.ZhKdBaseAdapter;
+import com.plugin.commons.helper.ComUtil;
 import com.plugin.commons.helper.DialogUtil;
 import com.plugin.commons.helper.DingLog;
 import com.plugin.commons.helper.SituoHttpAjax;
@@ -42,27 +43,8 @@ public class PetitionListFragment extends BaseFragment {
 	AskGovService askSvc;
 	
 	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-	
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		log.info("onViewCreated");
-		initViews(view);
+	protected void initViews(View view) {
 		askSvc = new AskGovServiceImpl();
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		log.info("onActivityCreated");
-		initDisplay();
-	}
-	
-	private void initViews(View view) {
 		lv_news = (PullToRefreshListView) view.findViewById(R.id.lv_news);
 		mAdapter = new PetitionListAdapter(mActivity,dataList);
 		lv_news.setAdapter(mAdapter);
@@ -91,6 +73,7 @@ public class PetitionListFragment extends BaseFragment {
 					long arg3) {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(mActivity,PetitionDetailActivity.class);
+				intent.putExtra(CoreContants.PARAMS_TITLE, "交流详情");
 				intent.putExtra(CoreContants.PARAMS_MSG,dataList.get(arg2-1));
 				startActivity(intent);
 			}
@@ -98,7 +81,7 @@ public class PetitionListFragment extends BaseFragment {
 		});
 	
 	}
-	private void initDisplay(){
+	protected void initDisplay(){
 		doRefresh(true, true);
 	}
 	private void doRefresh(final boolean isInit,final boolean isRefresh)
@@ -108,8 +91,9 @@ public class PetitionListFragment extends BaseFragment {
 			DialogUtil.showToast(mActivity, "尚未登陆，请登陆后查看");
 			lv_news.onRefreshComplete();
 		}else{
+			ComUtil.showListNone(getView(), "努力加载中...", dataList);
 			//异步
-			sCallBack=new SituoAjaxCallBackImp<AskMsgModel,AskGovService>(this.getView(),pageStart,this.dataList,isInit, isRefresh, log, 
+			sCallBack=new SituoAjaxCallBackImp<AskMsgModel,AskGovService>(this.getView(),pageStart,this.dataList,isInit, isRefresh, 
 					mActivity, lv_news, mAdapter,CoreContants.REQUEST_MY_LETTER,askSvc) {//, askSvc,null,null
 
 				@Override

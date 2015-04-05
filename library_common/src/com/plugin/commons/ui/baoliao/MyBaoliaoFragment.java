@@ -26,23 +26,7 @@ public class MyBaoliaoFragment extends BaseFragment implements OnTopIndicatorLis
 	private TabPagerAdapter mPagerAdapter;
 	private TopIndicator mTopIndicator;
 	DingLog log = new DingLog(MyBaoliaoFragment.class);
-	public static MyBaoliaoFragment newInstance() {
-		MyBaoliaoFragment homeFragment = new MyBaoliaoFragment();
-
-		return homeFragment;
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		this.mActivity = activity;
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-
+	  
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -50,20 +34,8 @@ public class MyBaoliaoFragment extends BaseFragment implements OnTopIndicatorLis
 		return view;
 	}
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		initViews(view);
-	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		
-		initDisplay();
-	}
-
-	private void initViews(View view) {
+	 
+	protected void initViews(View view) {
 		mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
 		mPagerAdapter = new TabPagerAdapter(getFragmentManager());
 		CharSequence[] mLabels = new CharSequence[] { "我的报料", "我的回答","我的收藏"};
@@ -73,22 +45,13 @@ public class MyBaoliaoFragment extends BaseFragment implements OnTopIndicatorLis
 		mTopIndicator.refresh();
 	}
 	
-	private void initDisplay() {
+	protected void initDisplay() {
 		mViewPager.setAdapter(mPagerAdapter);
 		mViewPager.invalidate();
 		mPagerAdapter.notifyDataSetChanged();
 	}
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-	}
-
+	 
 	@Override
 	public String getFragmentName() {
 		return TAG;

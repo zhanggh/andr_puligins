@@ -56,7 +56,7 @@
     	 
     	 <Button
 	        android:layout_width="@dimen/text_size_29"
-	        android:layout_height="@dimen/text_size_29"
+	        android:layout_height="@dimen/text_size_28"
 	        android:layout_alignParentRight="true"
 	        android:layout_centerVertical="true"
 	        android:layout_marginRight="12dip"
@@ -64,7 +64,7 @@
     	 
     	 <Button
 	        android:layout_width="@dimen/text_size_29"
-	        android:layout_height="@dimen/text_size_29"
+	        android:layout_height="@dimen/text_size_28"
 	        android:layout_toLeftOf="@+id/btn_share"
 	        android:layout_centerVertical="true"
 	        android:layout_marginRight="10dip"

@@ -10,8 +10,9 @@ import com.plugin.commons.helper.FuncUtil;
 import com.plugin.commons.model.BaoLiaoInfoModel;
 import com.plugin.commons.model.CommentModel;
 import com.plugin.commons.model.InvestigateModel;
-import com.plugin.commons.model.NumberModel;
+import com.plugin.commons.model.NumberType;
 import com.plugin.commons.model.PetitionModel;
+import com.plugin.commons.model.PhotoAndVideoModel;
 import com.plugin.commons.model.RspResultModel;
 import com.plugin.commons.model.SettingFqaModel;
 import com.plugin.commons.model.SpecialtyModel;
@@ -222,7 +223,20 @@ public class DisClsTestService {
 			}
 			rsp.setWriterList(writerList);
 		}
-		
+		if("3".equals(type)){
+			for(int i=0;i<2;i++){
+				WriterTpyeModel writer=new WriterTpyeModel();
+				writer.setId(i+"");
+				writer.setType(type);
+				if(i%2==0){
+					writer.setTypeName("提案");	
+				}else if(i%2==1){
+					writer.setTypeName("社情民意");	
+				}
+				writerList.add(writer);
+			}
+			rsp.setWriterList(writerList);
+		}
 		return rsp;
 	}
 	
@@ -281,21 +295,447 @@ public class DisClsTestService {
 		return rsp;
 	}
 	
-	public static RspResultModel getNum(){
+	public static RspResultModel getNumType(){
 		RspResultModel rsp = new RspResultModel();
 		rsp.setRetcode("0");
 		rsp.setRetmsg("查询成功");
-		List<NumberModel> numlist = new ArrayList<NumberModel>();
-		for(int i=0;i<6;i++){
-			NumberModel num=new NumberModel();
-			num.setId(i+"");
-			num.setTelNum("13823423532"+i);
-			num.setAddress("广东省广州市天河区体育西107号3楼");
-			num.setUsername("中国第一产科医院");
-			numlist.add(num);
-		}
-		rsp.setNumlist(numlist);
+		List<List<NumberType>> numlist= new ArrayList<List<NumberType>>();
+		List<NumberType> numlist1 = new ArrayList<NumberType>();
+		List<NumberType> numlist2 = new ArrayList<NumberType>();
+		
+			//addExtra(numlist);
+			//addExtra2(numlist);
+		NumberType type1=new NumberType();
+		type1.setId(1);
+		type1.setName("政府机关");
+		numlist1.add(type1);
+		
+		NumberType type2=new NumberType();
+		type2.setId(2);
+		type2.setName("医院机构");
+		numlist1.add(type2);
+		
+		NumberType type3=new NumberType();
+		type3.setId(3);
+		type3.setName("救援热线");
+		numlist1.add(type3);
+		
+		NumberType type4=new NumberType();
+		type4.setId(4);
+		type4.setName("社会服务");
+		numlist1.add(type4);
+		
+		NumberType type5=new NumberType();
+		type5.setId(5);
+		type5.setName("图书馆");
+		numlist1.add(type5);
+		
+		NumberType type6=new NumberType();
+		type6.setId(6);
+		type6.setName("博物馆");
+		numlist1.add(type6);
+		
+		NumberType type7=new NumberType();
+		type7.setId(7);
+		type7.setName("铁路航空");
+		numlist1.add(type7);
+		
+		NumberType type8=new NumberType();
+		type8.setId(8);
+		type8.setName("银行");
+		numlist1.add(type8);
+		
+		NumberType type9=new NumberType();
+		type9.setId(9);
+		type9.setName("快递物流");
+		numlist2.add(type9);
+		
+		NumberType type10=new NumberType();
+		type10.setId(10);
+		type10.setName("租车代驾");
+		numlist2.add(type10);
+		
+		NumberType type11=new NumberType();
+		type11.setId(11);
+		type11.setName("家电维修");
+		numlist2.add(type11);
+		
+		NumberType type12=new NumberType();
+		type12.setId(12);
+		type12.setName("家政");
+		numlist2.add(type12);
+		
+		NumberType type13=new NumberType();
+		type13.setId(13);
+		type13.setName("搬家");
+		numlist2.add(type13);
+		
+		NumberType type14=new NumberType();
+		type14.setId(14);
+		type14.setName("外卖送餐");
+		numlist2.add(type14);
+		
+		NumberType type15=new NumberType();
+		type15.setId(15);
+		type15.setName("铁路航空");
+		numlist2.add(type15);
+		
+		NumberType type16=new NumberType();
+		type16.setId(16);
+		type16.setName("生活");
+		numlist2.add(type16);
+		
+		
+		numlist.add(numlist1);
+		numlist.add(numlist2);		
+//		rsp.setNumTypelist(numlist);;
+		return rsp;
+	}
+	/*public static RspResultModel getNum(){
+		RspResultModel rsp = new RspResultModel();
+		rsp.setRetcode("0");
+		rsp.setRetmsg("查询成功");
+		List<List<NumberGroupModel>> numlist = new ArrayList<List<NumberGroupModel>>();
+		
+			addExtra(numlist);
+			addExtra2(numlist);
+		
+		
+		rsp.setNumGrouplist(numlist);
 		return rsp;
 	}
 
+	private static void addExtra(List<List<NumberGroupModel>> numlist) {
+		List<NumberGroupModel> nums=new ArrayList<NumberGroupModel>();
+		NumberGroupModel senseModel_gov =new NumberGroupModel();
+		List<NumberModel> numbers_gov=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("政府机关中国第一产科医院");
+			numbers_gov.add(num);
+		}
+		senseModel_gov.setId("1");
+		senseModel_gov.setName("政府机关");
+		senseModel_gov.setNumList(numbers_gov);
+		nums.add(senseModel_gov);
+		
+		NumberGroupModel senseModel_hosp =new NumberGroupModel();		
+		List<NumberModel> numbers_hosp=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("政府机关中国第一产科医院");
+			numbers_hosp.add(num);
+		}
+		senseModel_hosp.setId("2");
+		senseModel_hosp.setName("医院机构");
+		senseModel_hosp.setNumList(numbers_hosp);
+		nums.add(senseModel_hosp);
+		
+		NumberGroupModel senseModel_help =new NumberGroupModel();		
+		List<NumberModel> numbers_help=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("政府机关中国第一产科医院");
+			numbers_hosp.add(num);
+		}
+		senseModel_help.setId("3");
+		senseModel_help.setName("救援热线");
+		senseModel_help.setNumList(numbers_help);
+		nums.add(senseModel_help);
+		
+		
+		NumberGroupModel senseModel_societyhelp =new NumberGroupModel();		
+		List<NumberModel> numbers_societyhelp=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("中国第一产科医院");
+			numbers_societyhelp.add(num);
+		}
+		senseModel_societyhelp.setId("4");
+		senseModel_societyhelp.setName("社会服务");
+		senseModel_societyhelp.setNumList(numbers_societyhelp);
+		nums.add(senseModel_societyhelp);
+		
+		NumberGroupModel senseModel_libry =new NumberGroupModel();		
+		List<NumberModel> numbers_libry=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("中国第一产科医院");
+			numbers_libry.add(num);
+		}
+		senseModel_libry.setId("5");
+		senseModel_libry.setName("图书馆");
+		senseModel_libry.setNumList(numbers_libry);
+		nums.add(senseModel_libry);
+		
+		NumberGroupModel senseModel_museum =new NumberGroupModel();		
+		List<NumberModel> numbers_museum=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("中国第一产科医院");
+			numbers_museum.add(num);
+		}
+		senseModel_museum.setId("6");
+		senseModel_museum.setName("博物馆");
+		senseModel_museum.setNumList(numbers_museum);
+		nums.add(senseModel_museum);
+		
+		
+		NumberGroupModel senseModel_traffic =new NumberGroupModel();		
+		List<NumberModel> numbers_traffic=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("中国第一产科医院");
+			numbers_traffic.add(num);
+		}
+		senseModel_traffic.setId("7");
+		senseModel_traffic.setName("铁路航空");
+		senseModel_traffic.setNumList(numbers_traffic);
+		nums.add(senseModel_traffic);			
+		
+		NumberGroupModel senseModel_bank =new NumberGroupModel();		
+		List<NumberModel> numbers_bank=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("中国第一产科医院");
+			numbers_bank.add(num);
+		}
+		senseModel_bank.setId("8");
+		senseModel_bank.setName("银行");
+		senseModel_bank.setNumList(numbers_bank);
+		nums.add(senseModel_bank);			
+		
+		
+		numlist.add(nums);
+	}
+
+	private static void addExtra2(List<List<NumberGroupModel>> numlist) {
+		List<NumberGroupModel> nums=new ArrayList<NumberGroupModel>();
+		NumberGroupModel senseModel_gov =new NumberGroupModel();
+		List<NumberModel> numbers_gov=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("政府机关中国第一产科医院");
+			numbers_gov.add(num);
+		}
+		senseModel_gov.setId("9");
+		senseModel_gov.setName("快递物流");
+		senseModel_gov.setNumList(numbers_gov);
+		nums.add(senseModel_gov);
+		
+		NumberGroupModel senseModel_hosp =new NumberGroupModel();		
+		List<NumberModel> numbers_hosp=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("政府机关中国第一产科医院");
+			numbers_hosp.add(num);
+		}
+		senseModel_hosp.setId("10");
+		senseModel_hosp.setName("租车代驾");
+		senseModel_hosp.setNumList(numbers_hosp);
+		nums.add(senseModel_hosp);
+		
+		NumberGroupModel senseModel_help =new NumberGroupModel();		
+		List<NumberModel> numbers_help=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("政府机关中国第一产科医院");
+			numbers_hosp.add(num);
+		}
+		senseModel_help.setId("11");
+		senseModel_help.setName("家电维修");
+		senseModel_help.setNumList(numbers_help);
+		nums.add(senseModel_help);
+		
+		
+		NumberGroupModel senseModel_societyhelp =new NumberGroupModel();		
+		List<NumberModel> numbers_societyhelp=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("中国第一产科医院");
+			numbers_societyhelp.add(num);
+		}
+		senseModel_societyhelp.setId("12");
+		senseModel_societyhelp.setName("家政");
+		senseModel_societyhelp.setNumList(numbers_societyhelp);
+		nums.add(senseModel_societyhelp);
+		
+		NumberGroupModel senseModel_libry =new NumberGroupModel();		
+		List<NumberModel> numbers_libry=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("中国第一产科医院");
+			numbers_libry.add(num);
+		}
+		senseModel_libry.setId("13");
+		senseModel_libry.setName("搬家");
+		senseModel_libry.setNumList(numbers_libry);
+		nums.add(senseModel_libry);
+		
+		NumberGroupModel senseModel_museum =new NumberGroupModel();		
+		List<NumberModel> numbers_museum=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("中国第一产科医院");
+			numbers_museum.add(num);
+		}
+		senseModel_museum.setId("14");
+		senseModel_museum.setName("外卖送餐");
+		senseModel_museum.setNumList(numbers_museum);
+		nums.add(senseModel_museum);
+		
+		
+		NumberGroupModel senseModel_traffic =new NumberGroupModel();		
+		List<NumberModel> numbers_traffic=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("中国第一产科医院");
+			numbers_traffic.add(num);
+		}
+		senseModel_traffic.setId("15");
+		senseModel_traffic.setName("铁路航空");
+		senseModel_traffic.setNumList(numbers_traffic);
+		nums.add(senseModel_traffic);			
+		
+		NumberGroupModel senseModel_bank =new NumberGroupModel();		
+		List<NumberModel> numbers_bank=new ArrayList<NumberModel>();
+		for(int j=0;j<6;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("中国第一产科医院");
+			numbers_bank.add(num);
+		}
+		senseModel_bank.setId("16");
+		senseModel_bank.setName("生活");
+		senseModel_bank.setNumList(numbers_bank);
+		nums.add(senseModel_bank);			
+		
+		
+		numlist.add(nums);
+	}
+*/
+	/**
+	 * 拍客播客
+	 * @return
+	 */
+	public static RspResultModel getPkBk(boolean isVideo){
+		RspResultModel rsp = new RspResultModel();
+		rsp.setRetcode("0");
+		rsp.setRetmsg("查询成功");
+		String type="0";
+		if(isVideo){
+			type="2";
+		}
+		List<List<PhotoAndVideoModel>> paklist = new ArrayList<List<PhotoAndVideoModel>>();
+		for(int i=0;i<6;i++){
+			List<PhotoAndVideoModel> pks=new ArrayList<PhotoAndVideoModel>();
+			PhotoAndVideoModel pk=new PhotoAndVideoModel();
+			pk.setTitle("去东莞嫖吧"+i);
+			pks.add(pk);
+			pk=new PhotoAndVideoModel();
+			pk.setTitle("去那里威啊"+i);
+			pks.add(pk);
+			paklist.add(pks);
+		}
+		rsp.setPkbklist(paklist);
+		return rsp;
+	}
+	
+	
+	public static RspResultModel getComPhotos(boolean isVideo){
+		RspResultModel rsp = new RspResultModel();
+		rsp.setRetcode("0");
+		rsp.setRetmsg("查询成功");
+		 
+		List<PhotoAndVideoModel> comphotos=new ArrayList<PhotoAndVideoModel>();
+		for(int i=0;i<6;i++){
+			PhotoAndVideoModel pk=new PhotoAndVideoModel();
+			pk.setTitle("去东莞嫖吧"+i);
+			 
+			comphotos.add(pk);
+		}
+		rsp.setComphotos(comphotos);
+		return rsp;
+	}
+
+/*	public static RspResultModel getNumList(String numid) {
+		RspResultModel rsp = new RspResultModel();
+		List<NumberModel> nums=new ArrayList<NumberModel>();
+		for(int j=0;j<8;j++){
+			NumberModel num=new NumberModel();
+			num.setId(j+"");
+			num.setTelNum("13823423532"+j);
+			num.setAddress("广东省广州市天河区体育西107号3楼");
+			num.setUsername("中国第一产科医院");
+			nums.add(num);
+		}
+		rsp.setNumlist(nums);
+		return rsp;
+	}*/
+
+	/*public static RspResultModel getNum(String numberSenseId) {
+	
+		RspResultModel rsp = DisClsTestService.getNum();
+		List<List<NumberGroupModel>> numlist =rsp.getNumGrouplist();
+		for(int i=0;i<numlist.size();i++){
+			List<NumberGroupModel> numgroups=numlist.get(i);
+			for(int j=0;j<numgroups.size();j++){
+				NumberGroupModel numbergroup=numgroups.get(j);
+				String numberSense=numbergroup.getId();
+				if(numberSenseId.equals(numberSense)){
+					List<NumberModel> newNum=numbergroup.getNumList();
+					rsp.setNumlist(newNum);
+				}
+				
+			}
+		}		
+		return rsp;
+	}*/
 }

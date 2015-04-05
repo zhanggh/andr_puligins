@@ -51,27 +51,29 @@ public class DetailBarManager {
 	
 	public void refreshUI(){
 		CacheModel cm = CacheDataService.getAcction(cacheModel.type, cacheModel.id);
-		btn_fav.setSelected(cm!=null);
-		btn_fav.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				CacheModel cm = CacheDataService.getAcction(cacheModel.type, cacheModel.id);
-				if(cm==null){
-					XHSDKUtil.addXHBehavior(context, cacheModel.id+"", XHConstants.XHTOPIC_ARTICAL_FAV, cacheModel.type+"");
-					CacheDataService.addAcction(cacheModel);
-					btn_fav.setSelected(true);
-					DialogUtil.showToast(context, "收藏成功");
+		if(btn_fav!=null){
+			btn_fav.setSelected(cm!=null);
+			btn_fav.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					CacheModel cm = CacheDataService.getAcction(cacheModel.type, cacheModel.id);
+					if(cm==null){
+						XHSDKUtil.addXHBehavior(context, cacheModel.id+"", XHConstants.XHTOPIC_ARTICAL_FAV, cacheModel.type+"");
+						CacheDataService.addAcction(cacheModel);
+						btn_fav.setSelected(true);
+						DialogUtil.showToast(context, "收藏成功");
+					}
+					else{
+						XHSDKUtil.addXHBehavior(context, cacheModel.id+"", XHConstants.XHTOPIC_ARTICAL_FAV, cacheModel.type+"");
+						CacheDataService.cancelAcction(cacheModel.type, cacheModel.id+"");
+						btn_fav.setSelected(false);
+						DialogUtil.showToast(context, "取消收藏");
+					}
 				}
-				else{
-					XHSDKUtil.addXHBehavior(context, cacheModel.id+"", XHConstants.XHTOPIC_ARTICAL_FAV, cacheModel.type+"");
-					CacheDataService.cancelAcction(cacheModel.type, cacheModel.id+"");
-					btn_fav.setSelected(false);
-					DialogUtil.showToast(context, "取消收藏");
-				}
-			}
-		});
+			});
+		}
 		ll_addcomment.setOnClickListener(new View.OnClickListener() {
 			
 			@Override

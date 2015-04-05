@@ -37,10 +37,10 @@ public class SuggestActivity   extends Activity{
 	
 	private void initViews()
 	{
-		btn_right = (Button)this.findViewById(ComApp.getInstance().appStyle.btn_title_right);
+		btn_right = (Button)this.findViewById(R.id.btn_title_right);
 		 
 		et_content = (EditText)this.findViewById(R.id.et_content);
-		btn_right.setBackground(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_dialogsure_selector));
+		btn_right.setBackgroundDrawable(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_dialogsure_selector));
 		btn_right.setVisibility(View.VISIBLE);
 	}
 	private void refreshUI(){

@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Properties;
 
 import android.app.Activity;
+import android.app.Application;
+import android.app.Dialog;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,7 +30,12 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.plugin.R;
@@ -34,15 +43,23 @@ import com.plugin.commons.AppConfig;
 import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
 import com.plugin.commons.helper.SituoHttpAjax.SituoAjaxCallBack;
+import com.plugin.commons.model.AppInfoModel;
+import com.plugin.commons.model.CacheModel;
 import com.plugin.commons.model.NewsInfoModel;
 import com.plugin.commons.model.NewsTypeModel;
 import com.plugin.commons.model.RspResultModel;
+import com.plugin.commons.service.CacheDataService;
 import com.plugin.commons.service.ComService;
+import com.plugin.commons.service.DetailBarManager;
+import com.plugin.commons.service.DownloadService;
+import com.plugin.commons.service.NewsService;
 import com.plugin.commons.service.SmartWeatherService;
 import com.plugin.commons.service.SmartWeatherServiceImpl;
 import com.plugin.commons.ui.base.ActivityWeb;
+import com.plugin.commons.ui.base.ActivityWebExt;
 import com.plugin.commons.ui.base.VideoOLActivity;
 import com.plugin.commons.ui.base.WaitingActivity;
+import com.plugin.commons.ui.base.WebActivity;
 import com.plugin.commons.ui.news.NewsImageActivity;
 import com.plugin.commons.ui.news.SubNewsActivity;
 import com.zq.types.StBaseType;
@@ -61,12 +78,21 @@ public class ComUtil {
 	 public static void customeTitle(final Activity context,String title,boolean isLeft)
 	 {
 	    	context.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-	    			ComApp.getInstance().appStyle.common_title);
+	    			R.layout.common_title);
 			
 			TextView tvTitle=(TextView)context.findViewById(R.id.tv_title);
 			tvTitle.setText(title);
+			tvTitle.setTextColor(context.getResources().getColor(ComApp.getInstance().appStyle.title_text_color));
+			context.findViewById(R.id.ll_title).setBackgroundColor(ComApp.getInstance().getResources().getColor(ComApp.getInstance().appStyle.title_bg_color));
+//			RelativeLayout titleLy=(RelativeLayout) 
+//			titleLy.setBackgroundColor(ComApp.getInstance().getResources().getColor(ComApp.getInstance().appStyle.title_bg_color));
+			Button btn_title_left=(Button) context.findViewById(R.id.btn_title_left);
+			btn_title_left.setBackgroundResource(ComApp.getInstance().appStyle.btn_back_selector);
+			Button btn_title_right=(Button) context.findViewById(R.id.btn_title_right);
+			btn_title_right.setBackgroundResource(ComApp.getInstance().appStyle.btn_my_selector);
 			if(isLeft){
-				context.findViewById(ComApp.getInstance().appStyle.btn_title_left).setOnClickListener(new View.OnClickListener() {
+				
+				btn_title_left.setOnClickListener(new View.OnClickListener() {
 					
 					@Override
 					public void onClick(View arg0) {
@@ -130,11 +156,13 @@ public class ComUtil {
 				        options.inJustDecodeBounds = true;
 				        BitmapFactory.decodeFile(url, options);
 				        options.inPurgeable = true;
-				        options.inSampleSize = ComUtil.calculateInSampleSize(options, 128,
-				        		128);
+				        options.inSampleSize = ComUtil.calculateInSampleSize(options, width,
+				        		height);
 				        log.info("计算出来缩放比例------------:"+options.inSampleSize);
 				        if(options.inSampleSize<1){
 				        	options.inSampleSize = 1;
+				        }else{
+				        	options.inSampleSize=options.inSampleSize+1;
 				        }
 				        options.inJustDecodeBounds = false;
 				        Bitmap bitmap = BitmapFactory.decodeFile(url,options);
@@ -152,7 +180,7 @@ public class ComUtil {
 					        try { 
 					        	log.info("保存");
 					            FileOutputStream out=new FileOutputStream(fileSave); 
-					            if(bitmap.compress(Bitmap.CompressFormat.PNG, 100/options.inSampleSize, out)){ 
+					            if(bitmap.compress(Bitmap.CompressFormat.PNG,50, out)){ 
 					                out.flush(); 
 					                out.close(); 
 					                if(bitmap!=null){
@@ -477,30 +505,45 @@ public class ComUtil {
 	    
 		
 		public static void goNewsDetail(Context context,NewsInfoModel news,NewsTypeModel type){
-			if("1".equals(type.getHassub())){
+			if("主题拍".equals(type.getName())){
+				Intent intent = new Intent(context,ActivityWeb.class);
+				intent.putExtra(CoreContants.PARAMS_NEWS,news);
+				intent.putExtra(CoreContants.PARAMS_TYPE,type);
+				context.startActivity(intent);
+			}else if(CoreContants.NEWS_SUBTYPE_VIDEO.equals(type.getType())){
+				     Intent intent = new Intent(context,VideoOLActivity.class);
+				     intent.putExtra(CoreContants.PARAMS_NEWS,news);
+				     intent.putExtra(CoreContants.PARAMS_TYPE,type);
+				     context.startActivity(intent);
+		    }else if("1".equals(type.getHassub())){
 				Intent intent = new Intent(context,SubNewsActivity.class);
 				intent.putExtra(CoreContants.PARAMS_NEWS,news);
 				intent.putExtra(CoreContants.PARAMS_TYPE,type);
 				context.startActivity(intent);
-			}
-			else{
+			}else if(CoreContants.NEWS_SUBTYPE_WAP.equals(type.getType())){
+				Intent intent = new Intent(context,WebActivity.class); 
+				intent.putExtra(CoreContants.PARAMS_MSG, news.getUrl());
+				context.startActivity(intent); 
+			}else{
 				if(CoreContants.NEWS_SUBTYPE_PIC.equals(type.getType())){
 					Intent intent = new Intent(context,NewsImageActivity.class);
 					intent.putExtra(CoreContants.PARAMS_NEWS,news);
 					intent.putExtra(CoreContants.PARAMS_TYPE,type);
 					context.startActivity(intent);
-				}else if(CoreContants.NEWS_SUBTYPE_VIDEO.equals(type.getType())){
-				     Intent intent = new Intent(context,VideoOLActivity.class);
-				     intent.putExtra(CoreContants.PARAMS_NEWS,news);
-				     intent.putExtra(CoreContants.PARAMS_TYPE,type);
-				     context.startActivity(intent);
-				 }else{
+				}else if(CoreContants.NEWS_SUBTYPE_WORD_EXT.equals(type.getType())){
+					Intent intent = new Intent(context,ActivityWebExt.class);
+					intent.putExtra(CoreContants.PARAMS_NEWS,news);
+					intent.putExtra(CoreContants.PARAMS_TYPE,type);
+					context.startActivity(intent);
+				}else{
 					Intent intent = new Intent(context,ActivityWeb.class);
 					intent.putExtra(CoreContants.PARAMS_NEWS,news);
 					intent.putExtra(CoreContants.PARAMS_TYPE,type);
 					context.startActivity(intent);
 				}
 			}
+			
+			ComUtil.addViewTimes(context,news,type);
 		}
 		
 		
@@ -616,8 +659,7 @@ public class ComUtil {
 				
 				tv_title.setText(city+cacheData.getF().getF1().get(0).getFc()+"°C/"+cacheData.getF().getF1().get(0).getFd()+"°C");
 			}
-		}
-		else{
+		}else{
 			log.info("缓存预报为空，获取服务器数据");
 			SituoHttpAjax.ajax(new SituoAjaxCallBack(){
 				@Override
@@ -627,14 +669,16 @@ public class ComUtil {
 
 				@Override
 				public void callBack(StBaseType baseType) {
+					TextView tv_title = (TextView)mWeatheView.findViewById(R.id.title);
 					RspResultModel result = (RspResultModel)baseType;
 					if(ComUtil.checkRsp(cxt, result,false)&&result.getF()!=null&&!FuncUtil.isEmpty(result.getF().getF1())){
 						log.info("返回天气数据");
 						if(mWeatheView!=null){
 							log.info("显示白天黑夜温度");
-							TextView tv_title = (TextView)mWeatheView.findViewById(R.id.title);
 							tv_title.setText(city+result.getF().getF1().get(0).getFc()+"°C/"+result.getF().getF1().get(0).getFd()+"°C");
 						}
+					}else{
+						tv_title.setText(city+" 天气服务访问异常~");
 					}
 					
 				}
@@ -654,6 +698,17 @@ public class ComUtil {
     	 }
     	 intent.putExtra(CoreContants.PARAMS_NEWS, newsInfoModel);
     	 cxt.startService(intent);
+    }
+    
+    /**
+     * 启动下载任务
+     * @param cxt
+     * @param newsInfoModel 
+     */
+    public static void addDownLoadTask(Context cxt, AppInfoModel appInfo){
+    	Intent intent=new Intent(cxt,DownloadService.class);
+    	intent.putExtra(CoreContants.PARAMS_MSG, appInfo);
+    	cxt.startService(intent);
     }
     
 	
@@ -734,4 +789,296 @@ public class ComUtil {
 		AppConfig.getAppConfig(cxt).remove(key);
 	}
 
+	/**
+	 * 从相册中获取图片
+	 * @param cxt
+	 */
+	public static void getImagesFromLib(Activity cxt){
+		String state = Environment
+		.getExternalStorageState();
+		if (state.equals(Environment.MEDIA_MOUNTED)) {
+			Intent intent = new Intent(
+					Intent.ACTION_GET_CONTENT);
+			intent.addCategory(Intent.CATEGORY_OPENABLE);
+			intent.setType("image/*");
+			cxt.startActivityForResult(
+					Intent.createChooser(intent,"选择图片"),
+					CoreContants.REQUEST_CODE_IMAGE);
+		} else {
+			DialogUtil.showToast(cxt, "请插入SD卡");
+		}		
+	}
+	
+	/**
+	 * 拍照
+	 * @param cxt
+	 * @return 图片目录
+	 */
+	public static String takePhoto(Activity cxt){
+		String piPath="";
+		String state = Environment
+		.getExternalStorageState();
+		if (state.equals(Environment.MEDIA_MOUNTED)) {
+			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);//
+			String saveDir = Environment.getExternalStorageDirectory()
+			+ "/"+ComApp.APP_NAME;
+			File dir = new File(saveDir);
+			if (!dir.exists()) {
+				dir.mkdir();
+			}
+			
+			piPath = saveDir+"/"+ComUtil.getFilename();
+			log.info("文件路径："+piPath);
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(piPath)));
+			cxt.startActivityForResult(intent,CoreContants.REQUEST_CODE_CAMERL);
+		} else {
+			DialogUtil.showToast(cxt, "请插入SD卡");
+		}
+		return piPath;	
+	}
+	
+	/**
+	 * 从库中获取已有的视频
+	 * @param cxt
+	 */
+	public static void getVideoFromLib(Activity cxt){
+		String state = Environment
+		.getExternalStorageState();
+		if (state.equals(Environment.MEDIA_MOUNTED)) {
+			Intent intent = new Intent(
+					Intent.ACTION_GET_CONTENT);
+			intent.addCategory(Intent.CATEGORY_OPENABLE);
+			intent.setType("video/*");
+			cxt.startActivityForResult(
+					Intent.createChooser(intent,"选择视频"),
+					CoreContants.REQUEST_CODE_VIDEO);
+		} else {
+			DialogUtil.showToast(cxt, "请插入SD卡");
+		}		
+	}
+	
+	/**
+	 * 调用摄像机
+	 * @param cxt
+	 */
+	public static void takeVideo(Activity cxt){
+		String state = Environment
+		.getExternalStorageState();
+		if (state.equals(Environment.MEDIA_MOUNTED)) {
+			// TODO Auto-generated method stub
+			Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+//			intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+			intent.putExtra(MediaStore.EXTRA_MEDIA_TITLE,"正在录制视频");
+			intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 80);//视频的最大播放时间，单位为秒
+			intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 1512);//视频的最大字节数
+			cxt.startActivityForResult(intent, CoreContants.REQUEST_CODE_TAKE_VIDEO);
+		} else {
+			DialogUtil.showToast(cxt, "请插入SD卡");
+		}	
+	}
+	
+    /**
+     * 播放本地视频
+     * @param cxt
+     * @param videoPath
+     */
+    public static void playVideo(Activity cxt,String videoPath){  
+        Intent intent = new Intent(Intent.ACTION_VIEW);  
+        String strend="";  
+        if(videoPath.toLowerCase().endsWith(".mp4")){  
+            strend="mp4";  
+        }  
+        else if(videoPath.toLowerCase().endsWith(".3gp")){  
+            strend="3gp";  
+        }  
+        else if(videoPath.toLowerCase().endsWith(".mov")){  
+            strend="mov";  
+        }  
+        else if(videoPath.toLowerCase().endsWith(".wmv")){  
+            strend="wmv";  
+        }else{
+        	DialogUtil.showToast(cxt,"正在打开系统浏览器跳转页面");
+	        Uri content_url = Uri.parse(videoPath);  
+	        intent.setData(content_url); 
+	        cxt.startActivityForResult(intent, 100);
+        }
+        intent.setDataAndType(Uri.parse(videoPath), "video/"+strend);  
+        cxt.startActivity(intent);  
+    }  
+	
+	/**
+	 *播放网络视频
+	 * @param cxt
+	 * @param url
+	 */
+	public static void playVideoFromUrl(Activity cxt,String url){
+//	    String extension = MimeTypeMap.getFileExtensionFromUrl(url);  
+//	    String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);  
+//	    Intent mediaIntent = new Intent(Intent.ACTION_VIEW);  
+//	    mediaIntent.setDataAndType(Uri.parse(url), mimeType);  
+//	    cxt.startActivity(mediaIntent);  
+		playVideo(cxt,url);//
+	}
+	
+	public static WindowManager getWindowService(Context cxt){
+		WindowManager wm = (WindowManager) cxt.getSystemService(Context.WINDOW_SERVICE);
+		int width = wm.getDefaultDisplay().getWidth();
+		int height = wm.getDefaultDisplay().getHeight();
+		return wm;
+	}
+	
+	public static void hideKeyBoard(Activity cxt,EditText searchEd){
+		((InputMethodManager) searchEd.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
+		.hideSoftInputFromWindow(
+				cxt.getCurrentFocus()
+		.getWindowToken(),
+		InputMethodManager.HIDE_NOT_ALWAYS);
+	}
+	
+	
+	
+	/**
+	 * 评论
+	 */
+	public static void addComment(final Activity cxt,final NewsInfoModel mNews,final NewsService newService,final String mAttype,final TextView tv_right,int cacheType){
+		CacheModel cm = new CacheModel();
+		cm.type =cacheType;
+		cm.id = mNews.getId()+"";
+		cm.msg = mNews;
+		DetailBarManager detailBarMng = new DetailBarManager(cxt,cxt.findViewById(R.id.rl_commentbar),cm);
+		detailBarMng.setCommtentCB(new DetailBarManager.OnCommentCallBack() {
+			
+			@Override
+			public void onCommentCallBack(Dialog dlg, final String comment) {
+				
+				DialogUtil.showProgressDialog(cxt);
+				SituoHttpAjax.ajax(new SituoHttpAjax.SituoAjaxCallBack() {
+
+					@Override
+					public StBaseType requestApi() {
+						RspResultModel rsp = newService.pubNewComment(mNews.getId(), comment,mAttype);
+						return rsp;
+					}
+
+					@Override
+					public void callBack(StBaseType baseType) {
+						DialogUtil.closeProgress(cxt);
+						RspResultModel result = (RspResultModel)baseType;
+						if(ComUtil.checkRsp(cxt, result)){
+							if("0".equals(result.getRetcode())){
+								DialogUtil.showToast(cxt, "评论成功");
+								if(tv_right!=null){
+									int replyCount=Integer.parseInt(mNews.getReplycount())+1;
+									tv_right.setText(String.valueOf(replyCount));
+								}
+								//用户行为采集
+								XHSDKUtil.addXHBehavior(cxt,mAttype+"_"+mNews.getId(), XHConstants.XHTOPIC_COMMENT, mNews.getId());
+							}else{
+								DialogUtil.showToast(cxt, "评论失败");
+							}
+						}
+					}
+					
+				});
+			}
+		});
+		detailBarMng.refreshUI();
+	}
+	
+	public static void doCollection(final CacheModel cacheModel,final Activity cxt,final NewsInfoModel mNews,final String mAttype,final Button btn_right){
+		CacheModel cm = CacheDataService.getAcction(cacheModel.type, cacheModel.id);
+		if(cm==null){
+			CacheDataService.addAcction(cacheModel);
+			btn_right.setSelected(true);
+			DialogUtil.showToast(cxt, "收藏成功");
+			XHSDKUtil.addXHBehavior(cxt,mAttype+"_"+mNews.getId(), XHConstants.XHTOPIC_ARTICAL_FAV, mNews.getId());
+		}
+		else{
+			CacheDataService.cancelAcction(cacheModel.type, cacheModel.id+"");
+			btn_right.setSelected(false);
+			XHSDKUtil.addXHBehavior(cxt,mAttype+"_"+mNews.getId(), XHConstants.XHTOPIC_ARTICAL_FAV_CANCEL, mNews.getId());
+			DialogUtil.showToast(cxt, "取消收藏");
+		}
+	}
+
+	/**
+	    * 安装apk
+	    * @param url
+	    */
+	public static  void installApk(Context cxt,String apkFilePath){
+		File apkfile = new File(apkFilePath);
+        if (!apkfile.exists()) {
+            return;
+        }    
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive"); 
+        cxt.startActivity(i);
+	}
+	
+	/**
+	 * 安装apk
+	 * @param url
+	 */
+	public static  void installApk(Application app,String apkFilePath){
+		File apkfile = new File(apkFilePath);
+		if (!apkfile.exists()) {
+			return;
+		}    
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive"); 
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		app.startActivity(intent);
+	}
+	
+	/**
+     * 在状态栏显示通知
+     */
+	public static   void showNotification(Context cxt,int appIcon,Class target,int notifyId,String title,int progress,int notifyType){
+		
+        
+        Notification   notification = createNotification( cxt,appIcon,target,notifyId,title,ComApp.getInstance().getRemoteViews(title, appIcon, progress),notifyType);
+        // 把Notification传递给NotificationManager   
+        ComApp.getInstance().getNotificationManager().notify(notifyId, notification);   
+         
+	}
+	/**
+     * 在状态栏显示通知
+     */
+	public static   void showNotification(Context cxt,int appIcon,Class target,int notifyId,String title,int notifyType){
+		showNotification(cxt,appIcon,target,notifyId,title,1,notifyType);
+    }
+	
+	public static Notification createNotification(Context cxt,int appIcon,Class target,int notifyId,String title,RemoteViews contentView,int notifyType){
+		 // 定义Notification的各种属性   
+        Notification notification = ComApp.getInstance().getNotification();
+        notification.defaults =notifyType;//Notification.DEFAULT_VIBRATE; 
+        if(target!=null){
+        	 Intent notificationIntent =new Intent(cxt,target); // 点击该通知后要跳转的Activity   
+             PendingIntent contentItent = PendingIntent.getActivity(cxt, 0, notificationIntent,0);   
+//             notification.setLatestEventInfo(cxt, contentTitle, contentText, contentItent);
+             notification.contentIntent=contentItent;
+        }
+//        notification.tickerText = title;
+        notification.icon = appIcon;
+        notification.contentView = contentView;
+		return notification;
+	}
+	
+    //删除通知    
+	public static   void clearNotification(Context cxt,int notifyId){
+        // 启动后删除之前我们定义的通知   
+		ComApp.getInstance().getNotificationManager().cancel(notifyId);  
+  
+    }
+	
+	/**
+	 * apk下载所在的目录
+	 * @return
+	 */
+	public static String getApkDiretion(){
+		String dir="";
+		dir=Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+ComApp.APP_NAME+"/Update/";
+		return dir;
+	}
 }

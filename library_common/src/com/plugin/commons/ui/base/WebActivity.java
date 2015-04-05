@@ -9,17 +9,22 @@ import android.webkit.WebViewClient;
 
 import com.plugin.R;
 import com.plugin.commons.ComApp;
+import com.plugin.commons.CoreContants;
+import com.plugin.commons.helper.FuncUtil;
 import com.plugin.commons.view.ZqCircleView;
 
 
 public class WebActivity   extends BaseActivity{
 	private ZqCircleView mLJWebView = null;
+	private String targetUrl;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_govweb);
+		
+		targetUrl=(String) this.getIntent().getCharSequenceExtra(CoreContants.PARAMS_MSG);
 		
 		mLJWebView = (ZqCircleView)this.findViewById(R.id.web);
 		mLJWebView.setProgressStyle(ZqCircleView.Circle);
@@ -34,10 +39,21 @@ public class WebActivity   extends BaseActivity{
 				view.loadUrl(url);
 				return true;
 			}
+
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				// TODO Auto-generated method stub
+				super.onPageFinished(view, url);
+			}
+			
 			
 		});
 		String url=ComApp.getInstance().appStyle.tv_setting_version_contact_website_tx;
-		mLJWebView.loadUrl(url);
+		if(!FuncUtil.isEmpty(targetUrl)){
+			mLJWebView.loadUrl(targetUrl);
+		}else{
+			mLJWebView.loadUrl(url);
+		}
 		initBottom();
 	}
 	
@@ -68,5 +84,13 @@ public class WebActivity   extends BaseActivity{
 				mLJWebView.getmWebView().reload();
 			}
 		});
+	}
+
+	public String getTargetUrl() {
+		return targetUrl;
+	}
+
+	public void setTargetUrl(String targetUrl) {
+		this.targetUrl = targetUrl;
 	}
 }

@@ -35,17 +35,7 @@ public class AskGovFragment extends BaseFragment{
 		AskGovFragment homeFragment = new AskGovFragment();
 		return homeFragment;
 	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		this.mActivity = activity;
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
+ 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,20 +44,9 @@ public class AskGovFragment extends BaseFragment{
 		return view;
 	}
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		initViews(view);
-	}
+	 
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		initDisplay();
-		
-	}
-
-	private void initViews(View view) {
+	protected void initViews(View view) {
 		ll_my = (LinearLayout) view.findViewById(R.id.ll_my);
 		btn_ask = (Button) view.findViewById(R.id.btn_ask);
 		btn_ask.setBackgroundResource(ComApp.getInstance().appStyle.btn_ask_selector);
@@ -152,7 +131,7 @@ public class AskGovFragment extends BaseFragment{
 
 	}
 	
-	private void initDisplay() {
+	protected void initDisplay() {
 		fragmentList = new ArrayList<Fragment>();
 		fragmentList.add(getFragmentManager().findFragmentById(R.id.fl_hot));
 		fragmentList.add(getFragmentManager().findFragmentById(R.id.fl_trends));
@@ -183,28 +162,28 @@ public class AskGovFragment extends BaseFragment{
 		btn_my.setBackgroundResource(ComApp.getInstance().appStyle.my_btn_normal);
 		
 		TextView tv_my = (TextView)mActivity.findViewById(R.id.tv_my);
-		btn_hot.setBackground(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.hotspot_btn_normal));
+		btn_hot.setBackgroundDrawable(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.hotspot_btn_normal));
 		tv_hot.setTextColor(mActivity.getResources().getColor(R.color.grey_font2));
-		btn_trends.setBackground(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.trends_btn_normal));
+		btn_trends.setBackgroundDrawable(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.trends_btn_normal));
 		tv_trends.setTextColor(mActivity.getResources().getColor(R.color.grey_font2));
-		btn_gov.setBackground(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.institution_btn_normal));
+		btn_gov.setBackgroundDrawable(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.institution_btn_normal));
 		tv_gov.setTextColor(mActivity.getResources().getColor(R.color.grey_font2));
-		btn_my.setBackground(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.my_btn_normal));
+		btn_my.setBackgroundDrawable(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.my_btn_normal));
 		tv_my.setTextColor(mActivity.getResources().getColor(R.color.grey_font2));
 		if(mSelectTab==1){
-			btn_trends.setBackground(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.trends_btn_press));
+			btn_trends.setBackgroundDrawable(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.trends_btn_press));
 			tv_trends.setTextColor(mActivity.getResources().getColor(R.color.blue_font));
 		}
 		else if(mSelectTab==2){
-			btn_gov.setBackground(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.institution_btn_press));
+			btn_gov.setBackgroundDrawable(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.institution_btn_press));
 			tv_gov.setTextColor(mActivity.getResources().getColor(R.color.blue_font));
 		}
 		else if(mSelectTab==3){
-			btn_my.setBackground(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.my_btn_press));
+			btn_my.setBackgroundDrawable(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.my_btn_press));
 			tv_my.setTextColor(mActivity.getResources().getColor(R.color.blue_font));
 		}
 		else if(mSelectTab==0){
-			btn_hot.setBackground(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.hotspot_btn_press));
+			btn_hot.setBackgroundDrawable(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.hotspot_btn_press));
 			tv_hot.setTextColor(mActivity.getResources().getColor(R.color.blue_font));
 		}
 		

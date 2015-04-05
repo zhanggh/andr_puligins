@@ -120,20 +120,21 @@
     	 </LinearLayout>
     	 
     	 <Button
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_width="@dimen/text_size_29"
+	        android:layout_height="@dimen/text_size_28"
 	        android:layout_alignParentRight="true"
 	        android:layout_centerVertical="true"
 	        android:layout_marginRight="12dip"
 	        android:id="@+id/btn_share"/>
     	 
     	 <Button
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_width="@dimen/text_size_29"
+	        android:layout_height="@dimen/text_size_28"
 	        android:layout_toLeftOf="@+id/btn_share"
 	        android:layout_centerVertical="true"
 	        android:layout_marginRight="10dip"
 	        android:id="@+id/btn_fav"/>
+    	 
     	 
     </RelativeLayout>
 </RelativeLayout>

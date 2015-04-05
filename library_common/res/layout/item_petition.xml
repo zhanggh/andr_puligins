@@ -26,7 +26,7 @@
 			        android:layout_height="wrap_content"
 			        android:textSize="16sp"
 			        android:textColor="@color/new_title_color"
-			        android:text="某某地方公共设施被严重损坏"
+			        android:text=""
 			      />
 		    </LinearLayout>
 

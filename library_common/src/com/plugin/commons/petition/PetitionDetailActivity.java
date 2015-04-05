@@ -36,13 +36,14 @@ public class PetitionDetailActivity extends BaseActivity{
 	TextView tv_reply_time;
 	TextView tv_reply_context;
 	TextView tv_status;
+	TextView tv_type;
 	RelativeLayout ly_reply_cx;
 	List<CommentModel> mComments;
 	LinearLayout ll_med_pics;
 	ImageView iv_myimage1;
 	ImageView iv_myimage2;
 	ImageView iv_myimage3;
-	
+	boolean flag=false;
 	
 	AskMsgModel mMsg;
 	@Override
@@ -50,13 +51,19 @@ public class PetitionDetailActivity extends BaseActivity{
 		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_petition_detail);
-		ComUtil.customeTitle(this, "信件详情",true);
+		if(this.getIntent()!=null&&this.getIntent().getExtras().containsKey(CoreContants.PARAMS_TITLE)){
+			ComUtil.customeTitle(this, this.getIntent().getExtras().getString(CoreContants.PARAMS_TITLE),true);
+			flag=true;
+		}else{
+			ComUtil.customeTitle(this, "信件详情",true);
+		}
 		govDetail=(AskMsgModel) this.getIntent().getExtras().get(CoreContants.PARAMS_MSG);
 		initViews();
 		initData();
 	}
 	private void initViews(){
 		tv_reciever = (TextView)this.findViewById(R.id.tv_reciever);
+		tv_type = (TextView)this.findViewById(R.id.tv_type);
 		tv_time = (TextView)this.findViewById(R.id.tv_time);
 		tv_title = (TextView)this.findViewById(R.id.tv_email_title);
 		tv_reply_time = (TextView)this.findViewById(R.id.tv_reply_time);
@@ -70,7 +77,12 @@ public class PetitionDetailActivity extends BaseActivity{
 		 
 	}
 	private void initData(){
-		tv_reciever.setText(govDetail.getOrgname());
+		if(flag){
+			tv_type.setText("类型:");
+			tv_reciever.setText("0".equals(govDetail.getMsgtype())?"提案":"社情民意");
+		}else{
+			tv_reciever.setText(govDetail.getOrgname());
+		}
 		tv_time.setText(govDetail.getCreatetime());
 		tv_title.setText(govDetail.getContent());
 		tv_reply_time.setText(govDetail.getReplytime());

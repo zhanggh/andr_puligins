@@ -180,7 +180,7 @@ public class UserModifyActivity extends Activity{
 							File imageFile = new File(file);
 							try{
 								imageIS = new FileInputStream(imageFile);
-								log.info("文件长度："+imageIS.available());
+								log.info("文件长度："+imageIS.available()/1024);
 								rsp = ComApp.getInstance().getApi().uploadUserphoto(imageFile.getName(), imageIS);
 								return rsp;
 							}

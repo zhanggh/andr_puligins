@@ -1,5 +1,6 @@
 package com.plugin.commons.api;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -17,12 +18,18 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseStream;
+import com.lidroid.xutils.http.client.HttpRequest;
 import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
 import com.plugin.commons.helper.DingLog;
+import com.plugin.commons.helper.FuncUtil;
 import com.plugin.commons.helper.SmartWeatherUrlUtil;
 import com.plugin.commons.model.AskMsgModel;
 import com.plugin.commons.model.CommentModel;
+import com.plugin.commons.model.CommonModel;
 import com.plugin.commons.model.RspResultModel;
 import com.plugin.commons.model.UserInfoModel;
 import com.plugin.commons.model.XinHuaModel;
@@ -76,6 +83,14 @@ public class ComAppApi {
 	public static final String URL_NEWS_PIC_LIST= "art/pic_list";
 	public static final String URL_NEWS_PIC_DETAIL= "art/pic_detail";
 	public static final String URL_ART_VIEW= "art/view";//访问统计推送
+	public static final String URL_PAIKE_ADD= "paike/add";//增加拍客 
+	public static final String URL_BOKE_ADD= "boke/add";//增加播客
+	public static final String URL_NUMBER_TYPES= "number/types";//号码类型
+	public static final String URL_NUMBER_LIST= "number/list";
+	public static final String URL_AREA_LIST= "app/area_list";//地方列表
+	public static final String URL_LIST_AREA= "app/list_area";//地方应用推荐
+	public static final String URL_LIST_INDUSTRY= "app/list_industry";//行业应用推荐
+	public static final String URL_LIST_HOT= "app/list_hot";//热门应用推荐
 	public static String sysid="1";
 	
 	protected static AjaxParams buildBaseParam(){
@@ -87,6 +102,17 @@ public class ComAppApi {
 		params.put("sign", "");
 		params.put("systype","0");
 		params.put("sysid",sysid);
+		return params;
+	}
+	protected static RequestParams buildBaseParamExt(){
+		UserInfoModel user = ComApp.getInstance().getLoginInfo();
+		RequestParams params = new RequestParams(); // 默认编码UTF-8
+		params.addBodyParameter("user_id", user==null?"":user.getPhone());
+		params.addBodyParameter("version", CoreContants.INF_VERSION_CODE);
+		params.addBodyParameter("sessionid",user==null?"":user.getSessionid());
+		params.addBodyParameter("sign", "");
+		params.addBodyParameter("systype","0");
+		params.addBodyParameter("sysid",sysid);
 		return params;
 	}
 	
@@ -165,6 +191,33 @@ public class ComAppApi {
 			rsp.setRetmsg("网络不给力哦~");
 		}
 		return rsp;
+	}
+	
+	protected RspResultModel doRequestExt(RequestParams params,String url){
+		String retString="";
+		 try {
+			HttpUtils http = new HttpUtils();
+			// 设置返回文本的编码， 默认编码UTF-8
+			//http.configResponseTextCharset("GBK");
+			// 自动管理 cookie
+//       http.configCookieStore(preferencesCookieStore);
+
+			ResponseStream rsp= http.sendSync(HttpRequest.HttpMethod.POST,
+					getUrl(url),
+			        params);
+			
+			retString=rsp.readString();
+			log.info("返回信息："+retString);
+		} catch (com.lidroid.xutils.exception.HttpException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		RspResultModel rsp = (RspResultModel) JsonParse
+		.static_consume(retString);
+       return rsp;
 	}
 	
 	protected static String getUrl(String url){
@@ -537,7 +590,7 @@ public class ComAppApi {
 							url,null);
 			String retString = (String)obj;
 			log.info("返回:"+retString);
-			if(retString.contains("1")){//如果包含了1,表示数据正常返回
+			if(!FuncUtil.isEmpty(retString)&&retString.contains("1")){//如果包含了1,表示数据正常返回
 				rsp = (RspResultModel) JsonParse
 						.static_consume(retString);
 				rsp.setRetcode(CoreContants.RETCODE_SUCC);
@@ -567,13 +620,6 @@ public class ComAppApi {
 	 * @throws HttpException 
 	 */
 	public XinHuaModel getStartUpPage(String clientWidth,String clientHeight,String paramId,String timeStamp,String randomNum,String myEncrypt) throws HttpException, IOException {
-		AjaxParams params = new AjaxParams();
-		params.put("clientWidth",clientWidth);
-		params.put("clientHeight",clientHeight);
-		params.put("paramId",paramId);
-		params.put("timeStamp",timeStamp);
-		params.put("randomNum",randomNum);
-		params.put("myEncrypt",myEncrypt);
 		List<BasicNameValuePair> data = new ArrayList<BasicNameValuePair>();
 		data.add(new BasicNameValuePair("clientHeight",clientHeight));
 		data.add(new BasicNameValuePair("clientWidth",clientWidth));
@@ -581,7 +627,6 @@ public class ComAppApi {
 		data.add(new BasicNameValuePair("timeStamp",timeStamp));
 		data.add(new BasicNameValuePair("randomNum",randomNum));
 		data.add(new BasicNameValuePair("myEncrypt",myEncrypt));
-//		return doXinhuaRequest(params,XINHUA_STARTUP_URL);
 		return doHttpReq(data,XINHUA_STARTUP_URL);
 	}
 	
@@ -615,6 +660,28 @@ public class ComAppApi {
 		return rsp;
 		
 	}
+	public RspResultModel doShunJianRadioHttpReq(List<BasicNameValuePair> nameValuePairs,String url){
+		String strResponse = null;
+		//新建HttpClient对象  
+		HttpClient httpclient = new DefaultHttpClient();
+		//创建POST连接
+		HttpPost httppost = new HttpPost(url);
+		try {
+//            //使用PSOT方式，必须用NameValuePair数组传递参数
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpResponse response = httpclient.execute(httppost);
+			strResponse= EntityUtils.toString(response.getEntity());  
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		log.info("返回:"+strResponse);
+		
+		RspResultModel rsp = (RspResultModel) JsonParse
+		.parsShJianRadio(strResponse);
+		return rsp;
+	}
 	
 
 	public RspResultModel newsPicDetail(String id) {
@@ -640,5 +707,180 @@ public class ComAppApi {
 		AjaxParams params = buildBaseParam();
 		params.put("viewstr",viewstr);
 		return doRequest(params,URL_ART_VIEW);
+	}
+	
+	/**
+	 * 增加拍客信息
+	 * @param viewstr
+	 * @return
+	 */
+	public RspResultModel pushPhotos(CommonModel cmmodel) {
+		AjaxParams params = buildBaseParam();
+		 
+		params.put("type",cmmodel.getType());
+		params.put("subtype",cmmodel.getSubtype());
+		params.put("themeid",cmmodel.getThemeid());
+		params.put("title",cmmodel.getTitle());
+		params.put("picname1",cmmodel.getPicname1());
+		params.put("pic1",cmmodel.getPic1());
+		params.put("picname2",cmmodel.getPicname2());
+		params.put("pic2",cmmodel.getPic2());
+		params.put("picname3",cmmodel.getPicname3());
+		params.put("pic3",cmmodel.getPic3());
+		params.put("picname4",cmmodel.getPicname4());
+		params.put("pic4",cmmodel.getPic4());
+		params.put("picname5",cmmodel.getPicname5());
+		params.put("pic5",cmmodel.getPic5());
+		params.put("picname6",cmmodel.getPicname6());
+		params.put("pic6",cmmodel.getPic6());
+		params.put("picname7",cmmodel.getPicname7());
+		params.put("pic7",cmmodel.getPic7());
+		params.put("picname8",cmmodel.getPicname8());
+		params.put("pic8",cmmodel.getPic8());
+		params.put("picname9",cmmodel.getPicname9());
+		params.put("pic9",cmmodel.getPic9());
+		return doRequest(params,URL_PAIKE_ADD);
+	}
+	
+	
+	
+	
+	/**
+	 * 增加播客客信息
+	 * @param viewstr
+	 * @return
+	 */
+	public RspResultModel pushVideo(CommonModel cmmodel) {
+		//当要上传大文件的时候，必须使用该方式请求
+		// 设置请求参数的编码
+		RequestParams params =  buildBaseParamExt();
+		params.addBodyParameter("type",cmmodel.getType());
+		params.addBodyParameter("subtype",cmmodel.getSubtype());
+		params.addBodyParameter("themeid",cmmodel.getThemeid());
+		params.addBodyParameter("title",cmmodel.getTitle());
+		params.addBodyParameter("videoname",cmmodel.getVideoname());
+		// 添加文件
+		params.addBodyParameter("vidio", new File(cmmodel.getVideoFile()));
+		
+		return doRequestExt(params,URL_BOKE_ADD);
+	}
+	
+	/**
+	 * 获取网页信息
+	 * @param url
+	 * @return
+	 */
+	public String getHtml(String url){
+		Object obj = ComApp
+		.getInstance()
+		.getFinalHttp()
+		.postSync(
+				getUrl(url));
+		String retString = (String)obj;
+		log.info("返回:"+retString);
+		return retString;
+	}
+	
+	
+	
+	/**
+	 * new radio对接 获取列表
+	 * @return
+	 */
+	public RspResultModel getNewRadioTypeList() {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		return doShunJianRadioHttpReq(params,CoreContants.NEWRADIO_LIST_TYPES_URL);
+	}
+	/**
+	 * new radio对接 
+	 * 获取详细资源
+	 * @return
+	 */
+	public RspResultModel getNewRadioTypeDetail(String id) {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("Id",id));
+		return doShunJianRadioHttpReq(params,CoreContants.NEWRADIO_LIST_DETAIL_URL);
+	}
+	/**
+	 * 瞬间 对接 获取列表
+	 * @return
+	 */
+	public RspResultModel getShunJianTypeList() {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		return doShunJianRadioHttpReq(params,CoreContants.SHUNJIAN_LIST_TYPES_URL);
+	}
+	/**
+	 * 瞬间 对接 
+	 * 获取详细资源
+	 * @return
+	 */
+	public RspResultModel getShunJianTypeDetail(String id) {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("Id",id));
+		return doShunJianRadioHttpReq(params,CoreContants.SHUNJIAN_LIST_DETAIL_URL);
+	}
+	
+	/**
+	 * 获取号码类型列表
+	 * @param content
+	 * @return
+	 */
+	public RspResultModel getNubmerTypes() {
+		AjaxParams params = buildBaseParam();
+		params.put("version", "01");
+		return doRequest(params,URL_NUMBER_TYPES);
+	}
+	/**
+	 * 获取号码列表
+	 * @param content
+	 * @return
+	 */
+	public RspResultModel getNubmerList(String type,String stext,String start,String size){
+		AjaxParams params = buildBaseParam();
+		params.put("version", "01");
+		params.put("type",type);
+		params.put("stext",stext);
+		params.put("start", start);
+		params.put("size", size);
+		return doRequest(params,URL_NUMBER_LIST);
+	}
+	
+	
+	/**
+	 * 地区列表
+	 * @return
+	 */
+	public RspResultModel getAreaList(){
+		AjaxParams params = buildBaseParam();
+		params.put("version", "01");
+		return doRequest(params,URL_AREA_LIST);
+	}
+	/**
+	 * 地区app推荐列表
+	 * @return
+	 */
+	public RspResultModel getAreaRecList(String areaId){
+		AjaxParams params = buildBaseParam();
+		params.put("version", "01");
+		params.put("area_id",areaId);
+		return doRequest(params,URL_LIST_AREA);
+	}
+	/**
+	 * 行业app推荐列表
+	 * @return
+	 */
+	public RspResultModel getIndustryRecList(){
+		AjaxParams params = buildBaseParam();
+		params.put("version", "01");
+		return doRequest(params,URL_LIST_INDUSTRY);
+	}
+	/**
+	 *热门app推荐列表
+	 * @return
+	 */
+	public RspResultModel getHotRecList(){
+		AjaxParams params = buildBaseParam();
+		params.put("version", "01");
+		return doRequest(params,URL_LIST_HOT);
 	}
 }

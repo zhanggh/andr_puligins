@@ -8,8 +8,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,14 +22,16 @@ import com.plugin.commons.helper.XHConstants;
 import com.plugin.commons.helper.XHSDKUtil;
 import com.plugin.commons.model.NewsInfoModel;
 import com.plugin.commons.model.NewsTypeModel;
+import com.plugin.commons.service.NewsService;
 
 
 public class HomeNewsListAdapter extends BaseAdapter {
 	
 	private Context context;
 	private List<List<NewsInfoModel>> newList;
-	private static Map<String,View> viewMap = new HashMap<String,View>();
-	
+//	private static Map<String,View> viewMap = new HashMap<String,View>();
+	NewsTypeModel mNewType;
+	NewsService newsSvc;
 	public HomeNewsListAdapter(Context context, List<List<NewsInfoModel>> newItems){
 		this.context = context;
 		this.newList = newItems;
@@ -51,26 +55,21 @@ public class HomeNewsListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final List<NewsInfoModel> news = newList.get(position);
-		View rowView = viewMap.get(position+"");
+		View rowView =convertView;// viewMap.get(position+"");
 		final NewListItemCache viewCache;
         if (rowView == null) {
                 rowView = LayoutInflater.from(context).inflate(R.layout.item_homenews, null);
                 viewCache = new NewListItemCache(rowView,null,context,position+"");
                 rowView.setTag(viewCache);
-                viewMap.put(position+"", rowView);
+                viewCache.getLl_datalist();
+//                viewMap.put(position+"", rowView);
         } else {
                 viewCache = (NewListItemCache) rowView.getTag();
         }
         RelativeLayout rl_new1 = (RelativeLayout)viewCache.getView().findViewById(R.id.rl_new1);
-        RelativeLayout rl_new2 = (RelativeLayout)viewCache.getView().findViewById(R.id.rl_new2);
-        RelativeLayout rl_new3 = (RelativeLayout)viewCache.getView().findViewById(R.id.rl_new3);
         ImageView iv_image1 = (ImageView)viewCache.getView().findViewById(R.id.iv_image1);
-        ImageView iv_image2 = (ImageView)viewCache.getView().findViewById(R.id.iv_image2);
-        ImageView iv_image3 = (ImageView)viewCache.getView().findViewById(R.id.iv_image3);
-        
         TextView tv_title1 = (TextView)viewCache.getView().findViewById(R.id.tv_title1);
-        TextView tv_title2 = (TextView)viewCache.getView().findViewById(R.id.tv_title2);
-        TextView tv_title3 = (TextView)viewCache.getView().findViewById(R.id.tv_title3);
+        viewCache.getLl_datalist().removeAllViews();
         for(int i=0;i<news.size();i++){
         	final NewsInfoModel item = news.get(i);
         	if(item!=null){
@@ -85,11 +84,19 @@ public class HomeNewsListAdapter extends BaseAdapter {
     						doOnclick(item);
     					}
     				});
-            	}
-            	else if(i==1){
-            		tv_title2.setText(item.getTitle());
-            		ComApp.getInstance().getFinalBitmap().display(iv_image2, item.getImg());
-            		rl_new2.setOnClickListener(new View.OnClickListener() {
+            	}else{
+            		LinearLayout line=new LinearLayout(context);
+            		line.setBackgroundColor(context.getResources().getColor(R.color.line_color));
+            		LinearLayout.LayoutParams imagebtn_params = new LinearLayout.LayoutParams(
+                             LayoutParams.MATCH_PARENT,2);
+            		line.setLayoutParams(imagebtn_params);
+            		View rowViewext = LayoutInflater.from(context).inflate(R.layout.item_home_news, null);
+            		LinearLayout rl_new = (LinearLayout)rowViewext.findViewById(R.id.rl_new);
+        	        ImageView iv_image = (ImageView)rowViewext.findViewById(R.id.iv_image);
+        	        TextView tv_title = (TextView)rowViewext.findViewById(R.id.tv_title);
+        	        tv_title.setText(item.getTitle());
+            		ComApp.getInstance().getFinalBitmap().display(iv_image, item.getImg(),ComApp.getInstance().getLoadingBig(),ComApp.getInstance().getLoadingBig());
+            		rl_new.setOnClickListener(new View.OnClickListener() {
     					
     					@Override
     					public void onClick(View arg0) {
@@ -97,18 +104,8 @@ public class HomeNewsListAdapter extends BaseAdapter {
     						doOnclick(item);
     					}
     				});
-            	}
-            	else if(i==2){
-            		tv_title3.setText(item.getTitle());
-            		ComApp.getInstance().getFinalBitmap().display(iv_image3, item.getImg());
-            		rl_new3.setOnClickListener(new View.OnClickListener() {
-    					
-    					@Override
-    					public void onClick(View arg0) {
-    						// TODO Auto-generated method stub
-    						doOnclick(item);
-    					}
-    				});
+        	        viewCache.getLl_datalist().addView(rowViewext);
+        	        viewCache.getLl_datalist().addView(line);
             	}
         	}
         }
@@ -120,7 +117,6 @@ public class HomeNewsListAdapter extends BaseAdapter {
 		type.setId(item.getArttype());
 		type.setType(item.getNewtype());
 		type.setHassub("0");
-		ComUtil.addViewTimes(context,item,type);
 		ComUtil.goNewsDetail(context, item, type);
 		XHSDKUtil.addXHBehavior(context,item.getArttype()+"_"+item.getId(), XHConstants.XHTOPIC_ARTICAL_CLICK, item.getId());
 	}
@@ -141,12 +137,12 @@ public class HomeNewsListAdapter extends BaseAdapter {
 		this.newList = newList;
 	}
 
-	public static Map<String, View> getViewMap() {
-		return viewMap;
+	public NewsTypeModel getmNewType() {
+		return mNewType;
 	}
 
-	public static void setViewMap(Map<String, View> viewMap) {
-		HomeNewsListAdapter.viewMap = viewMap;
+	public void setmNewType(NewsTypeModel mNewType) {
+		this.mNewType = mNewType;
 	}
 
 }

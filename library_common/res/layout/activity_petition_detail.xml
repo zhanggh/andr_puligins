@@ -21,12 +21,14 @@
 			     android:layout_width="wrap_content"
 			     android:layout_height="wrap_content"
 			     android:orientation="horizontal"
+			     android:id="@+id/ll_reciever"
 			 >
 			 <TextView
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			        android:textSize="15sp"
-			        android:textColor="@color/new_colora2a2a2"
+			        android:textColor="@color/tv_2a2a2"
+			        android:id="@+id/tv_type"
 			        android:text="收件人:"
 			      />
 			    <TextView

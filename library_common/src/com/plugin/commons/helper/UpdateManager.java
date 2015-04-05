@@ -101,7 +101,7 @@ public class UpdateManager {
 				break;
 			case DOWN_OVER:
 				downloadDialog.dismiss();
-				installApk();
+				ComUtil.installApk(mContext,apkFilePath);
 				break;
 			case DOWN_NOSDCARD:
 				downloadDialog.dismiss();
@@ -285,12 +285,12 @@ public class UpdateManager {
 		@Override
 		public void run() {
 			try {
-				String apkName = "zhkdApp_"+appInfo.getVersion()+".apk";
-				String tmpApk = "zhkdApp_"+appInfo.getVersion()+".tmp";
+				String apkName = ComApp.APP_NAME+"_"+appInfo.getVersion()+".apk";
+				String tmpApk = ComApp.APP_NAME+"_"+appInfo.getVersion()+".tmp";
 				//判断是否挂载了SD卡
 				String storageState = Environment.getExternalStorageState();		
 				if(storageState.equals(Environment.MEDIA_MOUNTED)){
-					savePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/zhkd/Update/";
+					savePath =ComUtil.getApkDiretion();
 					File file = new File(savePath);
 					if(!file.exists()){
 						file.mkdirs();
@@ -310,7 +310,7 @@ public class UpdateManager {
 				//是否已下载更新文件
 				if(ApkFile.exists()){
 					downloadDialog.dismiss();
-					installApk();
+					ComUtil.installApk(mContext,apkFilePath);
 					return;
 				}
 				
@@ -371,18 +371,18 @@ public class UpdateManager {
 		downLoadThread = new Thread(mdownApkRunnable);
 		downLoadThread.start();
 	}
-	
-	/**
-    * 安装apk
-    * @param url
-    */
-	private void installApk(){
-		File apkfile = new File(apkFilePath);
-        if (!apkfile.exists()) {
-            return;
-        }    
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive"); 
-        mContext.startActivity(i);
-	}
+//	
+//	/**
+//    * 安装apk
+//    * @param url
+//    */
+//	private void installApk(){
+//		File apkfile = new File(apkFilePath);
+//        if (!apkfile.exists()) {
+//            return;
+//        }    
+//        Intent i = new Intent(Intent.ACTION_VIEW);
+//        i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive"); 
+//        mContext.startActivity(i);
+//	}
 }

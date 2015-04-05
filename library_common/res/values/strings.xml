@@ -7,10 +7,13 @@
     <string name="tips">提示</string>
     <string name="situo_ok">确定</string>
     <string name="situo_cancel">取消</string>
-    <string name="loading">加载中</string>
+    <string name="loading">加载中...</string>
+    <string name="lastLoading">上拉查看更多</string>
     <string name="zh_home">主页</string>
     <string name="zh_setting_aboutus">关于我们</string>
     <string name="zh_not_need">非必填</string>
+    <string name="zh_input_title">输入标题</string>
+    <string name="zh_input_ctx">输入内容</string>
     
     
  	<string name="zh_my_action">我的关注</string>
@@ -28,6 +31,7 @@
     <string name="app_name">智慧浑南</string>
 	<string name="zh_my_info">我的</string>
     <string name="zh_my_qr">扫一扫</string>
+    <string name="quick_mark">二维码</string>
     <string name="zh_my_group">我的团购</string>
     <string name="zh_my_order">订单</string>
     <string name="zh_my_notify">通知</string>
@@ -51,7 +55,8 @@
     <string name="zh_setting_version_website">官方网站:</string>
     <string name="zh_setting_aboutus">关于我们</string>
     <string name="zh_not_need">非必填</string>
-      <string name="zh_clear_cache">清理缓存</string>
+    <string name="zh_clear_cache">清理缓存</string>
+    <string name="zh_app_recommended">应用推荐</string>
 <!-- 	扫一扫 -->
 	 <string name="zh_msg_camera_framework_bug">抱歉，Android相机出现问题。您可能需要重启设备。</string>
 	    

@@ -90,14 +90,16 @@ public class SmartWeatherServiceImpl implements SmartWeatherService{
 	public String getAreaidFromCity(String cityName) {
 		String[] areaids=ComApp.getInstance().appStyle.getAreaids();
 		String[] areainf;
-		for(String area:areaids){
-			areainf=area.split(",");
-			if(cityName!=null){
-				if(cityName.contains(areainf[1])){
-					return areainf[0];
+		if(areaids!=null&&areaids.length!=0){
+			for(String area:areaids){
+				areainf=area.split(",");
+				if(cityName!=null){
+					if(cityName.contains(areainf[1])){
+						return areainf[0];
+					}
+				}else{
+					return ComApp.getInstance().appStyle.weatherAreaid;
 				}
-			}else{
-				return ComApp.getInstance().appStyle.weatherAreaid;
 			}
 		}
 		return ComApp.getInstance().appStyle.weatherAreaid;

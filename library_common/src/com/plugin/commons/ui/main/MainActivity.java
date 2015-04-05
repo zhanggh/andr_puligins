@@ -15,18 +15,17 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.jpush.android.api.JPushInterface;
 
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.location.LocationClientOption.LocationMode;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.plugin.R;
 import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
+import com.plugin.commons.helper.CryptUtils;
 import com.plugin.commons.helper.DingLog;
 import com.plugin.commons.helper.FuncUtil;
 import com.plugin.commons.helper.XHConstants;
@@ -40,15 +39,19 @@ import com.plugin.commons.service.NewsService;
 import com.plugin.commons.service.NewsServiceImpl;
 import com.plugin.commons.service.XinHuaService;
 import com.plugin.commons.service.XinHuaServiceImpl;
+import com.plugin.commons.ui.event.SLMenuListOnItemClickListener;
 import com.plugin.commons.ui.fragment.base.FindPeopleFragment;
 import com.plugin.commons.ui.fragment.base.MenuFragment;
-import com.plugin.commons.ui.fragment.base.MenuFragment.SLMenuListOnItemClickListener;
 import com.plugin.commons.ui.fragment.base.RightMenuFragment;
 import com.plugin.commons.ui.fragment.base.WapFragment;
 import com.plugin.commons.ui.news.HomePageFragment;
 import com.plugin.commons.ui.news.NewsGroupFragment;
+import com.plugin.commons.ui.news.NewsImageListFragment;
 import com.plugin.commons.ui.news.NewsTabFragment;
+import com.plugin.commons.ui.news.NewsVideoTabFragment;
 import com.plugin.commons.ui.news.SubNewsTabFragment;
+import com.plugin.commons.ui.number.NumberTypeFragment;
+import com.plugin.commons.ui.speciality.SpecialityListFragment;
 
 @SuppressLint("NewApi")
 public class MainActivity extends SlidingFragmentActivity implements SLMenuListOnItemClickListener{
@@ -57,6 +60,7 @@ public class MainActivity extends SlidingFragmentActivity implements SLMenuListO
 	Button btn_left;
 	Button btn_right;
 	TextView tv_title;
+	ProgressBar proc_loading;
 	private long exitTime = 0;
 	public HomePageFragment homeFragmet;
 	public NewsGroupFragment kdFragment;
@@ -65,10 +69,7 @@ public class MainActivity extends SlidingFragmentActivity implements SLMenuListO
 	Fragment mContent;
 	NavDrawerItem mSelectMenu;
 	XinHuaService xhSv;
-	//百度定位参数
-	private LocationMode tempMode = LocationMode.Hight_Accuracy;//高精度
-	private LocationClient mLocationClient;
-	private String tempcoor="gcj02";//高精度
+	private SpecialityListFragment specFragment;
 	
 	@SuppressLint("NewApi")
 	@Override
@@ -141,12 +142,15 @@ public class MainActivity extends SlidingFragmentActivity implements SLMenuListO
 	}
 	
 	private void initProper(){
+		
+		proc_loading=(ProgressBar) this.findViewById(R.id.proc_loading);
+		ComApp.getInstance().appStyle.setProc_loading(proc_loading);
 		LinearLayout ll_title_bg_color=(LinearLayout) this.findViewById(R.id.ll_title_bg_color);
 		ll_title_bg_color.setBackgroundColor(getResources().getColor(ComApp.getInstance().appStyle.title_bg_color));
 		
-		btn_left = (Button)this.findViewById(ComApp.getInstance().appStyle.btn_title_left);
+		btn_left = (Button)this.findViewById(R.id.btn_title_left);
 		btn_left.setBackgroundResource(ComApp.getInstance().appStyle.btn_back_selector);
-		btn_right = (Button)this.findViewById(ComApp.getInstance().appStyle.btn_title_right);
+		btn_right = (Button)this.findViewById(R.id.btn_title_right);
 		btn_right.setBackgroundResource(ComApp.getInstance().appStyle.btn_my_selector);
 		
 		tv_title = (TextView)this.findViewById(R.id.tv_title);
@@ -175,16 +179,16 @@ public class MainActivity extends SlidingFragmentActivity implements SLMenuListO
 	}
 	
 	private void ensureUI(){
-		btn_left.setBackground(getResources().getDrawable(ComApp.getInstance().appStyle.btn_menu_selector));
-		btn_right.setBackground(getResources().getDrawable(ComApp.getInstance().appStyle.btn_my_selector));
+		btn_left.setBackgroundDrawable(getResources().getDrawable(ComApp.getInstance().appStyle.btn_menu_selector));
+		btn_right.setBackgroundDrawable(getResources().getDrawable(ComApp.getInstance().appStyle.btn_my_selector));
 		//btn_left.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
 		//btn_left.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
 		btn_right.setVisibility(View.VISIBLE);
 	}
 	
 
-	/* (non-Javadoc)
-	 * 0图文  1图片 2视频 3外部WEB  4问政 5报料 6调查，7号码通  9暂时未开通栏目
+	/**
+	 * 0图文  1图片 2视频 3外部WEB  4问政 5报料 6调查，7号码通,8信件  9暂时未开通栏目 ,10拍客播客
 	 */
 	@SuppressLint("NewApi")
 	@Override
@@ -198,12 +202,22 @@ public class MainActivity extends SlidingFragmentActivity implements SLMenuListO
 		NewsService newsSvc = new NewsServiceImpl();
     	NewsTypeModel newsType = newsSvc.getNewsType(menu.getCode());
 	    Fragment fragment = null; 
+	    
 	    if(CoreContants.MENU_CODE_HOME.equals(menu.getCode())){
 	    	log.info("homeFragmet==null:"+(homeFragmet==null));
 	    	if(homeFragmet==null){
 	    		homeFragmet = new HomePageFragment();
+	    		homeFragmet.setmNewType(newsType);
 	    	}
 	    	fragment = homeFragmet;
+	    }else if(CoreContants.MENU_CODE_SPECIAL.equals(menu.getCode())){//宽甸特产
+	    	specFragment = new SpecialityListFragment();
+	    	fragment = specFragment;
+	    	
+	    }else if(CoreContants.NEWS_SUBTYPE_DEVELOPPING.equals(newsType.getType())){//开发中
+	    
+	    	FindPeopleFragment	findPeopleFragmet = new FindPeopleFragment();
+	    	fragment = findPeopleFragmet;
 	    }else if(FuncUtil.isEmpty(newsType.getSubtypes())&&"1".equals(newsType.getHassub())){
     		NewsTypeModel subType =new NewsTypeModel();
 	    	subType.setId("0");
@@ -215,13 +229,33 @@ public class MainActivity extends SlidingFragmentActivity implements SLMenuListO
     		subFragment.setmNewType(subType);
 			fragment=subFragment;
     	}else if(CoreContants.NEWS_SUBTYPE_WORD.equals(newsType.getType())
-	    		||CoreContants.NEWS_SUBTYPE_PIC.equals(menu.getCode())
-	    		||CoreContants.NEWS_SUBTYPE_VIDEO.equals(menu.getCode())){
+	    		||CoreContants.NEWS_SUBTYPE_PIC.equals(newsType.getType())
+	    		||CoreContants.NEWS_SUBTYPE_DIAOCHA.equals(newsType.getType())
+	    		||CoreContants.NEWS_SUBTYPE_PKBK.equals(newsType.getType())
+	    		||CoreContants.NEWS_SUBTYPE_VIDEO.equals(newsType.getType())){
 	    	 
 	    	if(!FuncUtil.isEmpty(newsType.getSubtypes())){
 	    		kdFragment = new NewsGroupFragment();
 	    		kdFragment.setTypeId(menu.getCode());
 		    	fragment = kdFragment;
+	    	}else if(CoreContants.NEWS_SUBTYPE_PIC.equals(newsType.getType())) {
+	    		NewsImageListFragment imgFragment=new NewsImageListFragment();
+	    		NewsTypeModel subType =new NewsTypeModel();
+		    	subType.setId("0");
+		    	subType.setParentid(menu.getCode());
+		    	subType.setType(newsType.getType());
+		    	imgFragment.setmNewType(subType);
+		    	imgFragment.setMsgName("0");
+		    	fragment=imgFragment;
+	    	}else if(CoreContants.NEWS_SUBTYPE_VIDEO.equals(newsType.getType())) {
+	    		NewsVideoTabFragment videoFragment=new NewsVideoTabFragment();
+	    		NewsTypeModel subType =new NewsTypeModel();
+		    	subType.setId("0");
+		    	subType.setParentid(menu.getCode());
+		    	subType.setType(newsType.getType());
+		    	videoFragment.setmNewType(subType);
+		    	videoFragment.setMsgName("0");
+		    	fragment=videoFragment;
 	    	}else{
 	    		NewsTabFragment newFragment  = new NewsTabFragment(); 
 		    	NewsTypeModel subType =new NewsTypeModel();
@@ -241,11 +275,11 @@ public class MainActivity extends SlidingFragmentActivity implements SLMenuListO
 	    		webFragment=new WapFragment();
 		    	if("商城".equals(newsType.getName())){
 		    		if(ComApp.getInstance().isLogin()){
-			    		webFragment.setUrl(newsType.getOuturl()+"?cellPhone="+ComApp.getInstance().getLoginInfo().getPhone());
+			    		webFragment.setUrl(newsType.getOuturl()+"?phone="+ComApp.getInstance().getLoginInfo().getPhone()+"&sign="+CryptUtils.MD5enc("phone="+ComApp.getInstance().getLoginInfo().getPhone()+CoreContants.SHOP_KEY));
 			    	}else{
 			    		webFragment.setUrl(newsType.getOuturl());
 			    	}
-		    	}else if("新华社发布".equals(newsType.getName())){ 
+		    	}else if("新华社发布".equals(newsType.getName())||"新华发布".equals(newsType.getName())){ 
 			    	String url=xhSv.getXinHuaIndex(ComApp.getInstance().appStyle.appid,newsType.getOuturl(),ComApp.getInstance().appStyle.xinhuaKey);
 			    	webFragment.setUrl(url);
 		    	}else if("中国网事".equals(newsType.getName())){ 
@@ -257,20 +291,17 @@ public class MainActivity extends SlidingFragmentActivity implements SLMenuListO
 		    	fragment = webFragment;
 	    	}
 	    }else if(CoreContants.NEWS_SUBTYPE_WENZHENG.equals(newsType.getType())){//问政
+	    	FindPeopleFragment	findPeopleFragmet = new FindPeopleFragment();
+	    	fragment = findPeopleFragmet;
+	    }else if(CoreContants.NEWS_SUBTYPE_LETTER.equals(newsType.getType())){//信件
 	    	PetitionFragment petFragment = new PetitionFragment();
 	    	fragment = petFragment;
 	    }else if(CoreContants.NEWS_SUBTYPE_BAOLIAO.equals(newsType.getType())){//报料
 	    	FindPeopleFragment	findPeopleFragmet = new FindPeopleFragment();
 	    	fragment = findPeopleFragmet;
-	    }else if(CoreContants.NEWS_SUBTYPE_DIAOCHA.equals(newsType.getType())){//调查
-	    	FindPeopleFragment	findPeopleFragmet = new FindPeopleFragment();
-	    	fragment = findPeopleFragmet;
-	    }else if(CoreContants.NEWS_SUBTYPE_NUMBER.equals(newsType.getType())){//号码通
-	    	FindPeopleFragment	findPeopleFragmet = new FindPeopleFragment();
-	    	fragment = findPeopleFragmet;
-	    }else{
-	    	FindPeopleFragment	findPeopleFragmet = new FindPeopleFragment();
-	    	fragment = findPeopleFragmet;
+	    }else if(CoreContants.NEWS_SUBTYPE_NUMBER.equals(newsType.getType())){//号码通	    	
+	    	NumberTypeFragment numFragment=new NumberTypeFragment();    	
+	    	fragment=numFragment;
 	    }
 	    XHSDKUtil.addXHBehavior(this, menu.getCode(), XHConstants.XHTOPIC_MENUCLICK, menu.getCode());
 	    mSelectMenu = menu;
@@ -289,14 +320,6 @@ public class MainActivity extends SlidingFragmentActivity implements SLMenuListO
 	public void onResume() {
 		super.onResume();
 		AnalyticsAgent.onResume(this);//新华sdk
-		//启动百度定位器
-		if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
-        	mLocationClient =ComApp.getInstance().mLocationClient;
-        	initLocation();
-        	if(!mLocationClient.isStarted()){
-				mLocationClient.start();
-			}
-        }
 	}
 	
 	@Override
@@ -330,7 +353,7 @@ public class MainActivity extends SlidingFragmentActivity implements SLMenuListO
 	}
 	@Override
 	protected void onStop() {
-		if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+		if(CoreContants.LOCATION_APP.contains(ComApp.APP_NAME)){
 			log.info("************stop baidu locatoin************");
 			if(ComApp.getInstance().mLocationClient!=null)
 				ComApp.getInstance().mLocationClient.stop();
@@ -338,19 +361,6 @@ public class MainActivity extends SlidingFragmentActivity implements SLMenuListO
 		super.onStop();
 	}
 
-	/**
-	 * 初始化定位参数
-	 */
-	private void initLocation(){
-		LocationClientOption option = new LocationClientOption();
-		option.setLocationMode(tempMode);//设置定位模式
-		option.setCoorType(tempcoor);//返回的定位结果是百度经纬度，默认值gcj02
-		int span=1000*30;
-		option.setScanSpan(span);//设置发起定位请求的间隔时间为5000ms
-		option.setIsNeedAddress(true);
-		mLocationClient.setLocOption(option);
-	}
-	
 	//启动服务
     private void startCustomService(){
          Intent intent=new Intent(this,ComService.class);
@@ -361,4 +371,5 @@ public class MainActivity extends SlidingFragmentActivity implements SLMenuListO
     	Intent intent=new Intent(this,ComService.class);
     	stopService(intent);
     }
+    
 }

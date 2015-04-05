@@ -1,41 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/ll_root" 
+    >
     
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="50sp"
     android:orientation="horizontal" 
     android:layout_marginLeft="10dip"
     android:layout_marginRight="10dip"
     android:gravity="center_vertical|left"
-    android:background="@drawable/search_box"
+  	android:background="@drawable/search_box"
     android:layout_marginTop="8dip"
-    android:layout_marginBottom="12dip"
     android:id="@+id/ll_box">
+
     	<ImageView
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:src="@drawable/search_icon"
-    	    android:layout_marginLeft="5dip"
-    	    ></ImageView>
+    	    android:id="@+id/img_numInfo"
+    	    android:layout_width="48dp"
+    	    android:layout_height="match_parent"
+    	    android:paddingLeft="10sp"
+    	    android:paddingRight="10sp"
+    	    android:src="@drawable/search_icon" >
+	</ImageView>
     	
     	<EditText
+    	    android:id="@+id/et_numInfo"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
     	    android:hint="@string/zh_num_search_tip"
-    	    android:layout_marginLeft="5dip"
-    	    android:id="@+id/et_name"
+    	    android:layout_gravity="center_vertical"
     	    android:background="@null"
+    	    android:imeOptions="actionSearch"
+    	    android:singleLine="true"
+    	    android:focusable="false"
     	    ></EditText>
     </LinearLayout>
+
     
     
    <com.handmark.pulltorefresh.library.PullToRefreshListView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/lv_numbers"
+        android:layout_below="@+id/ll_box"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fadingEdge="none"
@@ -56,4 +65,34 @@
          >
     </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
+   
+   <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal" 
+    android:id="@+id/ll_none"
+    android:layout_alignParentTop="true"
+    android:layout_marginTop="135dip"
+    android:visibility="gone">
+	<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/empty_list"
+    android:clickable="false">
+    </ImageView>
+    
+	<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    android:text="结果为空"
+    android:id="@+id/tv_tips"
+    android:textColor="@color/grey_font2"
+    android:textSize="16sp"
+    android:layout_marginTop="10dip">
+    </TextView>
+    
 </LinearLayout>
+</RelativeLayout>

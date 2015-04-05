@@ -39,17 +39,7 @@ public class BaoliaoFragment extends BaseFragment{
 		return homeFragment;
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		this.mActivity = activity;
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-
+	 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -58,20 +48,8 @@ public class BaoliaoFragment extends BaseFragment{
 		return view;
 	}
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		initViews(view);
-	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		initDisplay();
-		
-	}
-
-	private void initViews(View view) {
+	 
+	protected void initViews(View view) {
 		ll_my_bl = (LinearLayout) view.findViewById(R.id.ll_my_bl);
 		btn_baoliao = (Button) view.findViewById(R.id.btn_baoliao);
 		btn_baoliao.setBackgroundResource(ComApp.getInstance().appStyle.btn_ask_selector);
@@ -131,7 +109,7 @@ public class BaoliaoFragment extends BaseFragment{
 
 	}
 	
-	private void initDisplay() {
+	protected void initDisplay() {
 		fragmentList = new ArrayList<Fragment>();
 		if(!fragmentList.contains(getFragmentManager().findFragmentById(R.id.fl_other_baoliao)))
 			fragmentList.add(getFragmentManager().findFragmentById(R.id.fl_other_baoliao));
@@ -144,15 +122,15 @@ public class BaoliaoFragment extends BaseFragment{
 	@SuppressWarnings("deprecation")
 	private void refreshSelectTab(){
 		if(mSelectTab==1){
-			btn_my_bl.setBackground(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.my_newspaper_btn_press));
+			btn_my_bl.setBackgroundDrawable(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.my_newspaper_btn_press));
 			tv_my_bl.setTextColor(mActivity.getResources().getColor(R.color.blue_font));
-			btn_other_bl.setBackground(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.net_newspaper_btn_normal));
+			btn_other_bl.setBackgroundDrawable(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.net_newspaper_btn_normal));
 			tv_other_bl.setTextColor(mActivity.getResources().getColor(R.color.grey_font2));
 		}
 		else if(mSelectTab==0){
-			btn_other_bl.setBackground(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.net_newspaper_btn_press));
+			btn_other_bl.setBackgroundDrawable(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.net_newspaper_btn_press));
 			tv_other_bl.setTextColor(mActivity.getResources().getColor(R.color.blue_font));
-			btn_my_bl.setBackground(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.my_newspaper_btn_normal));
+			btn_my_bl.setBackgroundDrawable(mActivity.getResources().getDrawable(ComApp.getInstance().appStyle.my_newspaper_btn_normal));
 			tv_my_bl.setTextColor(mActivity.getResources().getColor(R.color.grey_font2));
 		}
 	}

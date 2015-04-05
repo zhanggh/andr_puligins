@@ -28,24 +28,13 @@ public class WapFragment extends BaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_chinawap, container, false);
         return rootView;
     }
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		initViews(view);
-	}
 	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		initDisplay();
-	}
-	
-	private void initViews(View view){
+	protected void initViews(View view){
 		mLJWebView = (ZqCircleView) view.findViewById(R.id.web);
 		rl_bottom=(RelativeLayout) view.findViewById(R.id.rl_bottom);
 		initBottom(view);
 	}
-	private void initDisplay(){
+	protected void initDisplay(){
 		
 		if(!showBar){
 			rl_bottom.setVisibility(View.GONE);
@@ -55,7 +44,8 @@ public class WapFragment extends BaseFragment {
 		mLJWebView.setBarHeight(8);
 		mLJWebView.setClickable(true);
 		mLJWebView.setUseWideViewPort(true);
-		mLJWebView.setCacheMode(WebSettings.LOAD_NO_CACHE);		
+		mLJWebView.setCacheMode(WebSettings.LOAD_NO_CACHE);
+		mLJWebView.getmWebView().getSettings().setDefaultTextEncodingName("UTF-8");
 		mLJWebView.setWebViewClient(new WebViewClient() {
 			//重写此方法，浏览器内部跳转
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {

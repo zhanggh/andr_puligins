@@ -205,6 +205,51 @@ public class BaoliaoServiceImpl implements BaoliaoService{
 				cols.getColslist().add(colsObj);
 			}
 		}
+		group = CacheDataService.getAcctionList(CacheModel.CACHE_ASKNEWS_EXT);
+		if(group!=null&&group.size()>0){
+			for(int i=0;i<group.size();i++){
+				CacheModel cm = (CacheModel)group.get(i);
+				NewsInfoModel bl =(NewsInfoModel)cm.msg;
+				cols.getNewsList().add(bl);
+				colsObj=new ContentBean();
+				colsObj.setContent(bl.getTitle());
+				colsObj.setId(bl.getId());
+				colsObj.setType(CacheModel.CACHE_ASKNEWS_EXT);
+				mNewType = newsSvc.getNewsType(bl.getArttype());
+				colsObj.setAttypeName(mNewType.getName());
+				cols.getColslist().add(colsObj);
+			}
+		}
+		group = CacheDataService.getAcctionList(CacheModel.CACHE_VIDEO);
+		if(group!=null&&group.size()>0){
+			for(int i=0;i<group.size();i++){
+				CacheModel cm = (CacheModel)group.get(i);
+				NewsInfoModel bl =(NewsInfoModel)cm.msg;
+				cols.getNewsList().add(bl);
+				colsObj=new ContentBean();
+				colsObj.setContent(bl.getTitle());
+				colsObj.setId(bl.getId());
+				colsObj.setType(CacheModel.CACHE_VIDEO);
+				mNewType = newsSvc.getNewsType(bl.getArttype());
+				colsObj.setAttypeName(mNewType.getName());
+				cols.getColslist().add(colsObj);
+			}
+		}
+		group = CacheDataService.getAcctionList(CacheModel.CACHE_IMG_NEWS);
+		if(group!=null&&group.size()>0){
+			for(int i=0;i<group.size();i++){
+				CacheModel cm = (CacheModel)group.get(i);
+				NewsInfoModel bl =(NewsInfoModel)cm.msg;
+				cols.getNewsList().add(bl);
+				colsObj=new ContentBean();
+				colsObj.setContent(bl.getTitle());
+				colsObj.setId(bl.getId());
+				colsObj.setType(CacheModel.CACHE_IMG_NEWS);
+				mNewType = newsSvc.getNewsType(bl.getArttype());
+				colsObj.setAttypeName(mNewType.getName());
+				cols.getColslist().add(colsObj);
+			}
+		}
 		rsp.setColts(cols);
 		return rsp;
 		 

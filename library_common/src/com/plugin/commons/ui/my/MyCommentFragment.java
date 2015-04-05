@@ -22,6 +22,7 @@ import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
 import com.plugin.commons.adapter.MyCommentListAdapter;
 import com.plugin.commons.adapter.ZhKdBaseAdapter;
+import com.plugin.commons.helper.ComUtil;
 import com.plugin.commons.helper.DialogUtil;
 import com.plugin.commons.helper.DingLog;
 import com.plugin.commons.helper.FuncUtil;
@@ -33,6 +34,7 @@ import com.plugin.commons.service.NewsService;
 import com.plugin.commons.service.NewsServiceImpl;
 import com.plugin.commons.service.SituoAjaxCallBackImp;
 import com.plugin.commons.ui.base.ActivityWeb;
+import com.plugin.commons.ui.base.ActivityWebExt;
 import com.plugin.commons.ui.fragment.base.BaseFragment;
 
 /**
@@ -47,21 +49,8 @@ public class MyCommentFragment extends BaseFragment {
 	List<Reply> dataList= new ArrayList<Reply>();
 	private ZhKdBaseAdapter<Reply> mAdapter;
 	
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		log.info("onViewCreated");
-		initViews(view);
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		log.info("onActivityCreated");
-		doRefresh(true,true);
-	}
-	
-	private void initViews(View view) {
+	 
+	protected void initViews(View view) {
 		newsSvc = new NewsServiceImpl();
 		lv_news = (PullToRefreshListView) view.findViewById(R.id.lv_news);
 		mAdapter = new MyCommentListAdapter(mActivity,dataList);
@@ -104,7 +93,12 @@ public class MyCommentFragment extends BaseFragment {
 				mNews.setReplycount(reply.getReplycount());
 				NewsTypeModel mNewType =new NewsTypeModel();
 				mNewType.setId(reply.getArt_type());
-				Intent intent = new Intent(mActivity,ActivityWeb.class);
+				Intent intent = null;
+				if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+					intent = new Intent(mActivity,ActivityWebExt.class);
+				}else{
+					intent = new Intent(mActivity,ActivityWeb.class);
+				}
 				intent.putExtra(CoreContants.PARAMS_NEWS,mNews);
 				intent.putExtra(CoreContants.PARAMS_TYPE,mNewType);
 				mActivity.startActivity(intent);
@@ -113,7 +107,9 @@ public class MyCommentFragment extends BaseFragment {
 		});
 	
 	}
-	
+	protected void initDisplay() {
+		doRefresh(true,true);
+	}
 
 	private void doRefresh(boolean isInit,boolean isRefresh)
 	{
@@ -122,8 +118,9 @@ public class MyCommentFragment extends BaseFragment {
 			DialogUtil.showToast(mActivity, "尚未登陆，请登陆后查看");
 			lv_news.onRefreshComplete();
 		}else{
+			ComUtil.showListNone(getView(), "努力加载中...", dataList);
 			//异步
-			sCallBack=new SituoAjaxCallBackImp<Reply,NewsService>(this.getView(),this.pageStart,this.dataList,isInit, isRefresh, log, this.mActivity, 
+			sCallBack=new SituoAjaxCallBackImp<Reply,NewsService>(this.getView(),this.pageStart,this.dataList,isInit, isRefresh, this.mActivity, 
 					lv_news, mAdapter,CoreContants.REQUEST_MY_COMMENT,newsSvc) {//, null,newsSvc,null
 
 				@Override

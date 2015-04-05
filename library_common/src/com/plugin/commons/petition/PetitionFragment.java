@@ -3,7 +3,6 @@ package com.plugin.commons.petition;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +13,8 @@ import android.widget.Button;
 
 import com.plugin.R;
 import com.plugin.commons.ComApp;
+import com.plugin.commons.CoreContants;
+import com.plugin.commons.model.NewsTypeModel;
 import com.plugin.commons.ui.fragment.base.BaseFragment;
 import com.plugin.commons.user.LoginActivity;
 
@@ -23,49 +24,19 @@ public class PetitionFragment extends BaseFragment{
 	private static List<Fragment> fragmentList;
 	public int mSelectTab=0;
 	View view ;
-	public static PetitionFragment newInstance() {
-		PetitionFragment homeFragment = new PetitionFragment();
-		return homeFragment;
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		this.mActivity = activity;
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-
+	NewsTypeModel mNewType;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		if(view==null)
-			view = inflater.inflate(R.layout.fragment_petition, container, false);
+		Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_petition, container, false);
 		return view;
 	}
+ 
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		initViews(view);
-	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		initDisplay();
-		
-	}
-
-	private void initViews(View view) {
+	protected void initViews(View view) {
 		 
 		btn_petition = (Button) view.findViewById(R.id.btn_petition);
 		btn_petition.setBackgroundResource(ComApp.getInstance().appStyle.btn_ask_selector);
-//		int width = (ViewsUtil.getWindowWidth(mActivity)-mActivity.getResources().getDimensionPixelSize(R.dimen.gov_ask_width))/2;
-		
 		btn_petition.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -73,7 +44,12 @@ public class PetitionFragment extends BaseFragment{
 				// TODO Auto-generated method stub
 				if(ComApp.getInstance().isLogin())
 				{
-					Intent intent = new Intent(mActivity,PetitionActivity.class);
+					Intent intent = null;//mActivity
+					if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+						intent = new Intent(mActivity,PetitionWrActivity.class);
+					}else{
+						intent = new Intent(mActivity,PetitionActivity.class);
+					}
 					mActivity.startActivity(intent);
 				}
 				else{
@@ -89,7 +65,7 @@ public class PetitionFragment extends BaseFragment{
 
 	}
 	
-	private void initDisplay() {
+	protected void initDisplay() {
 		fragmentList = new ArrayList<Fragment>();
 		if(!fragmentList.contains(getFragmentManager().findFragmentById(R.id.fl_petition_list)))
 			fragmentList.add(getFragmentManager().findFragmentById(R.id.fl_petition_list));
@@ -106,15 +82,7 @@ public class PetitionFragment extends BaseFragment{
 		getFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
 	}
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-	}
+	 
 	@Override
 	public void onDestroyView()  
     {  
@@ -123,7 +91,7 @@ public class PetitionFragment extends BaseFragment{
 	  
 		  for(int i=0;i<fragmentList.size();i++){
 			  if(fragmentList.get(i)!=null){
-				  getFragmentManager().beginTransaction().remove(fragmentList.get(i)).commit();  
+//				  getFragmentManager().beginTransaction().remove(fragmentList.get(i)).commit();  
 			  }
 		  }
 	   
@@ -136,4 +104,15 @@ public class PetitionFragment extends BaseFragment{
 	public void onFrageSelect(int idnex){
 		
 	}
+
+
+	public NewsTypeModel getmNewType() {
+		return mNewType;
+	}
+
+
+	public void setmNewType(NewsTypeModel mNewType) {
+		this.mNewType = mNewType;
+	}
+	
 }

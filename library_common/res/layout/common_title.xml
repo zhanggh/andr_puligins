@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" android:gravity="center"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:id="@+id/ll_title">
+        <Button
+            android:id="@+id/btn_title_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:visibility="visible"
+            />
+        
+	          <ProgressBar
+	              android:id="@+id/proc_loading"
+	              android:layout_width="20dip"
+	              android:layout_height="20dip"
+	              android:layout_centerVertical="true"
+	              android:visibility="gone"
+	              android:layout_toRightOf="@+id/btn_title_left" />
+         <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="20sp"
+                android:layout_marginLeft="90dip"
+                android:layout_centerInParent="true"></TextView>
+         <LinearLayout
+            android:id="@+id/ll_title_right"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:gravity="center"
+		    android:paddingLeft="10dip"
+		    android:paddingRight="2dip"
+		    android:clickable="true"
+		    android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"> 
+          <Button
+            android:id="@+id/btn_title_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:clickable="true"
+            android:onClick="commentList"
+            />
+          <TextView
+                android:id="@+id/tv_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="12sp"
+                android:textColor="@color/grey_font"
+                android:visibility="gone"
+                android:layout_marginRight="5dip"
+                ></TextView>
+          </LinearLayout>
+    </RelativeLayout>
+	<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="1dip"
+    android:orientation="vertical" android:background="@color/line_color"/>
+</LinearLayout>

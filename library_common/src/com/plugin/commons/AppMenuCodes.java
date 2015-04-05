@@ -44,4 +44,13 @@ public class AppMenuCodes {
     public static final String TITLE_FAMILYMOVE="搬家";//号码通- 
     public static final String TITLE_TAKEOUT="外卖送餐";//号码通- 
     public static final String TITLE_LIFT="生活";//号码通- 
+    
+    /**
+	 * 宽甸 特产id
+	 */
+	public static final String MENU_CODE_SPECIAL = "28"; 
+	/**
+	 * 辽宁政协 提案评论id
+	 */
+	public static final String MENU_CODE_ZHLNZX_TIAN = "771"; 
 }

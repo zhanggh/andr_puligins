@@ -14,7 +14,7 @@ import android.widget.BaseAdapter;
  * @param <T>
  */
 public class ZhKdBaseAdapter<T>  extends BaseAdapter {
-
+	public boolean isSpec=false;
 	public List<T> dataList;
 	
 	 
@@ -41,6 +41,12 @@ public class ZhKdBaseAdapter<T>  extends BaseAdapter {
 	public View getView(int arg0, View arg1, ViewGroup arg2) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int getViewTypeCount() {
+		// TODO Auto-generated method stub
+		return super.getViewTypeCount();
 	}
 
 	public List<T> getDataList() {

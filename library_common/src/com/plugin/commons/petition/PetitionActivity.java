@@ -17,12 +17,12 @@ import android.widget.TextView;
 import com.plugin.R;
 import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
-import com.plugin.commons.broadcast.ComBroatCast;
 import com.plugin.commons.helper.ComUtil;
 import com.plugin.commons.helper.DialogUtil;
 import com.plugin.commons.helper.FuncUtil;
 import com.plugin.commons.helper.SituoHttpAjax;
 import com.plugin.commons.helper.SituoHttpAjax.SituoAjaxCallBack;
+import com.plugin.commons.listener.ComBroatCast;
 import com.plugin.commons.model.AskMsgModel;
 import com.plugin.commons.model.DialogObj;
 import com.plugin.commons.model.GovmentInfoModel;
@@ -73,7 +73,7 @@ public class PetitionActivity extends BaseActivity{
 		refreshUI();
 	}
 	private void initViews(){
-		this.receiver=new ComBroatCast(this,CoreContants.ACTIVITY_COSE);
+		this.receiver=new ComBroatCast(null,this,CoreContants.ACTIVITY_COSE);
 		mSelectItem = new DialogObj("999","请选择");
 		ly_writer_type = (LinearLayout)this.findViewById(R.id.ly_writer_type);
 		ly_receiver = (LinearLayout)this.findViewById(R.id.ly_receiver);

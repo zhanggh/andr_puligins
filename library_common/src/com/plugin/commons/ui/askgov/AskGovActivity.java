@@ -136,7 +136,7 @@ public class AskGovActivity extends Activity{
 		iv_myvideo = (ImageView)this.findViewById(R.id.iv_myvideo);
 		rl_myvideo = (RelativeLayout)this.findViewById(R.id.rl_myvideo);
 		
-		btn_right.setBackground(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_dialogsure_selector));
+		btn_right.setBackgroundDrawable(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_dialogsure_selector));
 		btn_right.setVisibility(View.VISIBLE);
 		
 		int width = (ComUtil.getWindowWidth(this))/3;

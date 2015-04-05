@@ -7,7 +7,8 @@
     <dimen name="slidingmenu_offset">50dp</dimen>
     <dimen name="grid_horizontalSpacing">1dip</dimen>
     <dimen name="gov_ask_width">50dip</dimen>
-    <dimen name="text_tile_size">18dip</dimen>
+    <dimen name="text_tile_size">17dip</dimen>
+    <dimen name="num_size">15sp</dimen>
     <dimen name="text_tile_size22">22dip</dimen>
     <dimen name="text_tile_size10">10dip</dimen>
     <dimen name="text_tile_size14">14dip</dimen>
@@ -69,5 +70,15 @@
     <dimen name="space_3">3.0dip</dimen>
     <dimen name="space_2">2.0dip</dimen>
     <dimen name="space_1">1.0dip</dimen>
+    
+    
+    <dimen name="with_95">95dip</dimen>
+    <dimen name="with_91">80dip</dimen>
+    <dimen name="with_80">80dip</dimen>
+    <dimen name="with_70">70dip</dimen>
+    <dimen name="with_60">60dip</dimen>
+    <dimen name="with_40">40dip</dimen>
+    
+    <dimen name="height_areaapp">40dip</dimen>
     
 </resources>

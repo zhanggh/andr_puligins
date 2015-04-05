@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.plugin.R;
+import com.plugin.commons.ComApp;
+import com.plugin.commons.CoreContants;
 import com.plugin.commons.helper.FuncUtil;
 import com.plugin.commons.model.AskMsgModel;
 
@@ -43,18 +45,25 @@ public class PetitionListAdapter extends ZhKdBaseAdapter<AskMsgModel> {
         viewCache.getTv_time().setText(pertModel.getCreatetime());
         String desc=FuncUtil.getPexfStr(pertModel.getContent(), 20, "...");
         viewCache.getTv_desc().setText(desc);
-    	if("0".equals(pertModel.getStatus())){
-          viewCache.getTv_status().setText("已受理");
-          viewCache.getTv_status().setBackgroundColor(Color.parseColor("#ffc000"));
+        if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+        	if("0".equals(pertModel.getMsgtype())){
+                viewCache.getTv_status().setText("提案");
+              }else{
+                viewCache.getTv_status().setText("社情民意");
+              }
         }else{
-          viewCache.getTv_status().setText("待受理");
-          viewCache.getTv_status().setBackgroundColor(Color.parseColor("#ff5305"));
+        	if("0".equals(pertModel.getStatus())){
+                viewCache.getTv_status().setText("已受理");
+                viewCache.getTv_status().setBackgroundColor(Color.parseColor("#ffc000"));
+              }else{
+                viewCache.getTv_status().setText("待受理");
+                viewCache.getTv_status().setBackgroundColor(Color.parseColor("#ff5305"));
+              }
+          	if(!FuncUtil.isEmpty(pertModel.getRecontent())){
+          		 viewCache.getTv_status().setText("已办结");
+          		 viewCache.getTv_status().setBackgroundColor(Color.parseColor("#00965a"));
+      		}
         }
-    	if(!FuncUtil.isEmpty(pertModel.getRecontent())){
-    		 viewCache.getTv_status().setText("已办结");
-    		 viewCache.getTv_status().setBackgroundColor(Color.parseColor("#00965a"));
-		}
-//        MyApp.getInstance().getFinalBitmap().display(viewCache.getIv_image(), pertModel.getUserphoto());
         return rowView;
 	}
  

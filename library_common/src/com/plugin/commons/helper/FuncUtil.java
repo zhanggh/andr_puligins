@@ -4,7 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
@@ -942,4 +944,23 @@ public class FuncUtil {
 		LunarCalendar lc = new LunarCalendar(today);  
 	    return lc.toShortString();
 	}
+	
+	 public static int copy(Reader input, Writer output) throws IOException {
+	        long count = copyLarge(input, output);
+	        if (count > Integer.MAX_VALUE) {
+	            return -1;
+	        }
+	        return (int) count;
+	    }
+	 
+	  public static long copyLarge(Reader input, Writer output) throws IOException {
+	        char[] buffer = new char[1024 * 4];
+	        long count = 0;
+	        int n = 0;
+	        while (-1 != (n = input.read(buffer))) {
+	            output.write(buffer, 0, n);
+	            count += n;
+	        }
+	        return count;
+	    }
 }

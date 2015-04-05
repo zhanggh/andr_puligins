@@ -3,6 +3,7 @@ package com.plugin.commons.model;
 import java.io.Serializable;
 
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
@@ -21,6 +22,10 @@ public class AppStylePropModel implements StBaseType,Serializable{
 	 */
 	private static final long serialVersionUID = 1445950233071296000L;
 
+	
+	public ProgressBar proc_loading;
+	
+	
 	//类
 	public Class  MyFragmentActivity;
 	/**
@@ -51,7 +56,7 @@ public class AppStylePropModel implements StBaseType,Serializable{
 	public  int btn_share_selector;
 	public  int btn_my_selector;
 	public  int btn_fav_selector;
-	public  int btn_dialogsure_selector;
+	public  int btn_dialogsure_selector;//意见反馈的提交按键 样式
 	public  int btn_comment_sure_selector;
 	public  int btn_dialogcancel_selector;
 	public  int btn_comsure_selector;
@@ -61,13 +66,23 @@ public class AppStylePropModel implements StBaseType,Serializable{
 	public  int complain_discuss_btn_normal;
 	public  int sure_bnt_normal;
 	public  int jpushlogo;
+	public  int yytb;
 	public  int btn_colection_selector;
-	public  int btn_title_right;
-	public  int btn_title_left;
-	public  int common_title;
 	public  int btn_comment_selector;
-	public  int tv_right;
 	public  int im_setting_version_logo;//gywm_logo
+	public  int qidongye_a; 
+	public  int qidongye_b; 
+	/**
+	 * 拍客播客图标
+	 */
+	public int upload_photo_right_selector;
+	public int boke_btn_selector;
+	public int like_btn_selector;
+	public int paike_btn_selector;
+	public int upload_photo_btn_selector;
+	public int pinglun_btn_selector;
+	public int like_a_btn_selector;
+	public int eyes_btn_selector;
 	/**
 	 * 设置-关于我们的icon
 	 */
@@ -120,6 +135,7 @@ public class AppStylePropModel implements StBaseType,Serializable{
 	public  int institution_btn_press;
 	public  int hotspot_btn_press;
 	public  int my_btn_press;
+	public  int tuijian;
 	
 	
 	//报料
@@ -165,7 +181,9 @@ public class AppStylePropModel implements StBaseType,Serializable{
 	public  String tv_setting_version_contact_website_tx;////app信息-网站
 	public String[] areaids;
 	public String area;
-	
+	public boolean needScaner=false;//是否需要扫一扫
+	public boolean recommend=false;//是否需要应用推荐模块
+	public boolean homeOnButtom=false;//首页菜单显示在底部右下角？
 	
 	
 	/**
@@ -320,42 +338,21 @@ public class AppStylePropModel implements StBaseType,Serializable{
 	public  void setJpushlogo(int jpushlogo) {
 		this.jpushlogo = jpushlogo;
 	}
+	 
 	public  int getBtn_colection_selector() {
 		return btn_colection_selector;
 	}
 	public  void setBtn_colection_selector(int btn_colection_selector) {
 		this.btn_colection_selector = btn_colection_selector;
 	}
-	public  int getBtn_title_right() {
-		return btn_title_right;
-	}
-	public  void setBtn_title_right(int btn_title_right) {
-		this.btn_title_right = btn_title_right;
-	}
-	public  int getBtn_title_left() {
-		return btn_title_left;
-	}
-	public  void setBtn_title_left(int btn_title_left) {
-		this.btn_title_left = btn_title_left;
-	}
-	public  int getCommon_title() {
-		return common_title;
-	}
-	public  void setCommon_title(int common_title) {
-		this.common_title = common_title;
-	}
+	 
 	public  int getBtn_comment_selector() {
 		return btn_comment_selector;
 	}
 	public  void setBtn_comment_selector(int btn_comment_selector) {
 		this.btn_comment_selector = btn_comment_selector;
 	}
-	public  int getTv_right() {
-		return tv_right;
-	}
-	public  void setTv_right(int tv_right) {
-		this.tv_right = tv_right;
-	}
+	 
 	public  int getIm_setting_version_logo() {
 		return im_setting_version_logo;
 	}
@@ -722,8 +719,11 @@ public class AppStylePropModel implements StBaseType,Serializable{
 
 	public String getArea() {
 		String aname=(String) StCacheHelper.getCacheObj(ComApp.getInstance(), CoreContants.CACHE_AREA,"1");
-		if(FuncUtil.isEmpty(aname)){
+		if(FuncUtil.isEmpty(aname)&&FuncUtil.isEmpty(this.area)){
 			aname=this.weatherShortAddr;
+		}
+		if(FuncUtil.isEmpty(aname)){
+			aname=this.area;
 		}
 		return aname;
 	}
@@ -735,6 +735,36 @@ public class AppStylePropModel implements StBaseType,Serializable{
 			StCacheHelper.setCacheObj(ComApp.getInstance(),CoreContants.CACHE_AREA,"1", area);
 		}
 		this.area = area;
+	}
+	public boolean isNeedScaner() {
+		return needScaner;
+	}
+	public void setNeedScaner(boolean needScaner) {
+		this.needScaner = needScaner;
+	}
+	public boolean isRecommend() {
+		return recommend;
+	}
+	public void setRecommend(boolean recommend) {
+		this.recommend = recommend;
+	}
+	public boolean isHomeOnButtom() {
+		return homeOnButtom;
+	}
+	public void setHomeOnButtom(boolean homeOnButtom) {
+		this.homeOnButtom = homeOnButtom;
+	}
+	public ProgressBar getProc_loading() {
+		return proc_loading;
+	}
+	public void setProc_loading(ProgressBar proc_loading) {
+		this.proc_loading = proc_loading;
+	}
+	public int getYytb() {
+		return yytb;
+	}
+	public void setYytb(int yytb) {
+		this.yytb = yytb;
 	}
 	
 }

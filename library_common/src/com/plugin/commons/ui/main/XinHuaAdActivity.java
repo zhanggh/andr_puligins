@@ -14,6 +14,7 @@ import cn.jpush.android.api.JPushInterface;
 
 import com.plugin.R;
 import com.plugin.commons.ComApp;
+import com.plugin.commons.CoreContants;
 import com.plugin.commons.helper.DialogUtil;
 import com.plugin.commons.helper.DingLog;
 import com.plugin.commons.helper.FuncUtil;
@@ -55,7 +56,11 @@ public class XinHuaAdActivity extends Activity {
 			log.info("图片加载:"+xhModel.getData().getImgUrl());
 			ComApp.getInstance().getFinalBitmap().display(im_show,xhModel.getData().getImgUrl(),ImageUtils.drawableIdToBitmap(ComApp.getInstance(),ComApp.getInstance().appStyle.startLoading));
 		}else{
-			startActivity(new Intent(this,MainActivity.class));
+			if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+				startActivity(new Intent(XinHuaAdActivity.this,MainWithoutRightSideActivity.class));
+			}else{
+				startActivity(new Intent(XinHuaAdActivity.this,MainActivity.class));
+			}
 			finish();
 		}
 	}
@@ -69,7 +74,11 @@ public class XinHuaAdActivity extends Activity {
 			@Override
 			public void run() {
 				if(!oclickToWeb){
-					startActivity(new Intent(XinHuaAdActivity.this,MainActivity.class));
+					if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+						startActivity(new Intent(XinHuaAdActivity.this,MainWithoutRightSideActivity.class));
+					}else{
+						startActivity(new Intent(XinHuaAdActivity.this,MainActivity.class));
+					}
 					finish();	
 				}
 			}
@@ -105,7 +114,11 @@ public class XinHuaAdActivity extends Activity {
 	@Override  
     protected void onActivityResult(int requestCode, int resultCode, Intent data)  
     {  
-		startActivity(new Intent(this,MainActivity.class));
+		if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+			startActivity(new Intent(this,MainWithoutRightSideActivity.class));
+		}else{
+			startActivity(new Intent(this,MainActivity.class));
+		}
 		finish();
     } 
 }

@@ -54,7 +54,7 @@ public class ComService extends IntentService {
 			newsView=new HashMap<String, NewsInfoModel>();
 		}
 		if(ns!=null){
-			NewsInfoModel tem = newsView.get(ns.getArttype());
+			NewsInfoModel tem = newsView.get(ns.getArttype()+"_"+ns.getId());
 			if(tem!=null){
 				if(!FuncUtil.isEmpty(ns.getArttype())){
 					tem.setViewTimes(tem.getViewTimes()+1);
@@ -82,7 +82,9 @@ public class ComService extends IntentService {
 			while (iter.hasNext()) {
 			    entry = iter.next();
 			    count+=entry.getValue().getViewTimes();
-			    reqstr.append(entry.getKey()).append("_").append(entry.getValue().getViewTimes()).append(",");
+			    if(entry.getValue().getViewTimes()>0){
+			    	 reqstr.append(entry.getKey()).append("_").append(entry.getValue().getViewTimes()).append(",");
+			    }
 			}
 			log.debug("统计数："+count);
 			if(CoreContants.PUSH_TYPE.equals(type)||count>=CoreContants.MAXREQ_TIMES){

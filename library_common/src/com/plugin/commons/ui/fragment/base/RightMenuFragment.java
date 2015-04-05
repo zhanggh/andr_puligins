@@ -3,7 +3,6 @@ package com.plugin.commons.ui.fragment.base;
 import org.xinhua.analytics.analytics.AnalyticsAgent;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,25 +15,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.plugin.R;
-import com.plugin.barcode.scanner.CaptureActivity;
 import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
 import com.plugin.commons.helper.ComUtil;
 import com.plugin.commons.helper.DingLog;
 import com.plugin.commons.helper.FuncUtil;
-import com.plugin.commons.helper.LocationUtils;
-import com.plugin.commons.helper.SituoHttpAjax;
-import com.plugin.commons.helper.SituoHttpAjax.SituoAjaxCallBack;
-import com.plugin.commons.model.RspResultModel;
 import com.plugin.commons.model.UserInfoModel;
-import com.plugin.commons.service.SmartWeatherService;
-import com.plugin.commons.service.SmartWeatherServiceImpl;
+import com.plugin.commons.setting.QuickMarkActivity;
 import com.plugin.commons.setting.SettingActivity;
+import com.plugin.commons.ui.app.AppRecActivity;
 import com.plugin.commons.ui.my.SysNotifyActivity;
 import com.plugin.commons.ui.my.WeatherActivity;
 import com.plugin.commons.user.LoginActivity;
 import com.plugin.commons.user.UserInfoActivity;
-import com.zq.types.StBaseType;
 
 @SuppressLint({ "NewApi", "ValidFragment" })
 public class RightMenuFragment extends Fragment{
@@ -50,7 +43,6 @@ public class RightMenuFragment extends Fragment{
 	private String shortName;
 	boolean needUserGuid=false;
 	private Class MyFragmentActivity;
-	Activity act;
 	String city;
 	String areaid;
 	
@@ -59,25 +51,6 @@ public class RightMenuFragment extends Fragment{
 		this.userTips=ComApp.getInstance().appStyle.zh_usertips;
 		this.MyFragmentActivity=ComApp.getInstance().appStyle.MyFragmentActivity;
 		this.needUserGuid=Boolean.parseBoolean(ComApp.getInstance().appStyle.needUserGuid);
-	}
-	
-	public RightMenuFragment(boolean needUserGuid,String userTips,Class MyFragmentActivity){
-		super();
-		this.userTips=userTips;
-		this.MyFragmentActivity=MyFragmentActivity;
-		this.needUserGuid=needUserGuid;
-	}
-	
-	@Override
-	public void onAttach(Activity activity) {
-		act=activity;
-		super.onAttach(activity);
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
 	}
 	
 	@Override
@@ -125,9 +98,9 @@ public class RightMenuFragment extends Fragment{
 				tv_user.setText("登录帐号");
 				iv_icon.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.head));
 			}
-			if(ComUtil.isNetworkAvailable(act)){
+			if(ComUtil.isNetworkAvailable(getActivity())){
 				ComApp.getInstance().appStyle.setmWeatheView(mWeatheView);
-				ComUtil.doSmartWeather(ComApp.getInstance().appStyle.getArea(),act, mWeatheView);
+				ComUtil.doSmartWeather(ComApp.getInstance().appStyle.getArea(),getActivity(), mWeatheView);
 			}else{
 				TextView tv_title = (TextView)mWeatheView.findViewById(R.id.title);
 				tv_title.setText("正在努力获取天气...");
@@ -153,9 +126,11 @@ public class RightMenuFragment extends Fragment{
 				getActivity().getString(R.string.zh_my_info),"zh_my_info"));
 		ll_my.addView(ComUtil.createLineBlack(getActivity()));
 		
-//		ll_my.addView(createItemInfoView(R.drawable.saoyisao,
-//				getActivity().getString(R.string.zh_my_qr),"zh_my_qr"));
-//		ll_my.addView(ComUtil.createLineBlack(getActivity()));
+		if(ComApp.getInstance().appStyle.needScaner){
+			ll_my.addView(createItemInfoView(R.drawable.saoyisao,
+					getActivity().getString(R.string.zh_my_qr),"zh_my_qr"));
+			ll_my.addView(ComUtil.createLineBlack(getActivity()));
+		}
 //		
 //		ll_my.addView(createItemInfoView(R.drawable.orderform,
 //				getActivity().getString(R.string.zh_my_order),"zh_my_order"));
@@ -164,6 +139,11 @@ public class RightMenuFragment extends Fragment{
 		ll_my.addView(createItemInfoView(R.drawable.tongzhi,
 				getActivity().getString(R.string.zh_my_notify),"zh_my_notify"));
 		ll_my.addView(ComUtil.createLineBlack(getActivity()));
+		if(ComApp.getInstance().appStyle.recommend){//应用推荐模块
+			ll_my.addView(createItemInfoView(ComApp.getInstance().appStyle.tuijian,
+					getActivity().getString(R.string.zh_app_recommended),"zh_app_recommended"));
+			ll_my.addView(ComUtil.createLineBlack(getActivity()));
+		}
 		
 		ll_my.addView(createItemInfoView(R.drawable.shezhi,
 				getActivity().getString(R.string.zh_my_set),"zh_my_set"));
@@ -199,7 +179,7 @@ public class RightMenuFragment extends Fragment{
 		ImageView iv_icon = (ImageView)view.findViewById(R.id.icon);
 		view.setTag(code);
 		tv_title.setText(title);
-		iv_icon.setBackground(getActivity().getResources().getDrawable(icon));
+		iv_icon.setBackgroundDrawable(getActivity().getResources().getDrawable(icon));
 		view.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -217,9 +197,16 @@ public class RightMenuFragment extends Fragment{
 					startActivity(intent);
 				}
 				else if("zh_my_qr".equals(code)){
-					Intent intent = new Intent(RightMenuFragment.this.getActivity(),CaptureActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					startActivity(intent);
+					//Intent intent = new Intent(RightMenuFragment.this.getActivity(),CaptureActivity.class);
+					//intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					//startActivity(intent);
+					if(CoreContants.APP_ZHMLMGZ.equals(ComApp.APP_NAME)){
+						Intent intent = new Intent(RightMenuFragment.this.getActivity(),QuickMarkActivity.class);
+						startActivity(intent);
+					}else{
+						ComUtil.gotoWaitingActivity(getActivity(), "扫一扫");
+					}
+					
 				}
 				else if("zh_my_order".equals(code)){
 					ComUtil.gotoWaitingActivity(getActivity(), "订单");
@@ -228,6 +215,12 @@ public class RightMenuFragment extends Fragment{
 					Intent intent = new Intent(RightMenuFragment.this.getActivity(),SysNotifyActivity.class);
 					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
+				}
+				else if("zh_app_recommended".equals(code)){
+					Intent intent = new Intent(RightMenuFragment.this.getActivity(),AppRecActivity.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
+//					ComUtil.gotoWaitingActivity(getActivity(), "应用推荐");
 				}
 				else if("zh_my_set".equals(code)){
 					Intent intent = new Intent(RightMenuFragment.this.getActivity(),SettingActivity.class);

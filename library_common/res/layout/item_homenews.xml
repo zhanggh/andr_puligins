@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content" 
     android:orientation="vertical"
     android:background="@color/white"
@@ -33,82 +33,13 @@
         
         />
 	 </RelativeLayout>
-	<RelativeLayout
-	     android:layout_width="match_parent"
-	     android:layout_height="70dip"
-	     android:background="@drawable/menu_item_selector"
-	     android:id="@+id/rl_new2"
-	 >
-	 	<ImageView
-        android:id="@+id/iv_image2"
-        android:layout_width="80dip"
-        android:layout_height="50dip"
-        android:scaleType="centerCrop"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dip"
-        android:layout_centerVertical="true"
-      />
-	 	<TextView
-        android:id="@+id/tv_title2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/new_title_color"
-        android:gravity="center_vertical"
-        android:textSize="16sp"
-        android:layout_marginRight="10dip"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="11dip"
-        android:layout_toLeftOf="@+id/iv_image2"
-        android:maxLines="2"
-        android:lineSpacingExtra="6sp"
-        />
-	 </RelativeLayout>
-	 
 	<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="1dip" 
-    android:orientation="vertical"
-    android:background="@color/line_color"
-    >
-	 	</LinearLayout>
-	 
-	<RelativeLayout
-	     android:layout_width="match_parent"
-	     android:layout_height="70dip"
-	     android:background="@drawable/menu_item_selector"
-	     android:id="@+id/rl_new3"
-	 >
-	 	<ImageView
-        android:id="@+id/iv_image3"
-        android:layout_width="80dip"
-        android:layout_height="50dip"
-        android:scaleType="centerCrop"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dip"
-        android:layout_centerVertical="true"
-      />
-	 	<TextView
-        android:id="@+id/tv_title3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/new_title_color"
-        android:gravity="center_vertical"
-        android:textSize="16sp"
-        android:layout_marginRight="10dip"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="11dip"
-        android:layout_toLeftOf="@+id/iv_image3"
-        android:maxLines="2"
-        android:lineSpacingExtra="6sp"
-        />
-	 </RelativeLayout>
-	 <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="1dip" 
-    android:orientation="vertical"
-    android:background="@color/line_color"
-    >
-	 	</LinearLayout>
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" 
+	    android:orientation="vertical"
+	    android:background="@color/white"
+	    android:id="@+id/ll_datalist"
+	    >
+	 	
+    </LinearLayout>
 </LinearLayout>

@@ -25,4 +25,25 @@
         >
     </GridView>
 
+	<RelativeLayout
+	    android:id="@+id/rl_leftHome"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentLeft="true"
+	    android:layout_marginBottom="20dip"
+	    android:visibility="gone"
+	    >
+
+	    <ImageView
+	        android:id="@+id/im_leftHome"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginRight="40dip"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentTop="true"
+	        />
+
+	</RelativeLayout>
+
 </RelativeLayout>

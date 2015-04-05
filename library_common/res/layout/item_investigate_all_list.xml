@@ -25,6 +25,7 @@
 	 	     android:layout_width="80dip"
 	 	     android:layout_height="50dip"
 	 	     android:layout_gravity="center_vertical"
+	 	     android:src="@drawable/number_iphone_btn_normal"
 	 	     android:gravity="center"
 	 	     />
 

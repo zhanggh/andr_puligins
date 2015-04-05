@@ -32,7 +32,6 @@ public class InvesDetailActivity  extends Activity{
 		ComUtil.customeTitle(this, "调查",true);
 		status = this.getIntent().getStringExtra(PARAMS_ORG);
 		initViews();
-//		refreshUI();
 	}
 	
 	private void initViews(){

@@ -33,7 +33,6 @@ import com.plugin.commons.service.SysNotifyServiceImp;
 import com.plugin.commons.ui.base.BaseActivity;
 
 public class SysNotifyActivity extends BaseActivity{
-	private PullToRefreshListView lv_news;
 	ZhKdBaseAdapter<SysNoticeModel> mAdapter;
 	private List<SysNoticeModel> dataList= new ArrayList<SysNoticeModel>();
 	SysNotifyService sysNotifySv;
@@ -49,9 +48,7 @@ public class SysNotifyActivity extends BaseActivity{
 		initDisplay();
 	}
 	private void initViews() {
-		reqService=new HashMap();
 		sysNotifySv = new  SysNotifyServiceImp();
-		reqService.put("reqService", reqService);
 		lv_news = (PullToRefreshListView) this.findViewById(R.id.lv_news);
 		mAdapter = new SysNoticeListAdapter(this,dataList);
 		lv_news.setAdapter(mAdapter);
@@ -94,9 +91,9 @@ public class SysNotifyActivity extends BaseActivity{
 	
 	private void doRefresh(boolean isInit,boolean isRefresh)
 	{
-		
+		ComUtil.showListNone(this.getEmptyView(), "努力加载中...", dataList);
 		//异步
-		sCallBack=new SituoAjaxCallBackImp<SysNoticeModel,SysNotifyService>(findViewById(R.id.ll_root),pageStart,this.dataList,isInit, isRefresh, log, 
+		sCallBack=new SituoAjaxCallBackImp<SysNoticeModel,SysNotifyService>(findViewById(R.id.ll_root),pageStart,this.dataList,isInit, isRefresh, 
 				this, lv_news, mAdapter,CoreContants.REQUEST_NOTICE,sysNotifySv) {//null,null,sysNotifySv
 
 			@Override
@@ -108,17 +105,5 @@ public class SysNotifyActivity extends BaseActivity{
 		SituoHttpAjax.ajax(sCallBack);
 	}
 	
-	@Override
-	public void onResume() {
-		super.onResume();
-		AnalyticsAgent.onResume(this);//新华sdk
-	}
-	
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		AnalyticsAgent.onPause(this);//新华sdk
-	}
 
 }

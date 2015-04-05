@@ -49,19 +49,15 @@ import com.zq.types.StBaseType;
 
 public class SubNewsTabFragment extends BaseFragment {
 	public DingLog log = new DingLog(SubNewsTabFragment.class);
-	private static final String TAG = "NewsTabFragment";
+	private static final String TAG = "SubNewsTabFragment";
 	private List<NewsInfoModel> newList = new ArrayList<NewsInfoModel>();
 	private List<NewsInfoModel> headList = new ArrayList<NewsInfoModel>();
 	private HasSubNewsListAdapter mAdapter;
-	
 	private ViewPager viewPager; // android-support-v4中的滑动组件
 	private List<ImageView> imageViews; // 滑动的图片集合
-
 	private List<View> dots; // 图片标题正文的那些点
-
 	private TextView tv_imgtitle;
 	private int currentItem = 0; // 当前图片的索引号
-
 	// An ExecutorService that can schedule commands to run after a given delay,
 	// or to execute periodically.
 	private ScheduledExecutorService scheduledExecutorService;
@@ -77,20 +73,7 @@ public class SubNewsTabFragment extends BaseFragment {
 		};
 	};
 	
-   
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		initViews(view);
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		initDisplay();
-	}
-	
-	private void initViews(View view) {
+	protected void initViews(View view) {
 		newsSvc = new NewsServiceImpl();
 		lv_news = (PullToRefreshListView) view.findViewById(R.id.lv_news);
 		lv_news.setOnRefreshListener(new OnRefreshListener<ListView>() {
@@ -120,7 +103,6 @@ public class SubNewsTabFragment extends BaseFragment {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub
-				ComUtil.addViewTimes(mActivity,newList.get(arg2-(mAdView==null?1:2)),mNewType);
 				ComUtil.goNewsDetail(mActivity, newList.get(arg2-(mAdView==null?1:2)), mNewType);
 				XHSDKUtil.addXHBehavior(mActivity, mNewType.getParentid()+"_"+newList.get(arg2-(mAdView==null?1:2)).getId(),
 				XHConstants.XHTOPIC_ARTICAL_CLICK, mNewType.getParentid()+"_"+newList.get(arg2-(mAdView==null?1:2)).getId());
@@ -129,15 +111,21 @@ public class SubNewsTabFragment extends BaseFragment {
 		});
 	}
 	
-	private void initDisplay() {
+	protected void initDisplay() {
 		//mMsgTv.setText("暂无新闻");
 		RspResultModel rsp  = newsSvc.getNewsList(true, "0", "20",mNewType.getParentid(), mNewType.getId());
 		if(ComUtil.checkRsp(mActivity, rsp,false)){
-			newList = rsp.getArticle_list();
 			headList = rsp.getHeadnew_list();
-			
+			if(rsp.getArticle_list().size()>0){
+				newList=rsp.getArticle_list();
+				refreshList();
+				CacheDataService.setNeedLoad(CoreContants.CACHE_NEWS_NEWSLIST+mNewType.getParentid()+"_"+mNewType.getId());
+			}else{
+				doRefresh(true);
+			}
+		}else{
+			doRefresh(true);
 		}
-		refreshList();
 		//如果是第一个fragment并且没有下拉加载过，则第一次进入就自动下拉加载
 		if("0".equals(mMsgName)&&
 				CacheDataService.isNeedLoad(CoreContants.CACHE_NEWS_NEWSLIST+mNewType.getParentid()+"_"+mNewType.getId()))
@@ -219,8 +207,7 @@ public class SubNewsTabFragment extends BaseFragment {
 	
 	public void doRefresh(final boolean isRefresh)
 	{
-	 
-
+		ComUtil.showListNone(getView(), "努力加载中...", newList);
 		if(isRefresh){//下拉
 			pageStart=0;
 		}else{//上拉

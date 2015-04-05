@@ -9,9 +9,14 @@ import org.apache.http.HttpException;
 
 import com.plugin.commons.ComApp;
 import com.plugin.commons.helper.CryptUtils;
+import com.plugin.commons.helper.FuncUtil;
 import com.plugin.commons.model.RspResultModel;
 import com.plugin.commons.model.XinHuaModel;
 
+/**
+ * @author zhang
+ *	外部对接
+ */
 public class XinHuaServiceImpl implements XinHuaService {
 	public static final String XINHUA_HOME_URL = "http://xhpfm.open.zhongguowangshi.com/open/index";
 	@Override
@@ -49,18 +54,22 @@ public class XinHuaServiceImpl implements XinHuaService {
 	
 	public RspResultModel getXHImg(int clientWidth,int clientHeight,String paramId,String paramKeys)
 	{
-		XinHuaModel xh = getXinHuaImg(clientWidth,clientHeight,paramId,paramKeys);
-		RspResultModel rsp = new RspResultModel();
-		if(xh!=null){
-			rsp.setRetcode("0");
-			rsp.setRetmsg("操作成功");
-			rsp.setXhModel(xh);
+		if(!FuncUtil.isEmpty(paramKeys)){
+			XinHuaModel xh = getXinHuaImg(clientWidth,clientHeight,paramId,paramKeys);
+			RspResultModel rsp = new RspResultModel();
+			if(xh!=null){
+				rsp.setRetcode("0");
+				rsp.setRetmsg("操作成功");
+				rsp.setXhModel(xh);
+			}
+			else{
+				rsp.setRetcode("1");
+				rsp.setRetmsg("获取信息失败");
+			}
+			return rsp;
+		}else{
+			return null;
 		}
-		else{
-			rsp.setRetcode("1");
-			rsp.setRetmsg("获取信息失败");
-		}
-		return rsp;
 		
 	}
 
@@ -91,6 +100,31 @@ public class XinHuaServiceImpl implements XinHuaService {
 		orgstr.append("myEncrypt").append("=").append(myEncrypt);
 		 
 	    return url+"?"+orgstr.toString();
+	}
+
+	@Override
+	public RspResultModel getNewRadioTypeList() {
+		RspResultModel  rsp=ComApp.getInstance().getApi().getNewRadioTypeList();
+		return rsp;
+	}
+
+	@Override
+	public RspResultModel getNewRadioTypeDetail(String id) {
+
+		RspResultModel  rsp=ComApp.getInstance().getApi().getNewRadioTypeDetail(id);
+		return rsp;
+	}
+
+	@Override
+	public RspResultModel getShunJianTypeList() {
+		RspResultModel  rsp=ComApp.getInstance().getApi().getShunJianTypeList();
+		return rsp;
+	}
+
+	@Override
+	public RspResultModel getShunJianTypeDetail(String id) {
+		RspResultModel  rsp=ComApp.getInstance().getApi().getShunJianTypeDetail(id);
+		return rsp;
 	}
 
 }

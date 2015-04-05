@@ -45,19 +45,24 @@ public class SpecialityListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final NewsInfoModel specModel = specList.get(position);
-		View rowView = viewMap.get(specModel.getId());
+		View rowView = convertView;//viewMap.get(specModel.getId());
 		final NewListItemCache viewCache;
         if (rowView == null) {
                 rowView = LayoutInflater.from(context).inflate(R.layout.item_news, null);
                 viewCache = new NewListItemCache(rowView,null,context,specModel.getId());
+                viewCache.getIv_image();
+                specModel.getDescition();
+                specModel.getTitle();
                 rowView.setTag(viewCache);
-                viewMap.put(specModel.getId()+"", rowView);
+//                viewMap.put(specModel.getId()+"", rowView);
         } else {
                 viewCache = (NewListItemCache) rowView.getTag();
         }
         viewCache.getTv_title().setText(specModel.getTitle());
         viewCache.getTv_desc().setText(FuncUtil.isEmpty(specModel.getDescition())?"暂无介绍":specModel.getDescition());
-        ComApp.getInstance().getFinalBitmap().display(viewCache.getIv_image(), specModel.getImg());
+        
+        //解决卡顿的问题
+		ComApp.getInstance().getFinalBitmap().display(viewCache.getIv_image(), specModel.getImg());
         return rowView;
 	}
 

@@ -11,6 +11,52 @@
 	    android:background="@color/white"
 	    android:layout_above="@+id/ll_med"
 	    >
+	    <LinearLayout 
+		    android:layout_width="match_parent"
+		    android:layout_height="49dip" 
+		    android:orientation="horizontal"
+		    android:background="@drawable/menu_item_selector"
+		    android:id="@+id/ll_typelist"
+		    android:visibility="gone"
+		    >
+		 <TextView 
+		     android:layout_height="wrap_content" 
+		     android:layout_width="wrap_content"
+		     android:layout_gravity="center_vertical"
+		     android:layout_marginLeft="20dip"
+		     android:textSize="@dimen/text_size_14"
+		     android:textColor="@color/sbc_header_text"
+		     android:text="类型:"
+		     />
+		  <LinearLayout 
+		    android:id="@+id/ly_writer_type"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:orientation="horizontal"
+		    android:gravity="right"
+		    android:clickable="true"
+		    android:onClick="selectType"
+		    android:background="@drawable/menu_item_selector"
+		    >
+			    <TextView 
+			       	 android:id="@+id/tv_writer_type"
+				     android:layout_height="wrap_content" 
+				     android:layout_width="wrap_content"
+				     android:layout_gravity="center_vertical"
+				     android:layout_marginRight="20dip"
+				     android:textSize="@dimen/text_size_14"
+				     android:textColor="@color/kd_email_ct"
+				     android:text="提案"
+				     />
+			    <TextView 
+			         android:id="@+id/im_writer_type"
+				     android:layout_height="13dip" 
+				     android:layout_width="15dip"
+				     android:layout_gravity="center_vertical"
+				     android:layout_marginRight="20dip"
+			        />
+		    </LinearLayout>
+	</LinearLayout>
 <include layout="@layout/line_grey" ></include>
         <EditText
             android:id="@+id/et_content"

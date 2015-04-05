@@ -6,26 +6,29 @@
     >
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="300dip"
-	  	android:layout_centerVertical="true"
-	  	android:id="@+id/fl_scroll" >
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_commentbar"
+	  	android:id="@+id/fl_scroll"
+	  	>
         <android.support.v4.view.ViewPager
             android:id="@+id/vp"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:background="@color/black"
              />
      </FrameLayout>
 	<RelativeLayout
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_below="@+id/fl_scroll"
-			android:layout_marginTop="15dip"
+			android:layout_height="90dip"
 			android:id="@+id/rl_title"
+			android:layout_above="@+id/rl_commentbar"
+			android:background="#80000000"
+			android:paddingTop="4dip"
 			>
 		<TextView 
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:id="@+id/tv_title"
+		    android:id="@+id/tv_img_title"
 		    android:layout_alignParentLeft="true"
 		    android:layout_centerVertical="true"
 		    android:textSize="15sp"
@@ -34,6 +37,7 @@
 		    android:layout_marginRight="5dip"
 		    android:layout_toLeftOf="@+id/tv_readcount"
 		    android:singleLine="true"
+		    android:layout_alignParentTop="true"
 		    >
 		</TextView>
 		<TextView 
@@ -45,9 +49,9 @@
 		    android:textSize="12sp"
 		    android:textColor="@color/white"
 		    android:layout_marginRight="15dip"
+		    android:layout_alignParentTop="true"
 		    >
 		</TextView>
-		</RelativeLayout>
 		<TextView 
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
@@ -57,19 +61,70 @@
 		    android:textColor="@color/blue_btn_white"
 		    android:layout_marginRight="15dip"
 		    android:layout_marginLeft="15dip"
-		    android:layout_marginTop="10dip"
-		    android:layout_below="@+id/rl_title"
+		    android:layout_marginTop="4dip"
+		    android:layout_below="@+id/tv_img_title"
 		    >
 		</TextView>
-		<Button 
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_alignParentLeft="true"
-		    android:layout_alignParentTop="true"
-		    android:layout_marginTop="15dip"
-		    android:id="@+id/btn_left"
-		    android:background="@drawable/btn_picback_selector"
-
+		</RelativeLayout>
+		
+		    <RelativeLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="49dip"
+		    android:layout_alignParentBottom="true"
+		    android:background="@color/white"
+		    android:id="@+id/rl_commentbar"
 		    >
-		</Button>
+		    	 <LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="1dip"
+			    android:orientation="vertical"
+			    android:background="@color/line_color"
+			    android:layout_alignParentTop="true"/>
+		    	 
+		    	<LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="30dip"
+			    android:orientation="horizontal"
+			    android:background="@drawable/situo_corner_border"
+			    android:layout_alignParentLeft="true"
+			    android:layout_centerVertical="true"
+			    android:layout_marginLeft="20dip"
+			    android:layout_marginRight="15dip"
+			    android:gravity="center_vertical"
+			    android:layout_toLeftOf="@+id/btn_fav"
+			    android:id="@+id/ll_addcomment">
+				    <ImageView
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:src="@drawable/write"
+					        android:layout_marginLeft="4dip"
+					        />
+				    <TextView
+			        android:layout_width="match_parent"
+			        android:layout_height="match_parent"
+			        android:hint="写评论"
+			        android:gravity="center_vertical" 
+			        android:id="@+id/et_pwd"
+			        android:background="@null"
+			        android:layout_marginLeft="7dip"
+			        />
+		    	 </LinearLayout>
+		    	 
+		    	 <Button
+			        android:layout_width="@dimen/text_size_29"
+			        android:layout_height="@dimen/text_size_28"
+			        android:layout_alignParentRight="true"
+			        android:layout_centerVertical="true"
+			        android:layout_marginRight="12dip"
+			        android:id="@+id/btn_share"/>
+		    	 
+		    	 <Button
+			        android:layout_width="@dimen/text_size_29"
+			        android:layout_height="@dimen/text_size_28"
+			        android:layout_toLeftOf="@+id/btn_share"
+			        android:layout_centerVertical="true"
+			        android:layout_marginRight="10dip"
+			        android:id="@+id/btn_fav"/>
+		    	 
+		    </RelativeLayout>
 </RelativeLayout>

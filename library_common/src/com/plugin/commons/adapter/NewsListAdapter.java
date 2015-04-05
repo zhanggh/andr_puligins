@@ -1,5 +1,6 @@
 package com.plugin.commons.adapter;
 
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,29 +30,50 @@ public class NewsListAdapter extends ZhKdBaseAdapter<NewsInfoModel> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final NewsInfoModel news = dataList.get(position);
-		View rowView = viewMap.get(news.getId());
+		View rowView = convertView;//viewMap.get(news.getId());
+//		View convertView1=convertView;
+		 
 		final NewListItemCache viewCache;
         if (rowView == null) {
-                rowView = LayoutInflater.from(context).inflate(R.layout.item_news, null);
-                viewCache = new NewListItemCache(rowView,null,context,news.getId());
-                rowView.setTag(viewCache);
-                viewMap.put(news.getId(), rowView);
+            rowView = LayoutInflater.from(context).inflate(R.layout.item_news, null);
+            viewCache = new NewListItemCache(rowView,null,context,news.getId());
+            viewCache.getIv_image();
+            viewCache.getTv_desc();
+            viewCache.getTv_title();
+            viewCache.getTv_subtype();
+            rowView.setTag(viewCache);
+//            viewMap.put(news.getId(), rowView);
         } else {
-                viewCache = (NewListItemCache) rowView.getTag();
+            viewCache = (NewListItemCache) rowView.getTag();
         }
-        //news.setSubtypename("动态信息");
-        TextView tv_subtype = (TextView)rowView.findViewById(R.id.tv_subtype);
-       // viewCache.getTv_commentcount().setText(news.getReplycount()+"跟帖");
-        //viewCache.getTv_desc().setText(news.getDescition());
-        viewCache.getTv_title().setText(news.getTitle());
-        //viewCache.getTv_local().setText(news.getLocation());
-        ComApp.getInstance().getFinalBitmap().display(viewCache.getIv_image(), news.getImg());
+//        news.setSubtypename("动态信息");
+        if(!FuncUtil.isEmpty(news.getImg())){
+//        	//解决卡顿的问题
+			 ComApp.getInstance().getFinalBitmap().display(viewCache.getIv_image(), news.getImg());
+        }else{
+        	viewCache.getRl_layout().setVisibility(View.GONE);
+        }
+         
         if(!FuncUtil.isEmpty(news.getSubtypename())){
-        	tv_subtype.setVisibility(View.VISIBLE);
-        	tv_subtype.setText(news.getSubtypename());
+        	viewCache.getTv_subtype().setVisibility(View.VISIBLE);
+        	viewCache.getTv_subtype().setText(news.getSubtypename());
         }
         else{
-        	tv_subtype.setVisibility(View.GONE);
+        	viewCache.getTv_subtype().setVisibility(View.GONE);
+        }
+        
+        //摘要
+        if(!FuncUtil.isEmpty(news.getDescition())){
+        	if(!FuncUtil.isEmpty(news.getTitle())){
+//        		int maxEms=viewCache.getTv_title().getMaxEms();
+        		viewCache.getTv_title().setText(news.getTitle().replaceAll("\r", "").replaceAll("\n", "").trim());
+        		viewCache.getTv_title().setMaxLines(1);
+        	}
+        	viewCache.getTv_desc().setVisibility(View.VISIBLE);
+        	viewCache.getTv_desc().setText(news.getDescition().replaceAll("\r", "").replaceAll("\n", "").trim());
+        }else{
+        	viewCache.getTv_title().setText(news.getTitle().replaceAll("\r", "").replaceAll("\n", "").trim());
+        	viewCache.getTv_desc().setVisibility(View.GONE);
         }
         return rowView;
 	}

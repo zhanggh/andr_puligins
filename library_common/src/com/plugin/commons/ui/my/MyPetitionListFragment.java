@@ -20,6 +20,7 @@ import com.plugin.R;
 import com.plugin.commons.ComApp;
 import com.plugin.commons.CoreContants;
 import com.plugin.commons.adapter.MyPetitionListAdapter;
+import com.plugin.commons.helper.ComUtil;
 import com.plugin.commons.helper.DialogUtil;
 import com.plugin.commons.helper.DingLog;
 import com.plugin.commons.helper.SituoHttpAjax;
@@ -42,22 +43,10 @@ public class MyPetitionListFragment extends BaseFragment {
 	private MyPetitionListAdapter mAdapter;
 	AskGovService askSvc;
 	
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		log.info("onViewCreated");
-		initViews(view);
+	 
+	
+	protected void initViews(View view) {
 		askSvc = new AskGovServiceImpl();
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		log.info("onActivityCreated");
-		initDisplay();
-	}
-	
-	private void initViews(View view) {
 		lv_news = (PullToRefreshListView) view.findViewById(R.id.lv_news);
 		mAdapter = new MyPetitionListAdapter(mActivity,dataList);
 		lv_news.setAdapter(mAdapter);
@@ -97,7 +86,7 @@ public class MyPetitionListFragment extends BaseFragment {
 	
 	}
 	
-	private void initDisplay() {
+	protected void initDisplay() {
 		doRefresh(true,true);
 	}
 	
@@ -112,8 +101,9 @@ public class MyPetitionListFragment extends BaseFragment {
 			DialogUtil.showToast(mActivity, "尚未登陆，请登陆后查看");
 			lv_news.onRefreshComplete();
 		}else{
+			ComUtil.showListNone(getView(), "努力加载中...", dataList);
 			//异步
-			sCallBack=new SituoAjaxCallBackImp<AskMsgModel,AskGovService>(this.getView(),this.pageStart,this.dataList,isInit, isRefresh, log,
+			sCallBack=new SituoAjaxCallBackImp<AskMsgModel,AskGovService>(this.getView(),this.pageStart,this.dataList,isInit, isRefresh,
 					mActivity, lv_news, mAdapter,CoreContants.REQUEST_MY_LETTER,askSvc) {//, askSvc,null,null
 
 				@Override

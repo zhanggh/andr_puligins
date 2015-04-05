@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dip"
+    android:layout_marginTop="8dip"
+    android:orientation="vertical" >
+    <ScrollView 
+       android:layout_width="match_parent"
+   	   android:layout_height="match_parent"
+   	   android:scrollbars="none"
+        >
+	    <LinearLayout
+  	      android:layout_width="match_parent"
+  	      android:layout_height="match_parent"
+  	      android:layout_gravity="center_vertical"
+  	      android:id="@+id/ll_call"
+  	      android:orientation="horizontal" >          
+     	 <TextView
+     		    android:id="@+id/tv_phone"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="@dimen/num_size"
+		        android:textColor="@color/new_title_color"
+		        android:layout_gravity="center_vertical"
+				android:text=""		    
+				android:layout_marginLeft="22dip"				
+				android:paddingBottom="14dip"
+				android:paddingTop="4dip"
+		      /> 
+	  	<RelativeLayout
+	      android:layout_width="match_parent"
+	      android:layout_height="match_parent"
+	       >
+	      <ImageView	        
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_alignParentRight="true"
+	          android:layout_centerVertical="true"
+	          android:layout_gravity="center_vertical"
+	          android:scaleType="fitXY"
+	          android:layout_marginRight="21dip"
+	          android:paddingLeft="25dip"
+	          android:paddingRight="24dip"
+	          android:paddingBottom="14dip"
+	          android:clickable="true"
+	          android:src="@drawable/number_call_selector" />
+		
+	   </RelativeLayout>
+         
+     </LinearLayout>
+	</ScrollView>
+		
+</LinearLayout>

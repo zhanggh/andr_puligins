@@ -43,7 +43,7 @@ public class DialogOptionSelect {
 		dialog = new Dialog(context, R.style.dialog);
 		this.pickDialogcallback = pickDialogcallback;
 		dialog.setContentView(R.layout.dialog_option_select);
-		dialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		dialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		dialog.getWindow().setWindowAnimations(R.style.dialog_up);
 		dialog.getWindow().setGravity(Gravity.BOTTOM);
 		this.list = items;
@@ -145,7 +145,7 @@ public class DialogOptionSelect {
 	        }
 	        
 	        ImageView iv_image=(ImageView) rowView.findViewById(R.id.iv_image);
-	        iv_image.setImageResource(ComApp.getInstance().appStyle.sure_bnt_normal);
+	        iv_image.setImageResource(ComApp.getInstance().appStyle.btn_comsure_selector);
 	        
 	        viewCache.getTv_title().setText(item.getName());
 	        if(selectItem!=null&&selectItem.getCode().equals(item.getCode())){

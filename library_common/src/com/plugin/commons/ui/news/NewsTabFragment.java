@@ -20,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -54,15 +55,11 @@ public class NewsTabFragment extends BaseFragment {
 	private List<NewsInfoModel> newList = new ArrayList<NewsInfoModel>();
 	private List<NewsInfoModel> headList = new ArrayList<NewsInfoModel>();
 	private ZhKdBaseAdapter<NewsInfoModel> mAdapter;
-	
 	private ViewPager viewPager; // android-support-v4中的滑动组件
 	private List<ImageView> imageViews; // 滑动的图片集合
-
 	private List<View> dots; // 图片标题正文的那些点
-
 	private TextView tv_imgtitle;
 	private int currentItem = 0; // 当前图片的索引号
-
 	// An ExecutorService that can schedule commands to run after a given delay,
 	// or to execute periodically.
 	private ScheduledExecutorService scheduledExecutorService;
@@ -78,19 +75,9 @@ public class NewsTabFragment extends BaseFragment {
 		};
 	};
 	 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		initViews(view);
-	}
 	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		initDisplay();
-	}
-	
-	private void initViews(View view) {
+	protected void initViews(View view) {
+		initFooterView();
 		newsSvc = new NewsServiceImpl();
 		lv_news = (PullToRefreshListView) view.findViewById(R.id.lv_news);
 		lv_news.setOnRefreshListener(new OnRefreshListener<ListView>() {
@@ -101,7 +88,7 @@ public class NewsTabFragment extends BaseFragment {
 
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-				doRefresh(true);
+				doRefresh(false,true);
 			}
 		});
 		
@@ -109,7 +96,11 @@ public class NewsTabFragment extends BaseFragment {
 
 			@Override
 			public void onLastItemVisible() {
-				doRefresh(false);
+				if(NewsTabFragment.this.tv_msg!=null){
+					NewsTabFragment.this.tv_msg.setText("加载中...");
+					NewsTabFragment.this.pro_btm.setVisibility(View.VISIBLE);
+				}
+				doRefresh(false,false);
 			}
 		});
 		lv_news.setOnItemClickListener(new OnItemClickListener(){
@@ -118,7 +109,6 @@ public class NewsTabFragment extends BaseFragment {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub
-				ComUtil.addViewTimes(mActivity,newList.get(arg2-(mAdView==null?1:2)),mNewType);
 				XHSDKUtil.addXHBehavior(mActivity, mNewType.getParentid()+"_"+newList.get(arg2-(mAdView==null?1:2)).getId(), XHConstants.XHTOPIC_ARTICAL_CLICK, newList.get(arg2-(mAdView==null?1:2)).getId());
 				ComUtil.goNewsDetail(mActivity, newList.get(arg2-(mAdView==null?1:2)), mNewType);
 			}
@@ -126,14 +116,22 @@ public class NewsTabFragment extends BaseFragment {
 		});
 	}
 	
-	private void initDisplay() {
-		RspResultModel rsp  = newsSvc.getNewsList(true, "0", "20",mNewType.getParentid(), mNewType.getId());
+	protected void initDisplay() {
+		if(ComApp.getInstance().appStyle.getProc_loading()!=null){
+			ComApp.getInstance().appStyle.getProc_loading().setVisibility(View.VISIBLE);
+		}
+		RspResultModel rsp  = newsSvc.getNewsList(true,"0",String.valueOf(CoreContants.PAGE_SIZE),mNewType.getParentid(), mNewType.getId());
 		if(ComUtil.checkRsp(mActivity, rsp,false)){
 			newList = rsp.getArticle_list();
-			headList = rsp.getHeadnew_list();
-			
+			if(newList!=null&&newList.size()>0){
+				refreshList();
+			}else{
+				doRefresh(false,true);
+			}
+		}else{
+			doRefresh(false,true);
 		}
-		refreshList();
+
 		//如果是第一个fragment并且没有下拉加载过，则第一次进入就自动下拉加载
 		if("0".equals(mMsgName)&&
 				CacheDataService.isNeedLoad(CoreContants.CACHE_NEWS_NEWSLIST+mNewType.getParentid()+"_"+mNewType.getId()))
@@ -157,7 +155,13 @@ public class NewsTabFragment extends BaseFragment {
 		}
 		mAdapter.setDataList(newList);
 		mAdapter.notifyDataSetChanged();
-		lv_news.onRefreshComplete();
+		if(NewsTabFragment.this.tv_msg!=null){
+			NewsTabFragment.this.pro_btm.setVisibility(View.GONE);
+			NewsTabFragment.this.tv_msg.setText(ComApp.getInstance().getResources().getString(R.string.lastLoading));
+		}
+		if(ComApp.getInstance().appStyle.getProc_loading()!=null){
+			ComApp.getInstance().appStyle.getProc_loading().setVisibility(View.GONE);
+		}
 		log.info("是否为空:"+FuncUtil.isEmpty(newList));
 		ComUtil.showListNone(getView(), "暂无数据", newList,headList);
 	}
@@ -214,8 +218,9 @@ public class NewsTabFragment extends BaseFragment {
 		return null;
 	}
 	
-	public void doRefresh(final boolean isRefresh)
+	public void doRefresh(final boolean isCache,final boolean isRefresh)
 	{
+		ComUtil.showListNone(getView(), "努力加载中...", newList);
 		if(isRefresh){//下拉
 			pageStart=0;
 		}else{//上拉
@@ -224,7 +229,7 @@ public class NewsTabFragment extends BaseFragment {
 		SituoHttpAjax.ajax(new SituoAjaxCallBack(){
 			@Override
 			public StBaseType requestApi() {
-				RspResultModel rsp  = newsSvc.getNewsList(false,String.valueOf(pageStart),String.valueOf(CoreContants.PAGE_SIZE),mNewType.getParentid(), mNewType.getId());
+				RspResultModel rsp  = newsSvc.getNewsList(isCache,String.valueOf(pageStart),String.valueOf(CoreContants.PAGE_SIZE),mNewType.getParentid(), mNewType.getId());
 				return rsp;
 			}
 
@@ -243,12 +248,15 @@ public class NewsTabFragment extends BaseFragment {
 							newList=result.getArticle_list();
 						}
 					}
-					refreshList();
 					CacheDataService.setNeedLoad(CoreContants.CACHE_NEWS_NEWSLIST+mNewType.getParentid()+"_"+mNewType.getId());
 				}
-				else{
-					lv_news.onRefreshComplete();
+				refreshList();
+				lv_news.onRefreshComplete();
+				if(newList.size()>=CoreContants.PAGE_SIZE&&!hasFooter){
+					lv_news.getRefreshableView().addFooterView(footer);
+					hasFooter=true;
 				}
+				
 			}
 		});
 	}

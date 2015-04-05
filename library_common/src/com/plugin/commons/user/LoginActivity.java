@@ -31,6 +31,7 @@ import com.plugin.commons.service.UserInfoService;
 import com.plugin.commons.service.UserInfoServiceImpl;
 import com.plugin.commons.ui.askgov.AskGovActivity;
 import com.plugin.commons.ui.main.MainActivity;
+import com.plugin.commons.ui.main.MainWithoutRightSideActivity;
 import com.zq.types.StBaseType;
 
 public class LoginActivity extends Activity{
@@ -72,11 +73,15 @@ public class LoginActivity extends Activity{
 		et_pwd = (EditText)findViewById(R.id.et_pwd);
 		btn_sign = (Button)findViewById(R.id.btn_sign);
 		btn_sign.setBackgroundResource(ComApp.getInstance().appStyle.btn_sign_selector);
-		 
+		
+		if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+			findViewById(R.id.btn_title_left).setVisibility(View.INVISIBLE);
+		}
+		
 		if(!ComApp.APP_NAME.equals(CoreContants.APP_LNZX)){
 			btn_register = (Button)findViewById(R.id.btn_title_right);
 			btn_register.setVisibility(View.VISIBLE);
-			btn_register.setBackground(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_registration_selector));
+			btn_register.setBackgroundDrawable(this.getResources().getDrawable(ComApp.getInstance().appStyle.btn_registration_selector));
 		}else{
 			zh_tv_forgetpwd.setVisibility(View.GONE);
 			 
@@ -159,7 +164,13 @@ public class LoginActivity extends Activity{
 									finish();
 								}else{
 									//用户行为采集
-									Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+									Intent intent = null;
+									if(CoreContants.APP_LNZX.equals(ComApp.APP_NAME)){
+										intent = new Intent(LoginActivity.this,MainWithoutRightSideActivity.class);
+									}else{
+										intent = new Intent(LoginActivity.this,MainActivity.class);
+									}
+									
 									intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 									startActivity(intent);
 									finish();

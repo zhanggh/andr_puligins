@@ -21,6 +21,7 @@ import com.plugin.commons.helper.XHSDKUtil;
 import com.plugin.commons.model.UserInfoModel;
 import com.plugin.commons.service.UserInfoService;
 import com.plugin.commons.service.UserInfoServiceImpl;
+import com.plugin.commons.ui.main.LoginStatusActivity;
 
 public class UserInfoActivity extends Activity{
 	TextView tv_name;
@@ -92,7 +93,10 @@ public class UserInfoActivity extends Activity{
 					user=ComApp.getInstance().getLoginInfo().getUserid();
 				}
 				XHSDKUtil.addXHBehavior(UserInfoActivity.this,user, XHConstants.XHTOPIC_LOGINOUT,user+" logout success");
-				userService.loginout();
+				userService.loginout();	
+				
+				Intent intent = new Intent(UserInfoActivity.this,LoginStatusActivity.class);			
+				startActivity(intent);
 				finish();
 			}
 		});

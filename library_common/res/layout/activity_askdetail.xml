@@ -204,7 +204,7 @@
 		        android:id="@+id/tv_replycount"
 		      />
 		     
-		     <include layout="@layout/line_grey"></include>"
+		     <include layout="@layout/line_grey"></include>
 			 <LinearLayout
 			     android:layout_width="match_parent"
 			     android:layout_height="wrap_content"

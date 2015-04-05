@@ -13,26 +13,34 @@ import com.plugin.commons.adapter.ZhKdBaseAdapter;
 import com.plugin.commons.helper.ComUtil;
 import com.plugin.commons.helper.DingLog;
 import com.plugin.commons.helper.SituoHttpAjax.SituoAjaxCallBack;
+import com.plugin.commons.model.NewsInfoModel;
+import com.plugin.commons.model.NewsTypeModel;
+import com.plugin.commons.model.NumberModel;
+import com.plugin.commons.model.NumberType;
 import com.plugin.commons.model.RspResultModel;
 import com.plugin.commons.model.SysNoticeModel;
-import com.plugin.commons.ui.base.BaseActivity;
 import com.zq.types.StBaseType;
 
 public abstract class SituoAjaxCallBackImp<T,M> implements SituoAjaxCallBack {
-	public boolean isInit,isRefresh;
-	public List<T> dataList;
-	public List<T> rspList;
-	public M m;
-	public Activity activity;
-	public PullToRefreshListView lv_news;
-	public ZhKdBaseAdapter<T> mAdapter;
-	public DingLog log ;
+	private boolean isInit,isRefresh;
+	private List<T> dataList;
+	private List<T> rspList;
+	private M m;
+	private Activity activity;
+	private PullToRefreshListView lv_news;
+	private ZhKdBaseAdapter<T> mAdapter;
+	private DingLog log ;
 	int pageStart=0;
-	public String reqType;
-	public AskGovService askSvc;
-	public NewsService newService;
-	public SysNotifyService sysNotifySv;
+	private String reqType;
+	private AskGovService askSvc;
+	private NewsService newService;
+	private SysNotifyService sysNotifySv;
+	private NumberService numSvc;
 	private View view;
+	private NewsTypeModel mNewType;
+	private NewsInfoModel mNews;
+	private String keyWord;//关键字
+	
 	/**
 	 * @param view
 	 * @param pageStart 开始查询的游标
@@ -47,8 +55,9 @@ public abstract class SituoAjaxCallBackImp<T,M> implements SituoAjaxCallBack {
 	 * @param askSvc 业务对象
 	 * @param newService 业务对象
 	 * @param sysNotifySv 业务对象
+	 * @param numSvc 业务对象
 	 */
-	public SituoAjaxCallBackImp(View view,int pageStart,List<T> dataList,boolean isInit,boolean isRefresh,DingLog log,
+	public SituoAjaxCallBackImp(View view,int pageStart,List<T> dataList,boolean isInit,boolean isRefresh,
 			Activity activity,PullToRefreshListView lv_news,ZhKdBaseAdapter<T> mAdapter
 			,String reqType,M m) {//,AskGovService askSvc,NewsService newService,SysNotifyService sysNotifySv
 		super();
@@ -61,11 +70,8 @@ public abstract class SituoAjaxCallBackImp<T,M> implements SituoAjaxCallBack {
 		this.reqType=reqType;
 		this.lv_news=lv_news;
 		this.mAdapter=mAdapter;
-		this.log=log;
 		this.m=m;
-//		this.askSvc=askSvc;
-//		this.newService=newService;
-//		this.sysNotifySv=sysNotifySv;
+		log=new DingLog(SituoAjaxCallBackImp.class);
 	}
 
 	@Override
@@ -114,6 +120,31 @@ public abstract class SituoAjaxCallBackImp<T,M> implements SituoAjaxCallBack {
 			}
 			
 		}
+		
+		if(CoreContants.REQUEST_COM_PHOTOS.equals(reqType)){//拍客播客
+//			rsp =  DisClsTestService.getComPhotos(false);
+			newService=(NewsService) m;
+			rsp  = newService.getSubNewsList(false, String.valueOf(pageStart),String.valueOf(CoreContants.PAGE_SIZE),mNewType.getParentid(), mNewType.getId(),getmNews().getId());
+			
+		}
+		if(CoreContants.REQUEST_PAIKE_DETAIL.equals(reqType)){//拍客详情
+			rsp =  DisClsTestService.getComPhotos(false);
+			
+		}
+		if(CoreContants.REQUEST_NUMBER.equals(reqType)){//号码通列表
+			numSvc=(NumberService) m;			
+			NumberType type=null;				
+			if (activity.getIntent().getExtras() != null && activity.getIntent().getExtras().containsKey(CoreContants.PARAMS_MSG)) {
+				type =(NumberType)activity.getIntent().getExtras().get(CoreContants.PARAMS_MSG);
+			}	
+			String id=String.valueOf(type.getId());
+			if(id.equals("-1")){
+				id="";
+			}
+			rsp = numSvc.getNumList(isInit,id,keyWord, String.valueOf(pageStart),String.valueOf(CoreContants.PAGE_SIZE));
+			
+		}
+		
 		return rsp;
 	}
 
@@ -136,17 +167,27 @@ public abstract class SituoAjaxCallBackImp<T,M> implements SituoAjaxCallBack {
 				rspList = (List<T>) result.getMyreply_list();
 			}
 			
-			if(CoreContants.REQUEST_ART_27.equals(reqType)){
+			if(CoreContants.REQUEST_ART_27.equals(reqType)){//文章列表
 				rspList = (List<T>) result.getArticle_list();
 			}
 			
-			if(CoreContants.REQUEST_NOTICE.equals(reqType)){
+			if(CoreContants.REQUEST_NOTICE.equals(reqType)){//系统通知列表
 				rspList = (List<T>) result.getNotice_list();
+			}
+			if(CoreContants.REQUEST_COM_PHOTOS.equals(reqType)){//拍客列表
+				rspList = (List<T>) result.getArticle_list();
+			}
+			
+			if(CoreContants.REQUEST_COM_VIDEO.equals(reqType)){//播客列表
+				rspList = (List<T>) result.getComphotos();
+			}
+			
+			if(CoreContants.REQUEST_NUMBER.equals(reqType)){//号码通列表
+				rspList = (List<T>) result.getNumbers();
 			}
 			
 			log.info("mComments:"+rspList.size());
 			if(rspList.size()==0){
-				//DialogUtil.showToast(activity,"暂无数据");
 				pageStart-=CoreContants.PAGE_SIZE;
 			}else{
 				if(!isRefresh){//如果是上拉，并且返回结果值不为空时，游标递增
@@ -154,7 +195,6 @@ public abstract class SituoAjaxCallBackImp<T,M> implements SituoAjaxCallBack {
 				}else{
 					dataList=rspList;
 				}
-//				dataList=null;
 				mAdapter.setDataList(dataList);
 				afterService(null,dataList,pageStart);
 				mAdapter.notifyDataSetChanged();
@@ -171,4 +211,29 @@ public abstract class SituoAjaxCallBackImp<T,M> implements SituoAjaxCallBack {
 	 * @param pageStart
 	 */
 	public abstract void afterService(Map<String,T> response ,List<T> dataList,int pageStart);
+
+	public void setmNews(NewsInfoModel mNews) {
+		this.mNews = mNews;
+	}
+
+	public NewsInfoModel getmNews() {
+		return mNews;
+	}
+
+	public NewsTypeModel getmNewType() {
+		return mNewType;
+	}
+
+	public void setmNewType(NewsTypeModel mNewType) {
+		this.mNewType = mNewType;
+	}
+
+	public String getKeyWord() {
+		return keyWord;
+	}
+
+	public void setKeyWord(String keyWord) {
+		this.keyWord = keyWord;
+	}
+	
 }
